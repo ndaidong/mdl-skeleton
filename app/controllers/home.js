@@ -6,8 +6,9 @@ export var start = (req, res) => {
 
   let data = {
     meta: {
-      title: 'Name & Title'
-    }
+      title: 'MDL skeleton'
+    },
+    title: 'Name & Title'
   }
 
   let context = {

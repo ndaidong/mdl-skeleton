@@ -291,6 +291,12 @@ export var build = (layout, data = {}, context = {}) => {
   let continuable = true;
   let sHtml = '';
 
+  if(!data || !bella.isObject(data)){
+    data = {
+      meta: {}
+    }
+  }
+
   return new Promise((resolve, reject) => {
     return async.series([
       (next) => {
@@ -331,12 +337,14 @@ export var build = (layout, data = {}, context = {}) => {
           return next();
         }
 
+        let tmp = (!data.meta || !bella.isObject(data.meta)) ? {} : data.meta;
         let meta = config.meta;
         for(let k in meta){
-          if(!data[k]){
-            data[k] = meta[k];
+          if(!tmp[k]){
+            tmp[k] = meta[k];
           }
         }
+        data.meta = tmp;
         data.revision = config.revision;
 
         let template = Handlebars.compile(sHtml);

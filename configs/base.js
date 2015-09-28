@@ -20,7 +20,7 @@ config.meta = {
   keywords: '',
   image: '',
   author: '',
-  title: '',
+  title: 'Material Design Lite',
   domain: '',
   url: '',
   canonical: ''
