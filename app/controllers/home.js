@@ -5,21 +5,24 @@
 export var start = (req, res) => {
 
   let data = {
-    title: 'Name & Title'
+    meta: {
+      title: 'Name & Title'
+    }
   }
 
-  let css = [
-    'styles'
-  ];
+  let context = {
+    css: [
+      'styles'
+    ],
+    js: [
+      'packages/material',
+      'packages/bella',
+      'packages/fetch',
+      'packages/promise',
+      'app'
+    ]
+  }
 
-  let js = [
-    'packages/material',
-    'packages/bella',
-    'packages/fetch',
-    'packages/promise',
-    'app'
-  ];
-
-  return res.publish('landing', data, {css: css, js: js});
+  return res.publish('landing', data, context);
 }
 

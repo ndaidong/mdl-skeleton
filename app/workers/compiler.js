@@ -5,16 +5,16 @@
 
 import path from 'path';
 import fs from 'fs';
-import URL from 'url';
 import less from 'less';
-import mincss from 'mincss';
-import bella from 'bellajs';
+
 import async from 'async';
+import bella from 'bellajs';
+import mincss from 'mincss';
 import Promise from 'bluebird';
 
 var Handlebars = require('handlebars');
+var babel = require('babel');
 var UglifyJS = require('uglify-js');
-var mkdirp = require('mkdirp').sync;
 
 var pkg = require('../../package.json');
 var config = require('./../../configs/base');
@@ -23,6 +23,12 @@ var builder = pkg.builder;
 var cssDir = builder.cssDir + '/';
 var jsDir = builder.jsDir + '/';
 var distDir = builder.distDir;
+
+var transpileOpt = {
+  env: config.ENV,
+  comments: false,
+  blacklist: ['useStrict']
+}
 
 var removeNewLines = (s) => {
   s = s.replace(/(?:\r\n|\r|\n)+/gm, '');
@@ -114,6 +120,29 @@ export var lessify = (css) => {
   });
 }
 
+var isES6 = (file) => {
+  if(!file.match(/(\/es6\/|\.?es6)/)){
+    return false;
+  }
+  return true;
+}
+
+var transpile = (file) => {
+  return new Promise((resolve, reject) => {
+    console.log(file);
+    babel.transformFile(file, transpileOpt, (err, result) => {
+      if(err){
+        console.trace(err);
+        return reject(err);
+      }
+      if(result && result.code){
+        return resolve(result.code);
+      }
+      return reject({error: 1, message: 'Error while transpiling ' + file});
+    });
+  })
+}
+
 export var babelize = (js) => {
 
   return new Promise((resolve, reject) => {
@@ -125,9 +154,8 @@ export var babelize = (js) => {
 
     js.forEach((file) => {
       let full = jsDir + file;
-      let part = path.parse(full);
-      let ext = part.ext;
-      if(!ext){
+      let ext = path.extname(full);
+      if(!ext || ext !== '.js'){
         let _full = '';
         if(fs.existsSync(full + '.js')){
           _full = full + '.js';
@@ -158,9 +186,15 @@ export var babelize = (js) => {
 
     jsfiles.forEach((file) => {
       series.push((next) => {
-        let s = fs.readFileSync(file, 'utf8');
-        sJS += (s + ';');
-        next();
+        if(!isES6(file)){
+          let s = fs.readFileSync(file, 'utf8');
+          sJS += (s + ';');
+          return next();
+        }
+        transpile(file).then((s) => {
+          console.log(file);
+          sJS += (s + ';');
+        }).finally(next);
       });
     });
 
@@ -190,62 +224,6 @@ export var babelize = (js) => {
     });
   });
 }
-
-export var transform = (req, res, next) => {
-  let url = req.url;
-  let oUrl = URL.parse(url);
-  let pathname = oUrl.pathname;
-  if(!pathname.match(/\/js\/modules\/(.+)\.js/) && !pathname.match(/\/js\/app\.js/)){
-    return next();
-  }
-
-  let ext = path.extname(pathname);
-  if(ext !== '.js'){
-    return next();
-  }
-
-  let dirname = path.dirname(pathname);
-  let filename = path.basename(pathname, ext);
-  let file = './assets' + pathname;
-
-  if(!fs.existsSync(file)){
-    return next();
-  }
-
-  let output = (str) => {
-    if(!res.headersSent){
-      res.set('Content-Type', 'application/javascript; charset=utf-8');
-      res.send(str);
-    }
-  }
-
-  let stat = fs.statSync(file);
-  let mtime = bella.date.strtotime(stat.mtime);
-  let rd = './' + distDir + dirname;
-  if(!fs.existsSync(rd)){
-    mkdirp(rd);
-  }
-
-  let saveAs = path.resolve(rd + '/' + filename + '-' + mtime + ext);
-  if(fs.existsSync(saveAs)){
-    return fs.readFile(saveAs, 'utf8', (e, s) => {
-      output(s);
-    });
-  }
-
-  let minified = {};
-  let code = '';
-  if(config.ENV !== 'local'){
-    minified = UglifyJS.minify(file);
-    code = minified.code;
-  }
-  else{
-    code = fs.readFileSync(file, 'utf8');
-  }
-  output(code);
-  return fs.writeFileSync(saveAs, code, 'utf8');
-}
-
 
 export var build = (layout, data = {}, context = {}) => {
 
@@ -436,7 +414,7 @@ var render = (template, data, context, res) => {
 }
 
 export var io = (req, res, next) => {
-  res.publish = function(template, data, context){
+  res.publish = (template, data, context) => {
     return render(template, data, context, res);
   }
   next();

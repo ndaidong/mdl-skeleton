@@ -42,12 +42,14 @@ export var createDir = (ls) => {
   if(bella.isArray(ls)){
     var k = 0;
     ls.forEach((d) => {
+      d = path.normalize(d);
       mkdirp(d);
       ++k;
       console.log('%s, created dir "%s"... ', k, d);
     });
   }
   else{
+    ls = path.normalize(ls);
     mkdirp(ls);
   }
   console.log('Done.');
@@ -57,12 +59,14 @@ export var removeDir = (ls) => {
   if(bella.isArray(ls)){
     var k = 0;
     ls.forEach((d) => {
+      d = path.normalize(d);
       exec('rm -rf ' + d);
       ++k;
       console.log('%s, removed dir "%s"... ', k, d);
     });
   }
   else{
+    ls = path.normalize(ls);
     exec('rm -rf ' + ls);
   }
   console.log('Done.');

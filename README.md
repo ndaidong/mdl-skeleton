@@ -14,50 +14,9 @@ With this app structure, we can create a new website with Node.js and Material D
 
 ### Why this is cool?
 
-- New syntaxes to Handlebars based template so it can extend or include other templates like Jade.
+#### Make use of advanced techniques
 
-```
-{@extends 'layout'}
-<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-  {@includes 'common/header'}
-  {@includes 'home/main'}
-  {@includes 'common/footer'}
-</div>
-```
-
-Take a look at [/app/views/](https://github.com/ndaidong/mdl-skeleton/tree/master/app/views)
-
-
-- In-app automation builder runs when node.js process starts, to generate needed directories, download/minify javascript packages and optimize images. You can declare these resources in package.json, no longer need to use bower or browserify.
-
-```
-// new group of definition within package.json
-"builder": {
-  "directories": [
-    "storage/cache",
-    "storage/tmp"
-  ],
-  "cssDir": "assets/css",
-  "jsDir": "assets/js",
-  "imgDir": "assets/images",
-  "distDir": "dist",
-  "files": {
-    "fetch": "https://raw.githubusercontent.com/typicode/fetchival/master/index.js",
-    "material": "https://storage.googleapis.com/code.getmdl.io/1.0.4/material.min.js",
-    "ractive": "http://cdn.ractivejs.org/latest/ractive.js"
-  }
-}
-
-// when node.js server starts, it will
-// - create 4 folders: "storage", "storage/cache", "storage/tmp" and "dist"
-// - copy css, js, images under "assets/" to "dist/"
-// - download JS files defined with "files" property. Rename and minify them.
-```
-
-See [/app/workers/builder.js](https://github.com/ndaidong/mdl-skeleton/blob/master/app/workers/builder.js)
-
-
-- Built-in compiler, that will compile CSS resources with LESS, transpile JavaScript with Babel, group/minify/cache them, etc. Declare resources within controllers. And use "res.publish" instead of "res.render" as normal. It help to fastly share data from server to client.
+Built-in compiler, that compiles CSS resources with LESS and transpiles ES6 with Babel. Declare these resources within controllers. And use "res.publish" instead of "res.render" as normal. It also helps to fastly share data from server to client.
 
 ```
 /**
@@ -66,23 +25,32 @@ See [/app/workers/builder.js](https://github.com/ndaidong/mdl-skeleton/blob/mast
 
 export var start = (req, res) => {
 
+  // this block will be parsed by Handlebars engine and compiled to the template
   let data = {
-    title: 'Name & Title'
+    meta: {
+      title: 'Name & Title'
+    },
+    user: res.user
   }
 
-  let css = [
-    'styles'
-  ];
+  // this will be parsed by LESS, Babel
+  let context = {
+    css: [
+      'styles'
+    ],
+    js: [
+      'packages/material',
+      'packages/bella',
+      'packages/fetch',
+      'packages/promise',
+      'app'
+    ],
+    sdata: {
+      user: user // this will be shared to client script
+    }
+  }
 
-  let js = [
-    'packages/material',
-    'packages/bella',
-    'packages/fetch',
-    'packages/promise',
-    'app'
-  ];
-
-  return res.publish('landing', data, {css: css, js: js});
+  return res.publish('landing', data, context);
 }
 
 ```
@@ -133,6 +101,55 @@ res.publish(template, data, context);
 
 // client side script can access sdata via window.SDATA
 ```
+
+#### Extending and including templates
+
+New syntaxes to Handlebars based template so it can extend or include other templates like Jade.
+
+```
+{@extends 'layout'}
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+  {@includes 'common/header'}
+  {@includes 'home/main'}
+  {@includes 'common/footer'}
+</div>
+```
+
+Take a look at [/app/views/](https://github.com/ndaidong/mdl-skeleton/tree/master/app/views)
+
+
+#### Smart builder tool
+
+- In-app automation builder runs when node.js process starts, to generate needed directories, download/minify javascript packages and optimize images. You can declare these resources in package.json, no longer need to use bower or browserify.
+
+```
+// new group of definition within package.json
+"builder": {
+  "directories": [
+    "storage/cache",
+    "storage/tmp"
+  ],
+  "cssDir": "assets/css",
+  "jsDir": "assets/js",
+  "imgDir": "assets/images",
+  "distDir": "dist",
+  "files": {
+    "fetch": "https://raw.githubusercontent.com/typicode/fetchival/master/index.js",
+    "material": "https://storage.googleapis.com/code.getmdl.io/1.0.4/material.min.js",
+    "ractive": "http://cdn.ractivejs.org/latest/ractive.js"
+  }
+}
+
+// when node.js server starts, it will
+// - create 4 folders: "storage", "storage/cache", "storage/tmp" and "dist"
+// - copy css, js, images under "assets/" to "dist/"
+// - download JS files defined with "files" property. Rename and minify them.
+```
+
+See [/app/workers/builder.js](https://github.com/ndaidong/mdl-skeleton/blob/master/app/workers/builder.js)
+
+
+
 
 ### Installation
 

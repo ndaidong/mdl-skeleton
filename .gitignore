@@ -1,0 +1,15 @@
+# Logs
+logs
+*.log
+*.debug
+
+# Runtime data
+*.pid
+*.lock
+*.seed
+
+node_modules
+storage
+assets/js/packages
+dist
+app/configs/env
