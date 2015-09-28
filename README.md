@@ -1,15 +1,18 @@
 # Material Design Lite skeleton
 
-With this app structure, we can create a new website with Node.js and Material Design Lite faster than ever. Don't miss the best of technologies:
+Do you want to quickly generate a new website using Node.js and Material Design Lite? Try this:
 
-- [Material Design Lite](http://www.getmdl.io/)
-- ES6 with [Babel](https://babeljs.io/) tranpiler
-- [ExpressJS](http://expressjs.com)
-- [Handlebars](http://handlebarsjs.com/)
-- [LESS](http://lesscss.org/)
-- [Mongoose](http://mongoosejs.com/)
-- [Gulp](http://gulpjs.com/)
+```
+git clone https://github.com/ndaidong/mdl-skeleton.git
+cd mdl-skeleton
+npm install
+mkdir app/configs/env
+cp app/configs/vars.sample.js app/configs/env/vars.js
+gulp setup
+```
 
+Update app/configs/env/vars.js to fit your system.
+Any property defined within app/configs/env/vars.js will overwrite the same value in app/configs/base.js as default.
 
 
 ### Why this is cool?
@@ -149,23 +152,21 @@ Take a look at [/app/views/](https://github.com/ndaidong/mdl-skeleton/tree/maste
 See [/app/workers/builder.js](https://github.com/ndaidong/mdl-skeleton/blob/master/app/workers/builder.js)
 
 
+### Keywords
+
+Don't miss the best of technologies:
+
+- [Material Design Lite](http://www.getmdl.io/)
+- ES6 with [Babel](https://babeljs.io/) tranpiler
+- [ExpressJS](http://expressjs.com)
+- [Handlebars](http://handlebarsjs.com/)
+- [LESS](http://lesscss.org/)
+- [Mongoose](http://mongoosejs.com/)
+- [Gulp](http://gulpjs.com/)
 
 
-### Installation
 
-```
-git clone https://github.com/ndaidong/mdl-skeleton.git
-cd mdl-skeleton
-npm install
-mkdir app/configs/env
-cp app/configs/vars.sample.js app/configs/env/vars.js
-gulp setup
-```
-
-Update app/configs/env/vars.js to fit your system.
-Any property defined within app/configs/env/vars.js will overwrite the same value in app/configs/base.js as default.
-
-### Start
+### Starting
 
 ```
 node server.js
