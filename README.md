@@ -1,6 +1,6 @@
 # Material Design Lite skeleton
 
-Do you want to quickly generate a new website using Node.js and Material Design Lite? Try this:
+How to quickly generate a new website using Node.js and Material Design Lite? Try this:
 
 ```
 git clone https://github.com/ndaidong/mdl-skeleton.git
