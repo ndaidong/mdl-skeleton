@@ -1,0 +1,68 @@
+{
+  "version": "0.4.1",
+  "name": "mdl-skeleton",
+  "homepage": "http://md.techpush.net",
+  "description": "Material Design Lite - Skeleton for Node.js",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:ndaidong/mdl-skeleton"
+  },
+  "author": "Dong Nguyen <ndaidong@gmail.com> (https://twitter.com/ndaidong)",
+  "license": "MIT",
+  "engines": {
+    "node": ">= 0.9"
+  },
+  "main": "./server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "mocha"
+  },
+  "dependencies": {
+    "async": "latest",
+    "babel": "latest",
+    "bellajs": "latest",
+    "bluebird": "latest",
+    "body-parser": "latest",
+    "cookie-parser": "latest",
+    "copy-dir": "latest",
+    "device-detector": "latest",
+    "express": "latest",
+    "helmet": "latest",
+    "html-minifier": "latest",
+    "handlebars": "latest",
+    "less": "latest",
+    "mincss": "latest",
+    "mkdirp": "latest",
+    "mongoose": "latest",
+    "morgan": "latest",
+    "recursive-readdir": "latest",
+    "request": "latest",
+    "robots.txt": "latest",
+    "sanitize-html": "latest",
+    "serve-favicon": "latest",
+    "svgo": "latest",
+    "uglify-js": "latest"
+  },
+  "devDependencies": {
+    "chai": "latest",
+    "gulp": "latest",
+    "supertest": "latest"
+  },
+  "builder": {
+    "directories": [
+      "storage/cache",
+      "storage/tmp"
+    ],
+    "cssDir": "assets/css",
+    "jsDir": "assets/js",
+    "imgDir": "assets/images",
+    "distDir": "dist",
+    "files": {
+      "bella": "https://raw.githubusercontent.com/techpush/bella.js/master/src/bella.js",
+      "fetch": "https://raw.githubusercontent.com/typicode/fetchival/master/index.js",
+      "material": "https://storage.googleapis.com/code.getmdl.io/1.0.4/material.min.js",
+      "promise": "https://raw.githubusercontent.com/jakearchibald/es6-promise/master/dist/es6-promise.js",
+      "ractive": "http://cdn.ractivejs.org/latest/ractive.js"
+    }
+  }
+}
