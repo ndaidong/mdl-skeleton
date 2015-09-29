@@ -1,7 +1,7 @@
 {
   "version": "0.4.1",
   "name": "mdl-skeleton",
-  "homepage": "http://md.techpush.net",
+  "homepage": "http://techpush.net",
   "description": "Material Design Lite - Skeleton for Node.js",
   "repository": {
     "type": "git",
