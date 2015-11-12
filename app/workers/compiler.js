@@ -13,7 +13,34 @@ import mincss from 'mincss';
 import Promise from 'bluebird';
 
 var Handlebars = require('handlebars');
-var babel = require('babel');
+Handlebars.registerHelper({
+  eq: (v1, v2) => {
+    return v1 === v2;
+  },
+  ne: (v1, v2) => {
+    return v1 !== v2;
+  },
+  lt: (v1, v2) => {
+    return v1 < v2;
+  },
+  gt: (v1, v2) => {
+    return v1 > v2;
+  },
+  lte: (v1, v2) => {
+    return v1 <= v2;
+  },
+  gte: (v1, v2) => {
+    return v1 >= v2;
+  },
+  and: (v1, v2) => {
+    return v1 && v2;
+  },
+  or: (v1, v2) => {
+    return v1 || v2;
+  }
+});
+
+var traceur = require('traceur/src/node/api.js');
 var UglifyJS = require('uglify-js');
 
 var pkg = require('../../package.json');
@@ -23,12 +50,6 @@ var builder = pkg.builder;
 var cssDir = builder.cssDir + '/';
 var jsDir = builder.jsDir + '/';
 var distDir = builder.distDir;
-
-var transpileOpt = {
-  env: config.ENV,
-  comments: false,
-  blacklist: ['useStrict']
-}
 
 var removeNewLines = (s) => {
   s = s.replace(/(?:\r\n|\r|\n)+/gm, '');
@@ -127,20 +148,20 @@ var isES6 = (file) => {
   return true;
 }
 
-var transpile = (file) => {
+var transpile = (f) => {
   return new Promise((resolve, reject) => {
-    console.log(file);
-    babel.transformFile(file, transpileOpt, (err, result) => {
-      if(err){
-        console.trace(err);
-        return reject(err);
-      }
-      if(result && result.code){
-        return resolve(result.code);
-      }
-      return reject({error: 1, message: 'Error while transpiling ' + file});
-    });
-  })
+    if(!fs.existsSync(f)){
+      return reject({error: 1, message: 'File not found ' + f});
+    }
+    try{
+      let s = fs.readFileSync(f);
+      let c = traceur.compile(s);
+      return resolve(c);
+    }
+    catch(e){
+      return reject(e);
+    }
+  });
 }
 
 export var babelize = (js) => {
@@ -337,18 +358,23 @@ export var build = (layout, data = {}, context = {}) => {
           return next();
         }
 
-        let tmp = (!data.meta || !bella.isObject(data.meta)) ? {} : data.meta;
-        let meta = config.meta;
-        for(let k in meta){
-          if(!tmp[k]){
-            tmp[k] = meta[k];
+        try{
+          let tmp = (!data.meta || !bella.isObject(data.meta)) ? {} : data.meta;
+          let meta = config.meta;
+          for(let k in meta){
+            if(!tmp[k]){
+              tmp[k] = meta[k];
+            }
           }
+          data.meta = tmp;
+          data.revision = config.revision;
+          let template = Handlebars.compile(sHtml);
+          sHtml = template(data);
         }
-        data.meta = tmp;
-        data.revision = config.revision;
-
-        let template = Handlebars.compile(sHtml);
-        sHtml = template(data);
+        catch(e){
+          sHtml = 'Something went wrong. Please try again later.';
+          console.trace(e);
+        }
         next();
       },
       (next) => {

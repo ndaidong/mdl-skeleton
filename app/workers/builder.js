@@ -7,7 +7,7 @@ var fs = require('fs');
 var path = require('path');
 var exec = require('child_process').execSync;
 
-var babel = require('babel');
+var traceur = require('traceur/src/node/api.js');
 var bella = require('bellajs');
 var mkdirp = require('mkdirp').sync;
 var cpdir = require('copy-dir').sync;
@@ -16,7 +16,7 @@ var readdir = require('recursive-readdir');
 var UglifyJS = require('uglify-js');
 var SVGO = require('svgo');
 
-var fixPath = function(p){
+var fixPath = (p) => {
   return p ? (p += p.endsWith('/') ? '' : '/') : p;
 }
 
@@ -40,24 +40,25 @@ export var download = (src, saveas) => {
 
 export var createDir = (ls) => {
   if(bella.isArray(ls)){
-    var k = 0;
     ls.forEach((d) => {
       d = path.normalize(d);
-      mkdirp(d);
-      ++k;
-      console.log('%s, created dir "%s"... ', k, d);
+      if(!fs.existsSync(d)){
+        mkdirp(d);
+        console.log('Created dir "%s"... ', d);
+      }
     });
   }
   else{
     ls = path.normalize(ls);
-    mkdirp(ls);
+    if(!fs.existsSync(ls)){
+      mkdirp(ls);
+    }
   }
-  console.log('Done.');
 }
 
 export var removeDir = (ls) => {
   if(bella.isArray(ls)){
-    var k = 0;
+    let k = 0;
     ls.forEach((d) => {
       d = path.normalize(d);
       exec('rm -rf ' + d);
@@ -97,19 +98,19 @@ export var publish = (from, to) => {
 }
 
 export var minify = () => {
-  var dir = jsDir + '/packages/';
-  var files = bconf.files || {};
+  let dir = jsDir + '/packages/';
+  let files = bconf.files || {};
   if(bella.isObject(files)){
-    var destDir = dir;
-    var rd = fixPath(destDir);
-    var missed = [];
-    for(var alias in files){
-      var dest = rd + alias + '.js';
-      var min = rd + alias + '.min.js';
+    let destDir = dir;
+    let rd = fixPath(destDir);
+    let missed = [];
+    for(let alias in files){
+      let dest = rd + alias + '.js';
+      let min = rd + alias + '.min.js';
       if(fs.existsSync(dest) && !fs.existsSync(min)){
-        var s = fs.readFileSync(dest, 'utf8');
+        let s = fs.readFileSync(dest, 'utf8');
         if(s && s.length > 0){
-          var minified = UglifyJS.minify(s, {fromString: true});
+          let minified = UglifyJS.minify(s, {fromString: true});
           fs.writeFileSync(min, minified.code, 'utf8');
           console.log('Minified: %s', dest);
         }
@@ -251,13 +252,10 @@ export var transpile = (req, res, next) => {
   if(/\.*\/modules\/[A-Za-z0-9-_]+\.js/.test(req.url)){
     let f = 'assets' + req.url;
     if(fs.existsSync(f)){
-      return babel.transformFile(f, {}, (err, result) => {
-        if(err){
-          console.trace(err);
-        }
-        res.setHeader('content-type', 'text/javascript');
-        res.status(200).send(result.code);
-      });
+      let s = fs.readFileSync(f);
+      let c = traceur.compile(s);
+      res.setHeader('content-type', 'text/javascript');
+      res.status(200).send(c);
     }
   }
   next();
@@ -273,6 +271,7 @@ export var dir = () => {
 }
 
 export var setup = () => {
+  console.log('Start building...');
   dir();
   img();
   svg();

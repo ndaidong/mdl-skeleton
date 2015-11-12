@@ -1,5 +1,5 @@
 {
-  "version": "0.4.1",
+  "version": "0.4.2",
   "name": "mdl-skeleton",
   "homepage": "http://techpush.net",
   "description": "Material Design Lite - Skeleton for Node.js",
@@ -10,7 +10,7 @@
   "author": "Dong Nguyen <ndaidong@gmail.com> (https://twitter.com/ndaidong)",
   "license": "MIT",
   "engines": {
-    "node": ">= 0.9"
+    "node": ">= 4.0"
   },
   "main": "./server.js",
   "scripts": {
@@ -19,7 +19,6 @@
   },
   "dependencies": {
     "async": "latest",
-    "babel": "latest",
     "bellajs": "latest",
     "bluebird": "latest",
     "body-parser": "latest",
@@ -41,6 +40,7 @@
     "sanitize-html": "latest",
     "serve-favicon": "latest",
     "svgo": "latest",
+    "traceur": "latest",
     "uglify-js": "latest"
   },
   "devDependencies": {

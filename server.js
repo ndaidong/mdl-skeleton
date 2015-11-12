@@ -2,7 +2,12 @@
  * Starting app
  * @ndaidong
 **/
-require('babel/register');
+'use strict'; // enable strict mode to use "let" in node.js 4.x
+
+var traceur = require('traceur');
+traceur.require.makeDefault((filename) => {
+  return !filename.includes('node_modules');
+});
 
 var fs = require('fs');
 var path = require('path');
@@ -23,8 +28,8 @@ var app = express();
 var config = require('./configs/base');
 var envFile = './configs/env/vars';
 if(fs.existsSync(envFile + '.js')){
-  var configEnv = require(envFile);
-  var configAll = bella.copies(configEnv, config);
+  let configEnv = require(envFile);
+  let configAll = bella.copies(configEnv, config);
   config = configAll;
 }
 
@@ -57,13 +62,13 @@ app.use(bodyParser.json({limit: '2mb'}));
 app.use(bodyParser.urlencoded({limit: '2mb', extended: true}));
 app.use(cookieParser());
 
-app.use(function(req, res, next){
-  res.render404 = function(){
-    var s = fs.readFileSync('./app/views/errors/404.html', 'utf8');
+app.use((req, res, next) => {
+  res.render404 = () => {
+    let s = fs.readFileSync('./app/views/errors/404.html', 'utf8');
     res.status(404).send(s);
   }
-  res.render500 = function(){
-    var s = fs.readFileSync('./app/views/errors/500.html', 'utf8');
+  res.render500 = () => {
+    let s = fs.readFileSync('./app/views/errors/500.html', 'utf8');
     res.status(500).send(s);
   }
   next();
@@ -71,9 +76,9 @@ app.use(function(req, res, next){
 
 app.use(compiler.io);
 
-morgan.token('navigator', function(req){
-  var ua = req.headers['user-agent'];
-  var d = DeviceDetector.parse(ua);
+morgan.token('navigator', (req) => {
+  let ua = req.headers['user-agent'];
+  let d = DeviceDetector.parse(ua);
   if(d && bella.isObject(d)){
     if(d.type === 'Bot'){
       return bella.trim(d.engine + ' ' + d.version);
@@ -82,34 +87,34 @@ morgan.token('navigator', function(req){
   }
   return 'Unknown device';
 });
-morgan.token('user', function(req, res){
-  var u = res.user;
+morgan.token('user', (req, res) => {
+  let u = res.user;
   if(u && bella.isObject(u)){
     return u.name;
   }
   return 'Guest';
 });
-morgan.token('path', function(req){
+morgan.token('path', (req) => {
   return req.path;
 });
 
 app.use(morgan(':method :path :status - :res[content-length] bytes :response-time ms - :user, :navigator - [:date[web]]'));
 
-fs.readdirSync('./app/routers').forEach(function(file){
+fs.readdirSync('./app/routers').forEach((file) => {
   if(path.extname(file) === '.js'){
     require('./app/routers/' + file)(app);
   }
 });
 
-app.use(function(req, res){
+app.use((req, res) => {
   return res.render404();
 });
 
-app.use(function(error, req, res){
+app.use((error, req, res) => {
   return res.render500();
 });
 
-var onServerReady = function(){
+var onServerReady = () => {
   require('./app/workers/builder').setup();
 
   console.log('Server started at the port %d in %s mode', config.port, config.ENV);
