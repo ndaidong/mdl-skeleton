@@ -165,13 +165,12 @@ Any property defined within app/configs/env/vars.js will overwrite the same valu
 Don't miss the best of technologies:
 
 - [Material Design Lite](http://www.getmdl.io/)
-- ES6 with [Babel](https://babeljs.io/) tranpiler
+- ES6 with [Traceur](https://github.com/google/traceur-compiler) 
 - [ExpressJS](http://expressjs.com)
 - [Handlebars](http://handlebarsjs.com/)
 - [LESS](http://lesscss.org/)
 - [Mongoose](http://mongoosejs.com/)
 - [Gulp](http://gulpjs.com/)
-
 
 
 ### Starting
@@ -194,7 +193,7 @@ Original template: http://www.getmdl.io/templates/text-only/index.html
 
 ### Latest version
 
-v0.4.1
+v0.4.2
 
 
 ### License
