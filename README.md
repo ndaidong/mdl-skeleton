@@ -14,7 +14,7 @@ node server.js
 
 #### Make use of advanced techniques
 
-Built-in compiler, that compiles CSS resources with LESS and transpiles ES6 with Babel. Declare these resources within controllers. And use "res.publish" instead of "res.render" as normal. It also helps to fastly share data from server to client.
+Built-in compiler, that compiles CSS resources with LESS and transpiles ES6 with Traceur. Declare these resources within controllers. It also helps to fastly share data from server to client.
 
 ```
 /**
@@ -48,7 +48,7 @@ export var start = (req, res) => {
     }
   }
 
-  return res.publish('landing', data, context);
+  return res.render('landing', data, context);
 }
 
 ```
@@ -56,13 +56,13 @@ See [/app/workers/compiler.js](https://github.com/ndaidong/mdl-skeleton/blob/mas
 
 *Note:*
 
-- res.publish is a new function we attached to Express' Response method by defining the following line within server.js:
+We have overwritten ExpressJS' res.render function by defining the following line within server.js:
 
 ```
 app.use(compiler.io);
 ```
 
-res.publish requires 3 parameters as below:
+So the res.render now expects 3 parameters as below:
 
 - template: template file, similar to res.render(template)
 - data: an object will be Handlebars compile to template file
@@ -95,7 +95,7 @@ var context = {
   }
 }
 
-res.publish(template, data, context);
+res.render(template, data, context);
 
 // client side script can access sdata via window.SDATA
 ```
