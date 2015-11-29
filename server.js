@@ -2,7 +2,8 @@
  * Starting app
  * @ndaidong
 **/
-'use strict'; // enable strict mode to use "let" in node.js 4.x
+
+'use strict';
 
 var traceur = require('traceur');
 traceur.require.makeDefault((filename) => {

@@ -448,7 +448,7 @@ var render = (template, data, context, res) => {
 }
 
 export var io = (req, res, next) => {
-  res.publish = (template, data, context) => {
+  res.render = (template, data, context) => {
     return render(template, data, context, res);
   }
   next();

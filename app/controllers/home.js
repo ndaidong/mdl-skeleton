@@ -24,6 +24,6 @@ export var start = (req, res) => {
     ]
   }
 
-  return res.publish('landing', data, context);
+  return res.render('landing', data, context);
 }
 
