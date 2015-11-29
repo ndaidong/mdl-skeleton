@@ -191,9 +191,22 @@ pm2 start server.js -i 0 --name=main
 Original template: http://www.getmdl.io/templates/text-only/index.html
 
 
-### Latest version
+### Protractor
 
-v0.4.2
+If you want to write E2E test with [Protractor](http://www.protractortest.org), just place the test scripts under /test folder and install the tools as below:
+
+```
+sudo npm install -g protractor
+sudo webdriver-manager update
+webdriver-manager start
+```
+
+With the last command, we've got Selenium server running. Now open another terminal tab to start testing:
+
+```
+cd mdl-skeleton
+protractor test/protractor.conf.js
+```
 
 
 ### License
