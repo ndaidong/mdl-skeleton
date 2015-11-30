@@ -12,4 +12,4 @@ node_modules
 storage
 assets/js/packages
 dist
-app/configs/env
+configs/env
