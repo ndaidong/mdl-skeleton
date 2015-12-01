@@ -60,7 +60,7 @@
     "files": {
       "bella": "https://raw.githubusercontent.com/techpush/bella.js/master/src/bella.js",
       "fetch": "https://raw.githubusercontent.com/typicode/fetchival/master/index.js",
-      "material": "https://storage.googleapis.com/code.getmdl.io/1.0.4/material.min.js",
+      "material": "https://storage.googleapis.com/code.getmdl.io/1.0.6/material.min.js",
       "promise": "https://raw.githubusercontent.com/jakearchibald/es6-promise/master/dist/es6-promise.js",
       "ractive": "http://cdn.ractivejs.org/latest/ractive.js"
     }

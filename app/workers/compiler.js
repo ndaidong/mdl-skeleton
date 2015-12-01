@@ -119,23 +119,21 @@ export var lessify = (css) => {
       if(err){
         return reject(err);
       }
-      if(sCSS.length){
-        try{
-          if(config.ENV !== 'local'){
-            let minified = mincss.minify(sCSS);
-            fs.writeFileSync(saveAs, minified.css, 'utf8');
-          }
-          else{
-            fs.writeFileSync(saveAs, sCSS, 'utf8');
-          }
-          resolve(pname);
-        }
-        catch(e){
-          reject(e);
-        }
+      if(!sCSS || !sCSS.length){
+        return reject({error: 'Unknown error'});
       }
-      else{
-        reject({error: 'Unknown error'});
+      try{
+        if(config.ENV !== 'local'){
+          let minified = mincss.minify(sCSS);
+          fs.writeFileSync(saveAs, minified.css, 'utf8');
+        }
+        else{
+          fs.writeFileSync(saveAs, sCSS, 'utf8');
+        }
+        return resolve(pname);
+      }
+      catch(e){
+        return reject(e);
       }
     });
   });
@@ -224,23 +222,21 @@ export var babelize = (js) => {
         console.trace(err);
         return reject(err);
       }
-      if(sJS.length){
-        try{
-          if(config.ENV !== 'local'){
-            let minified = UglifyJS.minify(sJS, {fromString: true});
-            fs.writeFileSync(saveAs, minified.code, 'utf8');
-          }
-          else{
-            fs.writeFileSync(saveAs, sJS, 'utf8');
-          }
-          resolve(pname);
-        }
-        catch(e){
-          reject(e);
-        }
+      if(!sJS || !sJS.length){
+        return reject({error: 'Unknown error'});
       }
-      else{
-        reject({error: 'Unknown error'});
+      try{
+        if(config.ENV !== 'local'){
+          let minified = UglifyJS.minify(sJS, {fromString: true});
+          fs.writeFileSync(saveAs, minified.code, 'utf8');
+        }
+        else{
+          fs.writeFileSync(saveAs, sJS, 'utf8');
+        }
+        return resolve(pname);
+      }
+      catch(e){
+        return reject(e);
       }
     });
   });
@@ -430,7 +426,7 @@ export var build = (layout, data = {}, context = {}) => {
         console.trace(err);
         return reject(err);
       }
-      resolve(sHtml);
+      return resolve(sHtml);
     })
   });
 }
