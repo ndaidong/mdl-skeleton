@@ -2,7 +2,6 @@
  * Starting app
  * @ndaidong
 **/
-
 'use strict';
 
 var traceur = require('traceur');
@@ -19,10 +18,13 @@ var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var favicon = require('serve-favicon');
 var robots = require('robots.txt');
-var helmet = require('helmet');
 var morgan = require('morgan');
 var DeviceDetector = require('device-detector');
 var compiler = require('./app/workers/compiler');
+
+var helmet = require('helmet');
+var csp = require('helmet-csp');
+var hsts = require('hsts');
 
 var app = express();
 
@@ -41,6 +43,8 @@ app.set('port', config.port);
 app.set('etag', 'strong');
 
 app.use(helmet());
+app.use(csp(config.csp));
+app.use(hsts(config.hsts));
 app.use(helmet.xssFilter());
 app.use(helmet.frameguard());
 app.use(helmet.ieNoOpen());
@@ -64,6 +68,11 @@ app.use(bodyParser.urlencoded({limit: '2mb', extended: true}));
 app.use(cookieParser());
 
 app.use((req, res, next) => {
+  let ua = req.headers['user-agent'];
+  if(ua){
+    let di = DeviceDetector.parse(ua);
+    res.device = di;
+  }
   res.render404 = () => {
     let s = fs.readFileSync('./app/views/errors/404.html', 'utf8');
     res.status(404).send(s);
@@ -75,11 +84,8 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(compiler.io);
-
-morgan.token('navigator', (req) => {
-  let ua = req.headers['user-agent'];
-  let d = DeviceDetector.parse(ua);
+morgan.token('navigator', (req, res) => {
+  let d = res.device;
   if(d && bella.isObject(d)){
     if(d.type === 'Bot'){
       return bella.trim(d.engine + ' ' + d.version);
@@ -101,6 +107,8 @@ morgan.token('path', (req) => {
 
 app.use(morgan(':method :path :status - :res[content-length] bytes :response-time ms - :user, :navigator - [:date[web]]'));
 
+app.use(compiler.io);
+
 fs.readdirSync('./app/routers').forEach((file) => {
   if(path.extname(file) === '.js'){
     require('./app/routers/' + file)(app);
@@ -117,7 +125,6 @@ app.use((error, req, res) => {
 
 var onServerReady = () => {
   require('./app/workers/builder').setup();
-
   console.log('Server started at the port %d in %s mode', config.port, config.ENV);
   console.log('http://127.0.0.1:' + config.port);
   console.log(config.meta.url);
