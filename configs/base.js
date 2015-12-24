@@ -2,7 +2,7 @@ var pkg = require('./../package.json');
 
 var config = {
   ENV: 'dev'
-}
+};
 
 config.name = pkg.name || '';
 config.version = pkg.version || '';
@@ -24,7 +24,7 @@ config.meta = {
   domain: '',
   url: '',
   canonical: ''
-}
+};
 
 config.port = 9999;
 
@@ -37,7 +37,7 @@ config.settings = {
   cacheDir: './storage/cache/',
   viewDir: './app/views/',
   tplFileExtension: '.html'
-}
+};
 
 /*eslint-disable */
 config.csp = {
@@ -55,13 +55,13 @@ config.csp = {
   setAllHeaders: false,
   disableAndroid: false,
   safari5: false
-}
+};
 
 config.hsts = {
   maxAge: 10886400000,
   includeSubDomains: true,
   force: true
-}
+};
 /*eslint-enable */
 
 module.exports = config;

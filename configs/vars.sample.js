@@ -8,4 +8,4 @@ module.exports = {
     image: 'http://' + domain + '/images/bg/bb.jpg',
     url: 'http://' + domain
   }
-}
+};

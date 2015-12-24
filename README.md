@@ -66,7 +66,7 @@ So the res.render now expects 3 parameters as below:
 
 - template: template file, similar to res.render(template)
 - data: an object will be Handlebars compile to template file
-- context: another object with it we can declare css, js and SDATA (shared data). While css and js resources will be compiled and groupped to one file, ADATA will be shared to client script as a global object.
+- context: another object with it we can declare css, js and SDATA (shared data). While css and js resources will be compiled and groupped to one file, SDATA will be shared to client script as a global object.
 
 Example:
 
@@ -165,7 +165,7 @@ Any property defined within app/configs/env/vars.js will overwrite the same valu
 Don't miss the best of technologies:
 
 - [Material Design Lite](http://www.getmdl.io/)
-- ES6 with [Traceur](https://github.com/google/traceur-compiler) 
+- ES6 with [Traceur](https://github.com/google/traceur-compiler)
 - [ExpressJS](http://expressjs.com)
 - [Handlebars](http://handlebarsjs.com/)
 - [LESS](http://lesscss.org/)

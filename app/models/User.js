@@ -9,7 +9,7 @@ import Promise from 'bluebird';
 var User = require('./schemas/User');
 
 var encrypt = (pass, salt = '') => {
-  if(!salt){
+  if (!salt) {
     salt = bella.createId(10);
   }
   var hash = crypto.createHmac('sha512', salt);
@@ -17,8 +17,8 @@ var encrypt = (pass, salt = '') => {
   return {
     hash: hash.digest('hex'),
     salt: salt
-  }
-}
+  };
+};
 
 export var create = (data) => {
   return new Promise((resolve, reject) => {
@@ -34,12 +34,11 @@ export var create = (data) => {
     u.hash = p.hash;
 
     u.save((err) => {
-      if(err){
-        console.trace(err);
+      if (err) {
         return reject(err);
       }
       return resolve(u);
     });
   });
 
-}
+};

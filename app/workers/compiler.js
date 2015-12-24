@@ -3,6 +3,9 @@
  * @ndaidong
  **/
 
+/* eslint guard-for-in: 0*/
+/* eslint no-console: 0*/
+
 import path from 'path';
 import fs from 'fs';
 import less from 'less';
@@ -54,7 +57,7 @@ var distDir = builder.distDir;
 var removeNewLines = (s) => {
   s = s.replace(/(?:\r\n|\r|\n)+/gm, '');
   return s;
-}
+};
 
 export var lessify = (css) => {
 
@@ -62,7 +65,7 @@ export var lessify = (css) => {
 
     let fstats = [];
     let acss = [], aless = [];
-    if(bella.isString(css)){
+    if (bella.isString(css)) {
       css = [css];
     }
 
@@ -70,16 +73,15 @@ export var lessify = (css) => {
       let full = cssDir + file;
       let part = path.parse(full);
       let ext = part.ext;
-      if(!ext){
+      if (!ext) {
         full += '.css';
       }
-      if(fs.existsSync(full)){
+      if (fs.existsSync(full)) {
         let stat = fs.statSync(full);
         fstats.push(stat.mtime);
-        if(ext === '.less'){
+        if (ext === '.less') {
           aless.push(full);
-        }
-        else{
+        } else {
           acss.push(full);
         }
       }
@@ -90,7 +92,7 @@ export var lessify = (css) => {
     let pname = '/css/' + fname + '.css';
     let saveAs = distDir + pname;
 
-    if(fs.existsSync(saveAs)){
+    if (fs.existsSync(saveAs)) {
       return resolve(pname);
     }
 
@@ -116,75 +118,72 @@ export var lessify = (css) => {
     });
 
     async.series(series, (err) => {
-      if(err){
+      if (err) {
         return reject(err);
       }
-      if(!sCSS || !sCSS.length){
+      if (!sCSS || !sCSS.length) {
         return reject({error: 'Unknown error'});
       }
-      try{
-        if(config.ENV !== 'local'){
+      try {
+        if (config.ENV !== 'local') {
           let minified = mincss.minify(sCSS);
           fs.writeFileSync(saveAs, minified.css, 'utf8');
-        }
-        else{
+        } else {
           fs.writeFileSync(saveAs, sCSS, 'utf8');
         }
         return resolve(pname);
-      }
-      catch(e){
+      } catch (e) {
         return reject(e);
       }
     });
   });
-}
+};
 
 var isES6 = (file) => {
-  if(!file.match(/(\/es6\/|\.?es6)/)){
+  if (!file.match(/(\/es6\/|\.?es6)/)) {
     return false;
   }
   return true;
-}
+};
 
 var transpile = (f) => {
   return new Promise((resolve, reject) => {
-    if(!fs.existsSync(f)){
+    if (!fs.existsSync(f)) {
       return reject({error: 1, message: 'File not found ' + f});
     }
-    try{
+    try {
       let s = fs.readFileSync(f);
       let c = traceur.compile(s);
       return resolve(c);
-    }
-    catch(e){
+    } catch (e) {
       return reject(e);
     }
   });
-}
+};
 
 export var babelize = (js) => {
 
   return new Promise((resolve, reject) => {
 
     let fstats = [], jsfiles = [];
-    if(bella.isString(js)){
+    if (bella.isString(js)) {
       js = [js];
     }
 
     js.forEach((file) => {
       let full = jsDir + file;
       let ext = path.extname(full);
-      if(!ext || ext !== '.js'){
+      if (!ext || ext !== '.js') {
         let _full = '';
-        if(fs.existsSync(full + '.js')){
+        if (fs.existsSync(full + '.js')) {
           _full = full + '.js';
         }
-        if((config.ENV !== 'local' || full.match(/\/packages\//)) && fs.existsSync(full + '.min.js')){
+        if ((config.ENV !== 'local' || full.match(/\/packages\//)) && fs.existsSync(full + '.min.js')) {
           _full = full + '.min.js';
         }
         full = _full;
       }
-      if(fs.existsSync(full)){
+      if (fs.existsSync(full)) {
         let stat = fs.statSync(full);
         fstats.push(stat.mtime);
         jsfiles.push(full);
@@ -196,7 +195,7 @@ export var babelize = (js) => {
     let pname = '/js/' + fname + '.js';
     let saveAs = distDir + pname;
 
-    if(fs.existsSync(saveAs)){
+    if (fs.existsSync(saveAs)) {
       return resolve(pname);
     }
 
@@ -205,42 +204,40 @@ export var babelize = (js) => {
 
     jsfiles.forEach((file) => {
       series.push((next) => {
-        if(!isES6(file)){
+        if (!isES6(file)) {
           let s = fs.readFileSync(file, 'utf8');
-          sJS += (s + ';');
+          sJS += s + ';';
           return next();
         }
         transpile(file).then((s) => {
           console.log(file);
-          sJS += (s + ';');
+          sJS += s + ';';
         }).finally(next);
       });
     });
 
     async.series(series, (err) => {
-      if(err){
+      if (err) {
         console.trace(err);
         return reject(err);
       }
-      if(!sJS || !sJS.length){
+      if (!sJS || !sJS.length) {
         return reject({error: 'Unknown error'});
       }
-      try{
-        if(config.ENV !== 'local'){
+      try {
+        if (config.ENV !== 'local') {
           let minified = UglifyJS.minify(sJS, {fromString: true});
           fs.writeFileSync(saveAs, minified.code, 'utf8');
-        }
-        else{
+        } else {
           fs.writeFileSync(saveAs, sJS, 'utf8');
         }
         return resolve(pname);
-      }
-      catch(e){
+      } catch (e) {
         return reject(e);
       }
     });
   });
-}
+};
 
 export var build = (layout, data = {}, context = {}) => {
 
@@ -256,28 +253,28 @@ export var build = (layout, data = {}, context = {}) => {
     let getPlaceHolders = (_s) => {
       let reg = /\{@includes\s+(\'?([A-Za-z0-9-.\/]+)\'?|\"?([A-Za-z0-9-.\/]+)\"?)\}/;
       return _s.match(reg);
-    }
+    };
 
     let a = ss.split('\n');
     let matches = [];
-    if(a.length > 0){
+    if (a.length > 0) {
       a.forEach((line) => {
-        if(line.includes('@includes')){
+        if (line.includes('@includes')) {
           let m = getPlaceHolders(line);
-          if(m && m.length > 2){
+          if (m && m.length > 2) {
             matches.push({place: m[0], name: m[2]});
           }
         }
       });
     }
 
-    if(matches.length > 0){
+    if (matches.length > 0) {
       matches.forEach((m) => {
         let place = m.place;
         let f = path.normalize(dd + '/' + m.name + ext);
-        if(fs.existsSync(f)){
+        if (fs.existsSync(f)) {
           let cs = fs.readFileSync(f, 'utf8');
-          if(cs){
+          if (cs) {
             let ps = path.dirname(f);
             cs = getPartial(cs, ps);
             ss = ss.replace(place, cs);
@@ -286,49 +283,49 @@ export var build = (layout, data = {}, context = {}) => {
       });
     }
     return ss;
-  }
+  };
 
   let getContainer = (ss, dd) => {
     let reg = /\{@extends\s+(\'?([A-Za-z0-9-.\/]+)\'?|\"?([A-Za-z0-9-.\/]+)\"?)\}/i;
     let matches = ss.match(reg);
-    if(matches && matches.length > 2){
+    if (matches && matches.length > 2) {
       let place = matches[0];
       ss = ss.replace(place, '');
       let f = path.normalize(dd + '/' + matches[2] + ext);
-      if(fs.existsSync(f)){
+      if (fs.existsSync(f)) {
         let cs = fs.readFileSync(f, 'utf8');
-        if(cs){
+        if (cs) {
           ss = cs.replace('{@content}', ss);
         }
       }
     }
     return ss;
-  }
+  };
 
   let continuable = true;
   let sHtml = '';
 
-  if(!data || !bella.isObject(data)){
+  if (!data || !bella.isObject(data)) {
     data = {
       meta: {}
-    }
+    };
   }
 
   return new Promise((resolve, reject) => {
     return async.series([
       (next) => {
-        if(!fs.existsSync(file)){
+        if (!fs.existsSync(file)) {
           console.log('Layout missing: %s', file);
           continuable = false;
         }
         next();
       },
       (next) => {
-        if(!continuable){
+        if (!continuable) {
           return next();
         }
         fs.readFile(file, 'utf8', (err, s) => {
-          if(err){
+          if (err) {
             console.trace(err);
           }
           sHtml = s;
@@ -336,29 +333,29 @@ export var build = (layout, data = {}, context = {}) => {
         });
       },
       (next) => {
-        if(!continuable || !sHtml){
+        if (!continuable || !sHtml) {
           return next();
         }
         sHtml = getContainer(sHtml, dir);
         next();
       },
       (next) => {
-        if(!continuable || !sHtml){
+        if (!continuable || !sHtml) {
           return next();
         }
         sHtml = getPartial(sHtml, dir);
         next();
       },
       (next) => {
-        if(!continuable || !sHtml){
+        if (!continuable || !sHtml) {
           return next();
         }
 
-        try{
-          let tmp = (!data.meta || !bella.isObject(data.meta)) ? {} : data.meta;
+        try {
+          let tmp = !data.meta || !bella.isObject(data.meta) ? {} : data.meta;
           let meta = config.meta;
-          for(let k in meta){
-            if(!tmp[k]){
+          for (let k in meta) {
+            if (!tmp[k]) {
               tmp[k] = meta[k];
             }
           }
@@ -366,51 +363,53 @@ export var build = (layout, data = {}, context = {}) => {
           data.revision = config.revision;
           let template = Handlebars.compile(sHtml);
           sHtml = template(data);
-        }
-        catch(e){
+        } catch (e) {
           sHtml = 'Something went wrong. Please try again later.';
           console.trace(e);
         }
         next();
       },
       (next) => {
-        if(!continuable || !sHtml){
+        if (!continuable || !sHtml) {
           return next();
         }
         let css = context.css || false;
-        if(!css){
+        if (!css) {
           return next();
         }
         lessify(css).then((href) => {
-          sHtml = sHtml.replace('{@style}', '<link rel="stylesheet" type="text/css" href="' + href + '?rev=' + config.revision + '">');
+          let linkTag = '<link rel="stylesheet" type="text/css" href="' + href + '?rev=' + config.revision + '">';
+          sHtml = sHtml.replace('{@style}', linkTag);
         }).catch((e) => {
           console.trace(e);
         }).finally(next);
       },
       (next) => {
-        if(!continuable || !sHtml){
+        if (!continuable || !sHtml) {
           return next();
         }
         let js = context.js || false;
-        if(!js){
+        if (!js) {
           return next();
         }
         babelize(js).then((src) => {
-          sHtml = sHtml.replace('{@script}', '<script type="text/javascript" src="' + src + '?rev=' + config.revision + '"></script>');
+          let scriptTag = '<script type="text/javascript" src="' + src + '?rev=' + config.revision + '"></script>';
+          sHtml = sHtml.replace('{@script}', scriptTag);
         }).catch((e) => {
           console.trace(e);
         }).finally(next);
       },
       (next) => {
-        if(!continuable || !sHtml){
+        if (!continuable || !sHtml) {
           return next();
         }
         let sdata = bella.hasProperty(context, 'sdata') ? context.sdata : {};
-        sHtml = sHtml.replace('{@sdata}', '<script type="text/javascript">window.SDATA=' + JSON.stringify(sdata) + '</script>');
+        let scriptTag = '<script type="text/javascript">window.SDATA=' + JSON.stringify(sdata) + '</script>';
+        sHtml = sHtml.replace('{@sdata}', scriptTag);
         next();
       },
       (next) => {
-        if(!continuable || !sHtml){
+        if (!continuable || !sHtml) {
           return next();
         }
         sHtml = sHtml.replace('{@style}', '');
@@ -422,18 +421,18 @@ export var build = (layout, data = {}, context = {}) => {
         next();
       }
     ], (err) => {
-      if(err){
+      if (err) {
         console.trace(err);
         return reject(err);
       }
       return resolve(sHtml);
-    })
+    });
   });
-}
+};
 
 var render = (template, data, context, res) => {
   build(template, data, context).then((s) => {
-    if(res && !res.headersSent){
+    if (res && !res.headersSent) {
       return res.status(200).send(s);
     }
     return res.end();
@@ -441,12 +440,12 @@ var render = (template, data, context, res) => {
     console.trace(e);
     res.render500();
   });
-}
+};
 
 export var io = (req, res, next) => {
   res.render = (template, data, context) => {
     return render(template, data, context, res);
-  }
+  };
   next();
-}
+};
 

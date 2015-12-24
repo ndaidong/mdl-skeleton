@@ -9,7 +9,7 @@ export var start = (req, res) => {
       title: 'MDL skeleton'
     },
     title: 'Name & Title'
-  }
+  };
 
   let context = {
     css: [
@@ -22,8 +22,7 @@ export var start = (req, res) => {
       'packages/promise',
       'app'
     ]
-  }
+  };
 
   return res.render('landing', data, context);
-}
-
+};

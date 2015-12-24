@@ -30,7 +30,7 @@ var app = express();
 
 var config = require('./configs/base');
 var envFile = './configs/env/vars';
-if(fs.existsSync(envFile + '.js')){
+if (fs.existsSync(envFile + '.js')) {
   let configEnv = require(envFile);
   let configAll = bella.copies(configEnv, config);
   config = configAll;
@@ -58,7 +58,7 @@ var staticOpt = {
   maxAge: 24 * 60 * 6e4,
   etag: true,
   lastModified: true
-}
+};
 
 app.use(express.static(path.join(__dirname, 'assets'), staticOpt));
 app.use(express.static(path.join(__dirname, 'dist'), staticOpt));
@@ -69,25 +69,25 @@ app.use(cookieParser());
 
 app.use((req, res, next) => {
   let ua = req.headers['user-agent'];
-  if(ua){
+  if (ua) {
     let di = DeviceDetector.parse(ua);
     res.device = di;
   }
   res.render404 = () => {
     let s = fs.readFileSync('./app/views/errors/404.html', 'utf8');
     res.status(404).send(s);
-  }
+  };
   res.render500 = () => {
     let s = fs.readFileSync('./app/views/errors/500.html', 'utf8');
     res.status(500).send(s);
-  }
+  };
   next();
 });
 
 morgan.token('navigator', (req, res) => {
   let d = res.device;
-  if(d && bella.isObject(d)){
-    if(d.type === 'Bot'){
+  if (d && bella.isObject(d)) {
+    if (d.type === 'Bot') {
       return bella.trim(d.engine + ' ' + d.version);
     }
     return bella.trim(d.browser + ' ' + d.version) + ', ' + bella.trim(d.os + ' ' + d.type);
@@ -96,7 +96,7 @@ morgan.token('navigator', (req, res) => {
 });
 morgan.token('user', (req, res) => {
   let u = res.user;
-  if(u && bella.isObject(u)){
+  if (u && bella.isObject(u)) {
     return u.name;
   }
   return 'Guest';
@@ -105,12 +105,13 @@ morgan.token('path', (req) => {
   return req.path;
 });
 
-app.use(morgan(':method :path :status - :res[content-length] bytes :response-time ms - :user, :navigator - [:date[web]]'));
+var mgTpl = ':method :path :status - :res[content-length] bytes :response-time ms - :user, :navigator - [:date[web]]';
+app.use(morgan(mgTpl));
 
 app.use(compiler.io);
 
 fs.readdirSync('./app/routers').forEach((file) => {
-  if(path.extname(file) === '.js'){
+  if (path.extname(file) === '.js') {
     require('./app/routers/' + file)(app);
   }
 });
@@ -125,9 +126,11 @@ app.use((error, req, res) => {
 
 var onServerReady = () => {
   require('./app/workers/builder').setup();
+  /*eslint-disable */
   console.log('Server started at the port %d in %s mode', config.port, config.ENV);
   console.log('http://127.0.0.1:' + config.port);
   console.log(config.meta.url);
-}
+  /*eslint-enable */
+};
 
 app.listen(config.port, onServerReady);
