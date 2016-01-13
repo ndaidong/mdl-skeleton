@@ -19,15 +19,15 @@ var readdir = require('recursive-readdir');
 var UglifyJS = require('uglify-js');
 var SVGO = require('svgo');
 
-function fixPath(p) {
+var fixPath = (p) => {
   if (!p) {
     return '';
   }
-  if (!p.endsWith('/')) {
+  if (p.endsWith('/')) {
     return p;
   }
   return p + '/';
-}
+};
 
 var pkg = require('../../package');
 var bconf = pkg.builder || {},
@@ -89,7 +89,9 @@ export var createEmptyFile = (dest) => {
   } else if (ext === '.css' || ext === '.less') {
     content = '/*' + fname + '*/';
   }
-  fs.writeFileSync(dest, content, {encoding: 'utf8'});
+  fs.writeFileSync(dest, content, {
+    encoding: 'utf8'
+  });
 };
 
 export var publish = (from, to) => {
@@ -116,7 +118,9 @@ export var minify = () => {
       if (fs.existsSync(dest) && !fs.existsSync(min)) {
         let s = fs.readFileSync(dest, 'utf8');
         if (s && s.length > 0) {
-          let minified = UglifyJS.minify(s, {fromString: true});
+          let minified = UglifyJS.minify(s, {
+            fromString: true
+          });
           fs.writeFileSync(min, minified.code, 'utf8');
           console.log('Minified: %s', dest);
         } else {
@@ -135,6 +139,7 @@ export var minify = () => {
 export var img = () => {
   publish(imgDir, distDir + '/images/');
 };
+
 export var font = () => {
   publish(fontDir, distDir + '/fonts/');
 };

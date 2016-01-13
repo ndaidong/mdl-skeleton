@@ -64,7 +64,8 @@ export var lessify = (css) => {
   return new Promise((resolve, reject) => {
 
     let fstats = [];
-    let acss = [], aless = [];
+    let acss = [],
+      aless = [];
     if (bella.isString(css)) {
       css = [css];
     }
@@ -122,7 +123,9 @@ export var lessify = (css) => {
         return reject(err);
       }
       if (!sCSS || !sCSS.length) {
-        return reject({error: 'Unknown error'});
+        return reject({
+          error: 'Unknown error'
+        });
       }
       try {
         if (config.ENV !== 'local') {
@@ -149,7 +152,10 @@ var isES6 = (file) => {
 var transpile = (f) => {
   return new Promise((resolve, reject) => {
     if (!fs.existsSync(f)) {
-      return reject({error: 1, message: 'File not found ' + f});
+      return reject({
+        error: 1,
+        message: 'File not found ' + f
+      });
     }
     try {
       let s = fs.readFileSync(f);
@@ -165,7 +171,8 @@ export var babelize = (js) => {
 
   return new Promise((resolve, reject) => {
 
-    let fstats = [], jsfiles = [];
+    let fstats = [],
+      jsfiles = [];
     if (bella.isString(js)) {
       js = [js];
     }
@@ -222,11 +229,15 @@ export var babelize = (js) => {
         return reject(err);
       }
       if (!sJS || !sJS.length) {
-        return reject({error: 'Unknown error'});
+        return reject({
+          error: 'Unknown error'
+        });
       }
       try {
         if (config.ENV !== 'local') {
-          let minified = UglifyJS.minify(sJS, {fromString: true});
+          let minified = UglifyJS.minify(sJS, {
+            fromString: true
+          });
           fs.writeFileSync(saveAs, minified.code, 'utf8');
         } else {
           fs.writeFileSync(saveAs, sJS, 'utf8');
@@ -262,7 +273,10 @@ export var build = (layout, data = {}, context = {}) => {
         if (line.includes('@includes')) {
           let m = getPlaceHolders(line);
           if (m && m.length > 2) {
-            matches.push({place: m[0], name: m[2]});
+            matches.push({
+              place: m[0],
+              name: m[2]
+            });
           }
         }
       });
@@ -319,8 +333,7 @@ export var build = (layout, data = {}, context = {}) => {
           continuable = false;
         }
         next();
-      },
-      (next) => {
+      }, (next) => {
         if (!continuable) {
           return next();
         }
@@ -331,22 +344,19 @@ export var build = (layout, data = {}, context = {}) => {
           sHtml = s;
           next();
         });
-      },
-      (next) => {
+      }, (next) => {
         if (!continuable || !sHtml) {
           return next();
         }
         sHtml = getContainer(sHtml, dir);
         next();
-      },
-      (next) => {
+      }, (next) => {
         if (!continuable || !sHtml) {
           return next();
         }
         sHtml = getPartial(sHtml, dir);
         next();
-      },
-      (next) => {
+      }, (next) => {
         if (!continuable || !sHtml) {
           return next();
         }
@@ -368,8 +378,7 @@ export var build = (layout, data = {}, context = {}) => {
           console.trace(e);
         }
         next();
-      },
-      (next) => {
+      }, (next) => {
         if (!continuable || !sHtml) {
           return next();
         }
@@ -383,8 +392,7 @@ export var build = (layout, data = {}, context = {}) => {
         }).catch((e) => {
           console.trace(e);
         }).finally(next);
-      },
-      (next) => {
+      }, (next) => {
         if (!continuable || !sHtml) {
           return next();
         }
@@ -398,8 +406,7 @@ export var build = (layout, data = {}, context = {}) => {
         }).catch((e) => {
           console.trace(e);
         }).finally(next);
-      },
-      (next) => {
+      }, (next) => {
         if (!continuable || !sHtml) {
           return next();
         }
@@ -407,8 +414,7 @@ export var build = (layout, data = {}, context = {}) => {
         let scriptTag = '<script type="text/javascript">window.SDATA=' + JSON.stringify(sdata) + '</script>';
         sHtml = sHtml.replace('{@sdata}', scriptTag);
         next();
-      },
-      (next) => {
+      }, (next) => {
         if (!continuable || !sHtml) {
           return next();
         }
@@ -448,4 +454,3 @@ export var io = (req, res, next) => {
   };
   next();
 };
-
