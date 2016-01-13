@@ -53,7 +53,8 @@
     "requirejs": true,
     "Ractive": true,
     "Angular": true,
-    "jQuery": true
+    "jQuery": true,
+    "Bella": true
   },
 
   "plugins": [

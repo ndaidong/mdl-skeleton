@@ -2,7 +2,7 @@
  * start.js
  * Init app
  * @ndaidong
-*/
+ */
 (function init(sdata) {
 
   var App = window.App = {};
