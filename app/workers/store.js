@@ -62,6 +62,7 @@ bella.scheduler.every('10m', () => {
       delete store[k];
     }
   }
+  return true;
 });
 
 export var get = (id) => {
@@ -93,4 +94,5 @@ export var fdel = (f) => {
   if (fs.existsSync(f)) {
     return fs.unlinkSync(f);
   }
+  return false;
 };

@@ -67,7 +67,7 @@ export var lessify = (css) => {
     let acss = [],
       aless = [];
     if (bella.isString(css)) {
-      css = [css];
+      css = [ css ];
     }
 
     css.forEach((file) => {
@@ -111,14 +111,15 @@ export var lessify = (css) => {
     aless.forEach((file) => {
       let s = fs.readFileSync(file, 'utf8');
       series.push((next) => {
-        less.render(s).then((output) => {
-          sCSS += output.css;
-          next();
-        });
+        less.render(s)
+          .then((output) => {
+            sCSS += output.css;
+            next();
+          });
       });
     });
 
-    async.series(series, (err) => {
+    return async.series(series, (err) => {
       if (err) {
         return reject(err);
       }
@@ -174,7 +175,7 @@ export var babelize = (js) => {
     let fstats = [],
       jsfiles = [];
     if (bella.isString(js)) {
-      js = [js];
+      js = [ js ];
     }
 
     js.forEach((file) => {
@@ -216,14 +217,16 @@ export var babelize = (js) => {
           sJS += s + ';';
           return next();
         }
-        transpile(file).then((s) => {
-          console.log(file);
-          sJS += s + ';';
-        }).finally(next);
+        return transpile(file)
+          .then((s) => {
+            console.log(file);
+            sJS += s + ';';
+          })
+          .finally(next);
       });
     });
 
-    async.series(series, (err) => {
+    return async.series(series, (err) => {
       if (err) {
         console.trace(err);
         return reject(err);
@@ -333,30 +336,34 @@ export var build = (layout, data = {}, context = {}) => {
           continuable = false;
         }
         next();
-      }, (next) => {
+      },
+      (next) => {
         if (!continuable) {
           return next();
         }
-        fs.readFile(file, 'utf8', (err, s) => {
+        return fs.readFile(file, 'utf8', (err, s) => {
           if (err) {
             console.trace(err);
           }
           sHtml = s;
           next();
         });
-      }, (next) => {
+      },
+      (next) => {
         if (!continuable || !sHtml) {
           return next();
         }
         sHtml = getContainer(sHtml, dir);
-        next();
-      }, (next) => {
+        return next();
+      },
+      (next) => {
         if (!continuable || !sHtml) {
           return next();
         }
         sHtml = getPartial(sHtml, dir);
-        next();
-      }, (next) => {
+        return next();
+      },
+      (next) => {
         if (!continuable || !sHtml) {
           return next();
         }
@@ -377,8 +384,9 @@ export var build = (layout, data = {}, context = {}) => {
           sHtml = 'Something went wrong. Please try again later.';
           console.trace(e);
         }
-        next();
-      }, (next) => {
+        return next();
+      },
+      (next) => {
         if (!continuable || !sHtml) {
           return next();
         }
@@ -386,13 +394,17 @@ export var build = (layout, data = {}, context = {}) => {
         if (!css) {
           return next();
         }
-        lessify(css).then((href) => {
-          let linkTag = '<link rel="stylesheet" type="text/css" href="' + href + '?rev=' + config.revision + '">';
-          sHtml = sHtml.replace('{@style}', linkTag);
-        }).catch((e) => {
-          console.trace(e);
-        }).finally(next);
-      }, (next) => {
+        return lessify(css)
+          .then((href) => {
+            let linkTag = '<link rel="stylesheet" type="text/css" href="' + href + '?rev=' + config.revision + '">';
+            sHtml = sHtml.replace('{@style}', linkTag);
+          })
+          .catch((e) => {
+            console.trace(e);
+          })
+          .finally(next);
+      },
+      (next) => {
         if (!continuable || !sHtml) {
           return next();
         }
@@ -400,21 +412,26 @@ export var build = (layout, data = {}, context = {}) => {
         if (!js) {
           return next();
         }
-        babelize(js).then((src) => {
-          let scriptTag = '<script type="text/javascript" src="' + src + '?rev=' + config.revision + '"></script>';
-          sHtml = sHtml.replace('{@script}', scriptTag);
-        }).catch((e) => {
-          console.trace(e);
-        }).finally(next);
-      }, (next) => {
+        return babelize(js)
+          .then((src) => {
+            let scriptTag = '<script type="text/javascript" src="' + src + '?rev=' + config.revision + '"></script>';
+            sHtml = sHtml.replace('{@script}', scriptTag);
+          })
+          .catch((e) => {
+            console.trace(e);
+          })
+          .finally(next);
+      },
+      (next) => {
         if (!continuable || !sHtml) {
           return next();
         }
         let sdata = bella.hasProperty(context, 'sdata') ? context.sdata : {};
         let scriptTag = '<script type="text/javascript">window.SDATA=' + JSON.stringify(sdata) + '</script>';
         sHtml = sHtml.replace('{@sdata}', scriptTag);
-        next();
-      }, (next) => {
+        return next();
+      },
+      (next) => {
         if (!continuable || !sHtml) {
           return next();
         }
@@ -424,7 +441,7 @@ export var build = (layout, data = {}, context = {}) => {
         sHtml = removeNewLines(sHtml);
         sHtml = sHtml.replace(/\s+/gm, ' ');
         sHtml = sHtml.replace(/>\s+</gm, '><');
-        next();
+        return next();
       }
     ], (err) => {
       if (err) {
@@ -437,15 +454,18 @@ export var build = (layout, data = {}, context = {}) => {
 };
 
 var render = (template, data, context, res) => {
-  build(template, data, context).then((s) => {
-    if (res && !res.headersSent) {
-      return res.status(200).send(s);
-    }
-    return res.end();
-  }).catch((e) => {
-    console.trace(e);
-    res.render500();
-  });
+  build(template, data, context)
+    .then((s) => {
+      if (res && !res.headersSent) {
+        return res.status(200)
+          .send(s);
+      }
+      return res.end();
+    })
+    .catch((e) => {
+      console.trace(e);
+      res.render500();
+    });
 };
 
 export var io = (req, res, next) => {
