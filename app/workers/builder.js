@@ -103,6 +103,7 @@ export var publish = (from, to) => {
   }
   mkdirp(to);
   cpdir(from, to);
+  return true;
 };
 
 export var minify = () => {
@@ -168,7 +169,7 @@ export var svg = () => {
     });
   };
 
-  readdir(distDir + 'images/', ['*.png', '*.jpg', '*.gif', '.ico'], (err, files) => {
+  return readdir(distDir + 'images/', [ '*.png', '*.jpg', '*.gif', '.ico' ], (err, files) => {
     if (err) {
       console.trace(err);
     }
@@ -243,7 +244,7 @@ export var reconf = () => {
       createDir(dir);
       return false;
     }
-    fs.readdirSync(dir).forEach((f) => {
+    return fs.readdirSync(dir).forEach((f) => {
       let bx = path.extname(f);
       if (bx === '.js') {
         let ax = path.basename(f, bx);

@@ -47,7 +47,7 @@ export var get = (endpoint, params, token) => {
         message: 'Authorization ticket is required in order to access API system.'
       });
     }
-    request.get(
+    return request.get(
       {
         url: url,
         headers: {
