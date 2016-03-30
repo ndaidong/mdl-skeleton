@@ -21,7 +21,6 @@ export var start = (req, res) => {
       'vendor/bella',
       'vendor/fetch',
       'vendor/promise',
-      'vendor/traceur-runtime.js',
       'app',
       'modules/es6.test'
     ]

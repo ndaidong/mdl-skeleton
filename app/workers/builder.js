@@ -229,10 +229,6 @@ export var packages = () => {
         }
       }
     }
-    let traceurRuntime = './node_modules/traceur/bin/traceur-runtime.js';
-    if (fs.existsSync(traceurRuntime)) {
-      copyFile(traceurRuntime, rd + '/traceur-runtime.js');
-    }
   }
   if (bella.isObject(cssFiles)) {
     let rd = fixPath(css3rdDir);
