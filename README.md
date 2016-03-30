@@ -31,7 +31,7 @@ export var start = (req, res) => {
     user: res.user
   }
 
-  // this will be parsed by PostCSS, Traceur
+  // this will be processed by PostCSS, Traceur
   let context = {
     css: [
       'vendor/mdl',
@@ -42,9 +42,7 @@ export var start = (req, res) => {
       'vendor/bella',
       'vendor/fetch',
       'vendor/promise',
-      'vendor/traceur-runtime.js',
-      'app',
-      'modules/es6.test'
+      'app'
     ],
     sdata: {
       user: user // this will be shared to client script
@@ -177,11 +175,10 @@ Don't miss the best of technologies:
 
 - [Material Design Lite](http://www.getmdl.io/)
 - ES6 with [Traceur](https://github.com/google/traceur-compiler)
+- [PostCSS](http://postcss.org/)
+- [Gulp](http://gulpjs.com/)
 - [ExpressJS](http://expressjs.com)
 - [Handlebars](http://handlebarsjs.com/)
-- [PostCSS](http://postcss.org/)
-- [Mongoose](http://mongoosejs.com/)
-- [Gulp](http://gulpjs.com/)
 
 
 ### Starting
