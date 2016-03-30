@@ -150,8 +150,9 @@ Take a look at [/app/views/](https://github.com/ndaidong/mdl-skeleton/tree/maste
 
 // when node.js server starts, it will
 // - create 4 folders: "storage", "storage/cache", "storage/tmp" and "dist"
+// - download CSS files defined with "css" property into vendorDir
+// - download JS files defined with "javascript" property into vendorDir. Rename and minify them.
 // - copy css, js, images under "assets/" to "dist/"
-// - download JS files defined with "files" property. Rename and minify them.
 ```
 
 See [/app/workers/builder.js](https://github.com/ndaidong/mdl-skeleton/blob/master/app/workers/builder.js)
@@ -221,5 +222,5 @@ protractor test/protractor.conf.js
 
 ### License
 
-Apache License Version 2.0
+The MIT License (MIT)
 
