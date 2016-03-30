@@ -151,10 +151,15 @@ var compileJS = (files) => {
     s = as.join('\n');
 
     if (s.length > 0) {
+      let ss = '';
+      let traceurRuntime = './node_modules/traceur/bin/traceur-runtime.js';
+      if (fs.existsSync(traceurRuntime)) {
+        ss = fs.readFileSync(traceurRuntime, 'utf8');
+      }
       let minified = UglifyJS.minify(s, {
         fromString: true
       });
-      return resolve(minified.code);
+      return resolve(ss + '\n' + minified.code);
     }
     return reject(new Error('No JavaScript data'));
   });
