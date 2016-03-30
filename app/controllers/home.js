@@ -1,6 +1,6 @@
 /**
  * HomeController
-**/
+ **/
 
 export var start = (req, res) => {
 
@@ -13,14 +13,17 @@ export var start = (req, res) => {
 
   let context = {
     css: [
+      'vendor/mdl',
       'styles'
     ],
     js: [
-      'packages/material',
-      'packages/bella',
-      'packages/fetch',
-      'packages/promise',
-      'app'
+      'vendor/material',
+      'vendor/bella',
+      'vendor/fetch',
+      'vendor/promise',
+      'vendor/traceur-runtime.js',
+      'app',
+      'modules/es6.test'
     ]
   };
 

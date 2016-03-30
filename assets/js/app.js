@@ -36,9 +36,4 @@
     return _sdata.user || false;
   };
 
-  Bella.event.on('add', 'click', function(){
-    fbq('track', 'Purchase', {value: '10.00', currency: 'USD'});
-    console.log('tracked')
-  });
-
 })(window.SDATA);

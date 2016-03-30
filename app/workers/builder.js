@@ -3,14 +3,12 @@
  * @ndaidong
  **/
 
-/* eslint guard-for-in: 0*/
 /* eslint no-console: 0*/
 
 var fs = require('fs');
 var path = require('path');
 var exec = require('child_process').execSync;
 
-var traceur = require('traceur/src/node/api.js');
 var bella = require('bellajs');
 var mkdirp = require('mkdirp').sync;
 var cpdir = require('copy-dir').sync;
@@ -23,20 +21,24 @@ var fixPath = (p) => {
   if (!p) {
     return '';
   }
-  if (p.endsWith('/')) {
-    return p;
-  }
-  return p + '/';
+  p = path.normalize(p);
+  p += p.endsWith('/') ? '' : '/';
+  return p;
 };
 
 var pkg = require('../../package');
 var bconf = pkg.builder || {},
   jsDir = fixPath(bconf.jsDir),
+  cssDir = fixPath(bconf.cssDir),
   imgDir = fixPath(bconf.imgDir),
   authDir = fixPath(bconf.authDir),
   fontDir = fixPath(bconf.fontDir),
   distDir = fixPath(bconf.distDir),
+  vendorDir = fixPath(bconf.vendorDir),
   tplDir = fixPath(bconf.tplDir);
+
+var js3rdDir = fixPath(jsDir + vendorDir);
+var css3rdDir = fixPath(cssDir + vendorDir);
 
 export var download = (src, saveas) => {
   if (fs.existsSync(saveas)) {
@@ -80,6 +82,32 @@ export var removeDir = (ls) => {
   console.log('Done.');
 };
 
+export var copyDir = (from, to) => {
+  if (!fs.existsSync(from)) {
+    return false;
+  }
+  if (fs.existsSync(to)) {
+    exec('rm -rf ' + to);
+  }
+  mkdirp(to);
+  cpdir(from, to);
+  return false;
+};
+
+export var copyFile = (source, target) => {
+  return new Promise((resolve, reject) => {
+    if (fs.existsSync(target)) {
+      fs.unlinkSync(target);
+    }
+    var rd = fs.createReadStream(source);
+    rd.on('error', reject);
+    var wr = fs.createWriteStream(target);
+    wr.on('error', reject);
+    wr.on('finish', resolve);
+    rd.pipe(wr);
+  });
+};
+
 export var createEmptyFile = (dest) => {
   let ext = path.extname(dest);
   let fname = path.basename(dest);
@@ -103,19 +131,19 @@ export var publish = (from, to) => {
   }
   mkdirp(to);
   cpdir(from, to);
-  return true;
+  return null;
 };
 
 export var minify = () => {
-  let dir = jsDir + '/packages/';
-  let files = bconf.files || {};
+  let files = bconf.javascript || {};
   if (bella.isObject(files)) {
-    let destDir = dir;
-    let rd = fixPath(destDir);
     let missed = [];
     for (let alias in files) {
-      let dest = rd + alias + '.js';
-      let min = rd + alias + '.min.js';
+      if (!bella.hasProperty(files, alias)) {
+        return false;
+      }
+      let dest = js3rdDir + alias + '.js';
+      let min = js3rdDir + alias + '.min.js';
       if (fs.existsSync(dest) && !fs.existsSync(min)) {
         let s = fs.readFileSync(dest, 'utf8');
         if (s && s.length > 0) {
@@ -135,12 +163,12 @@ export var minify = () => {
       console.log(missed);
     }
   }
+  return null;
 };
 
 export var img = () => {
   publish(imgDir, distDir + '/images/');
 };
-
 export var font = () => {
   publish(fontDir, distDir + '/fonts/');
 };
@@ -149,14 +177,14 @@ export var auth = () => {
   publish(authDir, distDir + '/auth/');
 };
 
-
 export var tpl = () => {
   publish(tplDir, distDir + '/templates/');
 };
 
 export var reset = () => {
   removeDir(distDir);
-  removeDir(jsDir + '/packages/');
+  removeDir(fixPath(jsDir + vendorDir));
+  removeDir(fixPath(cssDir + vendorDir));
 };
 
 export var svg = () => {
@@ -185,25 +213,46 @@ export var svg = () => {
 };
 
 export var packages = () => {
-  let files = bconf.files || {};
-  if (bella.isObject(files)) {
-    let destDir = jsDir + 'packages/';
-    let rd = fixPath(destDir);
+  let jsFiles = bconf.javascript || {};
+  let cssFiles = bconf.css || {};
+  if (bella.isObject(jsFiles)) {
+    let rd = fixPath(js3rdDir);
     if (!fs.existsSync(rd)) {
       mkdirp(rd);
     }
-    for (let alias in files) {
-      let src = files[alias];
-      let dest = rd + alias + '.js';
-      if (!fs.existsSync(dest)) {
-        download(src, dest);
+    for (let alias in jsFiles) {
+      if (bella.hasProperty(jsFiles, alias)) {
+        let src = jsFiles[alias];
+        let dest = rd + alias + '.js';
+        if (!fs.existsSync(dest)) {
+          download(src, dest);
+        }
+      }
+    }
+    let traceurRuntime = './node_modules/traceur/bin/traceur-runtime.js';
+    if (fs.existsSync(traceurRuntime)) {
+      copyFile(traceurRuntime, rd + '/traceur-runtime.js');
+    }
+  }
+  if (bella.isObject(cssFiles)) {
+    let rd = fixPath(css3rdDir);
+    if (!fs.existsSync(rd)) {
+      mkdirp(rd);
+    }
+    for (let alias in cssFiles) {
+      if (bella.hasProperty(cssFiles, alias)) {
+        let src = cssFiles[alias];
+        let dest = rd + alias + '.css';
+        if (!fs.existsSync(dest)) {
+          download(src, dest);
+        }
       }
     }
   }
 };
 
 export var reconf = () => {
-  let saveas = jsDir + '/packages/reconf.js';
+  let saveas = js3rdDir + 'reconf.js';
   let dirs = bconf.directories || [];
   if (bella.isArray(dirs) && dirs.length) {
     dirs.map((d) => {
@@ -222,18 +271,19 @@ export var reconf = () => {
   let paths = {};
   let files = bconf.files || {};
   if (bella.isObject(files)) {
-    let destDir = jsDir + 'packages/';
-    let rd = fixPath(destDir);
     for (let alias in files) {
-      let dest = rd + alias + '.min.js';
+      if (!bella.hasProperty(files, alias)) {
+        return false;
+      }
+      let dest = js3rdDir + alias + '.min.js';
       if (!fs.existsSync(dest)) {
-        dest = rd + alias + '.js';
+        dest = js3rdDir + alias + '.js';
       }
       if (fs.existsSync(dest)) {
         let b = path.extname(dest);
         if (b === '.js') {
           let a = path.basename(dest, b);
-          paths[alias] = 'packages/' + a;
+          paths[alias] = vendorDir + a;
         }
       }
     }
@@ -244,32 +294,21 @@ export var reconf = () => {
       createDir(dir);
       return false;
     }
-    return fs.readdirSync(dir).forEach((f) => {
+    fs.readdirSync(dir).forEach((f) => {
       let bx = path.extname(f);
       if (bx === '.js') {
         let ax = path.basename(f, bx);
         to[ax] = folder + '/' + ax;
       }
     });
+    return null;
   };
 
   collect('modules', paths);
   c.paths = paths;
-  fs.writeFileSync(saveas, ';var RECONF=' + JSON.stringify(c) + ';');
+  fs.writeFileSync(saveas, ';var RECONF=window.RECONF=' + JSON.stringify(c) + ';');
   console.log('Packages are ready to use.');
-};
-
-export var transpile = (req, res, next) => {
-  if (/\.*\/modules\/[A-Za-z0-9-_]+\.js/.test(req.url)) {
-    let f = 'assets' + req.url;
-    if (fs.existsSync(f)) {
-      let s = fs.readFileSync(f);
-      let c = traceur.compile(s);
-      res.setHeader('content-type', 'text/javascript');
-      res.status(200).send(c);
-    }
-  }
-  next();
+  return null;
 };
 
 export var dir = () => {
@@ -279,6 +318,7 @@ export var dir = () => {
     distDir + '/css'
   ]);
   createDir(dirs);
+  return null;
 };
 
 export var setup = () => {
