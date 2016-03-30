@@ -3,16 +3,13 @@
  * @ndaidong
  **/
 
-/* eslint guard-for-in: 0*/
 /* eslint no-console: 0*/
 
 import path from 'path';
 import fs from 'fs';
-import less from 'less';
 
 import async from 'async';
 import bella from 'bellajs';
-import mincss from 'mincss';
 import Promise from 'bluebird';
 
 var Handlebars = require('handlebars');
@@ -44,28 +41,131 @@ Handlebars.registerHelper({
 });
 
 var traceur = require('traceur/src/node/api.js');
+
 var UglifyJS = require('uglify-js');
+
+var postcss = require('postcss');
+var postcssFilter = require('postcss-filter-plugins');
+var cssnano = require('cssnano');
+var cssnext = require('postcss-cssnext');
+var postcssMixin = require('postcss-mixins');
+var postcssNested = require('postcss-nested');
+var postcssNesting = require('postcss-nesting');
+
+const POSTCSS_PLUGINS = [
+  postcssFilter({
+    silent: true
+  }),
+  cssnext,
+  cssnano,
+  postcssMixin,
+  postcssNesting,
+  postcssNested
+];
+
+var fixPath = (p) => {
+  if (!p) {
+    return '';
+  }
+  p = path.normalize(p);
+  p += p.endsWith('/') ? '' : '/';
+  return p;
+};
+
+var removeNewLines = (s) => {
+  return s.replace(/(?:\r\n|\r|\n)+/gm, '');
+};
 
 var pkg = require('../../package.json');
 var config = require('./../../configs/base');
 
 var builder = pkg.builder;
-var cssDir = builder.cssDir + '/';
-var jsDir = builder.jsDir + '/';
-var distDir = builder.distDir;
+var cssDir = fixPath(builder.cssDir);
+var jsDir = fixPath(builder.jsDir);
+var distDir = fixPath(builder.distDir);
+var vendorDir = fixPath(builder.vendorDir);
 
-var removeNewLines = (s) => {
-  s = s.replace(/(?:\r\n|\r|\n)+/gm, '');
-  return s;
+var postProcess = (css) => {
+  return new Promise((resolve, reject) => {
+    return postcss(POSTCSS_PLUGINS)
+      .process(css)
+      .then((result) => {
+        return resolve(result.css);
+      }).catch((err) => {
+        return reject(err);
+      });
+  });
 };
 
-export var lessify = (css) => {
+var compileCSS = (files) => {
+
+  return new Promise((resolve, reject) => {
+    let s = '', as = [], vs = [];
+    if (bella.isString(files)) {
+      files = [ files ];
+    }
+
+    files.forEach((file) => {
+      if (fs.existsSync(file)) {
+        let x = fs.readFileSync(file, 'utf8');
+        if (!file.includes('/vendor')) {
+          as.push(x);
+        } else {
+          vs.push(x);
+        }
+      }
+    });
+
+    s = as.join('\n');
+
+    if (s.length > 0) {
+      let ps = vs.join('\n');
+      return postProcess(s).then((rs) => {
+        return resolve(ps + rs);
+      }).catch((err) => {
+        return reject(err);
+      });
+    }
+    return reject(new Error('No CSS data'));
+  });
+};
+
+var compileJS = (files) => {
+
+  return new Promise((resolve, reject) => {
+    let s = '', as = [];
+    if (bella.isString(files)) {
+      files = [ files ];
+    }
+
+    files.forEach((file) => {
+      if (fs.existsSync(file)) {
+        let x = fs.readFileSync(file, 'utf8');
+        if (!file.includes('/vendor')) {
+          x = traceur.compile(x);
+        }
+        as.push(x);
+      }
+    });
+
+    s = as.join('\n');
+
+    if (s.length > 0) {
+      let minified = UglifyJS.minify(s, {
+        fromString: true
+      });
+      return resolve(minified.code);
+    }
+    return reject(new Error('No JavaScript data'));
+  });
+};
+
+export var processCSS = (css) => {
 
   return new Promise((resolve, reject) => {
 
     let fstats = [];
-    let acss = [],
-      aless = [];
+    let cssfiles = [];
     if (bella.isString(css)) {
       css = [ css ];
     }
@@ -80,11 +180,7 @@ export var lessify = (css) => {
       if (fs.existsSync(full)) {
         let stat = fs.statSync(full);
         fstats.push(stat.mtime);
-        if (ext === '.less') {
-          aless.push(full);
-        } else {
-          acss.push(full);
-        }
+        cssfiles.push(full);
       }
     });
 
@@ -97,83 +193,22 @@ export var lessify = (css) => {
       return resolve(pname);
     }
 
-    let sCSS = '';
-    let series = [];
-
-    acss.forEach((file) => {
-      let s = fs.readFileSync(file, 'utf8');
-      series.push((next) => {
-        sCSS += s;
-        next();
-      });
-    });
-
-    aless.forEach((file) => {
-      let s = fs.readFileSync(file, 'utf8');
-      series.push((next) => {
-        less.render(s)
-          .then((output) => {
-            sCSS += output.css;
-            next();
-          });
-      });
-    });
-
-    return async.series(series, (err) => {
-      if (err) {
-        return reject(err);
-      }
-      if (!sCSS || !sCSS.length) {
-        return reject({
-          error: 'Unknown error'
-        });
-      }
-      try {
-        if (config.ENV !== 'local') {
-          let minified = mincss.minify(sCSS);
-          fs.writeFileSync(saveAs, minified.css, 'utf8');
-        } else {
-          fs.writeFileSync(saveAs, sCSS, 'utf8');
-        }
-        return resolve(pname);
-      } catch (e) {
-        return reject(e);
-      }
+    return compileCSS(cssfiles).then((code) => {
+      fs.writeFileSync(saveAs, code, 'utf8');
+      return resolve(pname);
+    }).catch((er) => {
+      console.trace(er);
+      return reject(er);
     });
   });
 };
 
-var isES6 = (file) => {
-  if (!file.match(/(\/es6\/|\.?es6)/)) {
-    return false;
-  }
-  return true;
-};
 
-var transpile = (f) => {
-  return new Promise((resolve, reject) => {
-    if (!fs.existsSync(f)) {
-      return reject({
-        error: 1,
-        message: 'File not found ' + f
-      });
-    }
-    try {
-      let s = fs.readFileSync(f);
-      let c = traceur.compile(s);
-      return resolve(c);
-    } catch (e) {
-      return reject(e);
-    }
-  });
-};
-
-export var babelize = (js) => {
+export var processJS = (js) => {
 
   return new Promise((resolve, reject) => {
 
-    let fstats = [],
-      jsfiles = [];
+    let fstats = [], jsfiles = [];
     if (bella.isString(js)) {
       js = [ js ];
     }
@@ -186,7 +221,7 @@ export var babelize = (js) => {
         if (fs.existsSync(full + '.js')) {
           _full = full + '.js';
         }
-        if ((config.ENV !== 'local' || full.match(/\/packages\//)) && fs.existsSync(full + '.min.js')) {
+        if ((config.ENV !== 'local' || full.includes(vendorDir)) && fs.existsSync(full + '.min.js')) {
           _full = full + '.min.js';
         }
         full = _full;
@@ -207,48 +242,23 @@ export var babelize = (js) => {
       return resolve(pname);
     }
 
-    let sJS = '';
-    let series = [];
-
-    jsfiles.forEach((file) => {
-      series.push((next) => {
-        if (!isES6(file)) {
-          let s = fs.readFileSync(file, 'utf8');
-          sJS += s + ';';
-          return next();
-        }
-        return transpile(file)
-          .then((s) => {
-            console.log(file);
-            sJS += s + ';';
-          })
-          .finally(next);
-      });
-    });
-
-    return async.series(series, (err) => {
-      if (err) {
-        console.trace(err);
-        return reject(err);
-      }
-      if (!sJS || !sJS.length) {
-        return reject({
-          error: 'Unknown error'
-        });
-      }
+    return compileJS(jsfiles).then((code) => {
       try {
         if (config.ENV !== 'local') {
-          let minified = UglifyJS.minify(sJS, {
+          let minified = UglifyJS.minify(code, {
             fromString: true
           });
           fs.writeFileSync(saveAs, minified.code, 'utf8');
         } else {
-          fs.writeFileSync(saveAs, sJS, 'utf8');
+          fs.writeFileSync(saveAs, code, 'utf8');
         }
         return resolve(pname);
       } catch (e) {
         return reject(e);
       }
+    }).catch((er) => {
+      console.trace(er);
+      return reject(er);
     });
   });
 };
@@ -346,7 +356,7 @@ export var build = (layout, data = {}, context = {}) => {
             console.trace(err);
           }
           sHtml = s;
-          next();
+          return next();
         });
       },
       (next) => {
@@ -394,15 +404,14 @@ export var build = (layout, data = {}, context = {}) => {
         if (!css) {
           return next();
         }
-        return lessify(css)
-          .then((href) => {
-            let linkTag = '<link rel="stylesheet" type="text/css" href="' + href + '?rev=' + config.revision + '">';
-            sHtml = sHtml.replace('{@style}', linkTag);
-          })
-          .catch((e) => {
-            console.trace(e);
-          })
-          .finally(next);
+        return processCSS(css).then((href) => {
+          let s = `<link rel="stylesheet" type="text/css" href="${href}?rev=${config.revision}"`;
+          sHtml = sHtml.replace('{@style}', s);
+          return sHtml;
+        }).catch((e) => {
+          console.trace(e);
+          return e;
+        }).finally(next);
       },
       (next) => {
         if (!continuable || !sHtml) {
@@ -412,23 +421,22 @@ export var build = (layout, data = {}, context = {}) => {
         if (!js) {
           return next();
         }
-        return babelize(js)
-          .then((src) => {
-            let scriptTag = '<script type="text/javascript" src="' + src + '?rev=' + config.revision + '"></script>';
-            sHtml = sHtml.replace('{@script}', scriptTag);
-          })
-          .catch((e) => {
-            console.trace(e);
-          })
-          .finally(next);
+        return processJS(js).then((src) => {
+          let s = `<script type="text/javascript" src="${src}?rev=${config.revision}"></script>`;
+          sHtml = sHtml.replace('{@script}', s);
+          return null;
+        }).catch((e) => {
+          console.trace(e);
+          return e;
+        }).finally(next);
       },
       (next) => {
         if (!continuable || !sHtml) {
           return next();
         }
         let sdata = bella.hasProperty(context, 'sdata') ? context.sdata : {};
-        let scriptTag = '<script type="text/javascript">window.SDATA=' + JSON.stringify(sdata) + '</script>';
-        sHtml = sHtml.replace('{@sdata}', scriptTag);
+        let s = '<script type="text/javascript">window.SDATA=' + JSON.stringify(sdata) + '</script>';
+        sHtml = sHtml.replace('{@sdata}', s);
         return next();
       },
       (next) => {
@@ -472,5 +480,5 @@ export var io = (req, res, next) => {
   res.render = (template, data, context) => {
     return render(template, data, context, res);
   };
-  next();
+  return next();
 };

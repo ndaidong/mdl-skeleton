@@ -10,6 +10,7 @@ logs
 
 node_modules
 storage
-assets/js/packages
+assets/js/vendor
+assets/css/vendor
 dist
 configs/env

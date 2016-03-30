@@ -1,7 +1,7 @@
 /**
  * Starting app
  * @ndaidong
-**/
+ **/
 'use strict';
 
 var traceur = require('traceur');
@@ -49,7 +49,9 @@ app.use(helmet.xssFilter());
 app.use(helmet.frameguard());
 app.use(helmet.ieNoOpen());
 app.use(helmet.noSniff());
-app.use(helmet.hidePoweredBy({setTo: config.meta.name}));
+app.use(helmet.hidePoweredBy({
+  setTo: config.meta.name
+}));
 
 app.use(robots(path.join(__dirname, '/robots.txt')));
 app.use(favicon(path.join(__dirname, '/assets/images') + '/brand/favicon.ico'));
@@ -63,8 +65,13 @@ var staticOpt = {
 app.use(express.static(path.join(__dirname, 'assets'), staticOpt));
 app.use(express.static(path.join(__dirname, 'dist'), staticOpt));
 
-app.use(bodyParser.json({limit: '2mb'}));
-app.use(bodyParser.urlencoded({limit: '2mb', extended: true}));
+app.use(bodyParser.json({
+  limit: '2mb'
+}));
+app.use(bodyParser.urlencoded({
+  limit: '2mb',
+  extended: true
+}));
 app.use(cookieParser());
 
 app.use((req, res, next) => {

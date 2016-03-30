@@ -14,7 +14,7 @@ node server.js
 
 #### Make use of advanced techniques
 
-Built-in compiler, that compiles CSS resources with LESS and transpiles ES6 with Traceur. Declare these resources within controllers. It also helps to fastly share data from server to client.
+Built-in compiler, that compiles CSS resources with PostCSS and transpiles ES6 with Traceur. Declare these resources within controllers. It also helps to fastly share data from server to client.
 
 ```
 /**
@@ -31,17 +31,20 @@ export var start = (req, res) => {
     user: res.user
   }
 
-  // this will be parsed by LESS, Babel
+  // this will be parsed by PostCSS, Traceur
   let context = {
     css: [
+      'vendor/mdl',
       'styles'
     ],
     js: [
-      'packages/material',
-      'packages/bella',
-      'packages/fetch',
-      'packages/promise',
-      'app'
+      'vendor/material',
+      'vendor/bella',
+      'vendor/fetch',
+      'vendor/promise',
+      'vendor/traceur-runtime.js',
+      'app',
+      'modules/es6.test'
     ],
     sdata: {
       user: user // this will be shared to client script
@@ -122,21 +125,28 @@ Take a look at [/app/views/](https://github.com/ndaidong/mdl-skeleton/tree/maste
 
 ```
 // new group of definition within package.json
-"builder": {
-  "directories": [
-    "storage/cache",
-    "storage/tmp"
-  ],
-  "cssDir": "assets/css",
-  "jsDir": "assets/js",
-  "imgDir": "assets/images",
-  "distDir": "dist",
-  "files": {
-    "fetch": "https://raw.githubusercontent.com/typicode/fetchival/master/index.js",
-    "material": "https://storage.googleapis.com/code.getmdl.io/1.0.4/material.min.js",
-    "ractive": "http://cdn.ractivejs.org/latest/ractive.js"
+  "builder": {
+    "directories": [
+      "storage/cache",
+      "storage/tmp"
+    ],
+    "cssDir": "assets/css",
+    "jsDir": "assets/js",
+    "imgDir": "assets/images",
+    "fontDir": "assets/fonts",
+    "distDir": "dist",
+    "vendorDir": "vendor",
+    "css": {
+      "mdl": "https://code.getmdl.io/1.1.3/material.indigo-pink.min.css"
+    },
+    "javascript": {
+      "bella": "https://raw.githubusercontent.com/techpush/bella.js/master/src/bella.js",
+      "fetch": "https://raw.githubusercontent.com/typicode/fetchival/master/index.js",
+      "material": "https://storage.googleapis.com/code.getmdl.io/1.1.3/material.js",
+      "promise": "https://raw.githubusercontent.com/jakearchibald/es6-promise/master/dist/es6-promise.js",
+      "ractive": "http://cdn.ractivejs.org/latest/ractive.js"
+    }
   }
-}
 
 // when node.js server starts, it will
 // - create 4 folders: "storage", "storage/cache", "storage/tmp" and "dist"
@@ -168,7 +178,7 @@ Don't miss the best of technologies:
 - ES6 with [Traceur](https://github.com/google/traceur-compiler)
 - [ExpressJS](http://expressjs.com)
 - [Handlebars](http://handlebarsjs.com/)
-- [LESS](http://lesscss.org/)
+- [PostCSS](http://postcss.org/)
 - [Mongoose](http://mongoosejs.com/)
 - [Gulp](http://gulpjs.com/)
 

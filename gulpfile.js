@@ -25,6 +25,7 @@ gulp.task('font', builder.font);
 gulp.task('auth', builder.auth);
 gulp.task('tpl', builder.tpl);
 gulp.task('reset', builder.reset);
-gulp.task('setup', ['dir', 'packages', 'minify', 'img', 'svg', 'font', 'auth', 'tpl'], () => {
+gulp.task('reconf', builder.reconf);
+gulp.task('setup', [ 'dir', 'packages', 'minify', 'img', 'svg', 'font', 'auth', 'tpl', 'reconf' ], () => {
   console.log('All Gulp tasks have been executed.');
 });
