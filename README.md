@@ -9,6 +9,24 @@ npm install
 node server.js
 ```
 
+Then you would got this:
+
+![Material Design Lite](http://i.imgur.com/SJC0rl5.png)
+
+
+# Contents
+
+* [Why this is cool?](#why-this-is-cool)
+  * [Make use of advanced techniques](#make-use-of-advanced-techniques)
+  * [Extending and including templates](#extending-and-including-templates)
+  * [Smart builder tool](#smart-builder-tool)
+  * [Standard front-end output](#standard-front-end-output)
+* [Installation](#installation)
+* [Protractor](#protractor)
+* [Live examples](#live-examples)
+* [Tech stacks](#tech-stacks)
+* [License](#license)
+
 
 ### Why this is cool?
 
@@ -167,49 +185,6 @@ With the medthods we are using, the last output is always fit the requirements o
 - Ready for E2E testing
 
 
-### Installation
-
-```
-git clone https://github.com/ndaidong/mdl-skeleton.git
-cd mdl-skeleton
-npm install
-mkdir app/configs/env
-cp app/configs/vars.sample.js app/configs/env/vars.js
-gulp setup
-```
-
-Update app/configs/env/vars.js to fit your system.
-Any property defined within app/configs/env/vars.js will overwrite the same value in app/configs/base.js as default.
-
-
-Don't miss the best of technologies:
-
-- [Material Design Lite](http://www.getmdl.io/)
-- ES6 with [Traceur](https://github.com/google/traceur-compiler)
-- [PostCSS](http://postcss.org/)
-- [Gulp](http://gulpjs.com/)
-- [ExpressJS](http://expressjs.com)
-- [Handlebars](http://handlebarsjs.com/)
-
-
-### Starting
-
-```
-node server.js
-
-// or with PM2
-
-pm2 start server.js -i 0 --name=main
-
-```
-
-### Screenshot
-
-![Material Design Lite](http://i.imgur.com/SJC0rl5.png)
-
-Original template: http://www.getmdl.io/templates/text-only/index.html
-
-
 ### Protractor
 
 If you want to write E2E test with [Protractor](http://www.protractortest.org), just place the test scripts under /test folder and install the tools as below:
@@ -226,6 +201,57 @@ With the last command, we've got Selenium server running. Now open another termi
 cd mdl-skeleton
 protractor test/protractor.conf.js
 ```
+
+
+### Installation
+
+```
+git clone https://github.com/ndaidong/mdl-skeleton.git
+cd mdl-skeleton
+npm install
+mkdir app/configs/env
+cp app/configs/vars.sample.js app/configs/env/vars.js
+gulp setup
+```
+
+Update app/configs/env/vars.js to fit your system.
+Any property defined within app/configs/env/vars.js will overwrite the same value in app/configs/base.js as default.
+
+
+Starting:
+
+```
+node server.js
+
+// or with PM2
+
+pm2 start server.js -i 0 --name=main
+
+```
+
+*Original template:* http://www.getmdl.io/templates/text-only/index.html
+
+
+### Live examples:
+
+- [TechPush](http://techpush.net/)
+- [FOMO](http://fomo.link/)
+
+![TechPush](http://i.imgur.com/ETERBvf.png)
+
+![FOMO](http://i.imgur.com/U72Cyq1.png)
+
+
+### Tech stacks
+
+Don't miss these hot technologies:
+
+- [Material Design Lite](http://www.getmdl.io/)
+- [ES6 with Traceur](https://github.com/google/traceur-compiler)
+- [PostCSS](http://postcss.org/)
+- [Gulp](http://gulpjs.com/)
+- [ExpressJS](http://expressjs.com)
+- [Handlebars](http://handlebarsjs.com/)
 
 
 ### License
