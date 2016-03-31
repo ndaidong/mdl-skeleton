@@ -222,7 +222,7 @@ Don't miss the best of technologies:
 - [Handlebars](http://handlebarsjs.com/)
 
 
-#### Starting
+Starting
 
 ```
 node server.js
