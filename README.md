@@ -119,7 +119,7 @@ Take a look at [/app/views/](https://github.com/ndaidong/mdl-skeleton/tree/maste
 
 #### Smart builder tool
 
-- In-app automation builder runs when node.js process starts, to generate needed directories, download/minify javascript packages and optimize images. You can declare these resources in package.json, no longer need to use bower or browserify.
+In-app automation builder runs when node.js process starts, to generate needed directories, download/minify javascript packages and optimize images. You can declare these resources in package.json, no longer need to use bower or browserify.
 
 ```
 // new group of definition within package.json
@@ -154,6 +154,17 @@ Take a look at [/app/views/](https://github.com/ndaidong/mdl-skeleton/tree/maste
 ```
 
 See [/app/workers/builder.js](https://github.com/ndaidong/mdl-skeleton/blob/master/app/workers/builder.js)
+
+#### Standard front-end output
+
+With the medthods we are using, the last output is always fit the requirements of today web standard:
+
+- Minify JavaScript, CSS and SVG images
+- Concat JavaScript and CSS files
+- Prefix assets to prevent cache
+- Lint JavaScript using ESLint
+- Standard HTML5 structure with oGraph and Twitter card support
+- Ready for E2E testing
 
 
 ### Installation
