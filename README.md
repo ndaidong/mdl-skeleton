@@ -9,6 +9,18 @@ npm install
 node server.js
 ```
 
+# Contents
+
+* [Why this is cool?](#why-this-is-cool)
+  * [Make use of advanced techniques](#make-use-of-advanced-techniques)
+  * [Extending and including templates](#extending-and-including-templates)
+  * [Smart builder tool](#smart-builder-tool)
+  * [Standard front-end output](#standard-front-end-output)
+* [Installation](#installation)
+* [Protractor](#protractor)
+* [Live examples](#live-examples)
+* [License](#license)
+
 
 ### Why this is cool?
 
@@ -210,7 +222,7 @@ Don't miss the best of technologies:
 - [Handlebars](http://handlebarsjs.com/)
 
 
-### Starting
+#### Starting
 
 ```
 node server.js
@@ -221,13 +233,14 @@ pm2 start server.js -i 0 --name=main
 
 ```
 
-### Screenshot
+Then you would got this:
 
 ![Material Design Lite](http://i.imgur.com/SJC0rl5.png)
 
 Original template: http://www.getmdl.io/templates/text-only/index.html
 
-#### Live examples:
+
+### Live examples:
 
 - [TechPush](http://techpush.net/)
 - [FOMO](http://fomo.link/)
