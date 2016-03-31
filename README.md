@@ -9,6 +9,11 @@ npm install
 node server.js
 ```
 
+Then you would got this:
+
+![Material Design Lite](http://i.imgur.com/SJC0rl5.png)
+
+
 # Contents
 
 * [Why this is cool?](#why-this-is-cool)
@@ -19,6 +24,7 @@ node server.js
 * [Installation](#installation)
 * [Protractor](#protractor)
 * [Live examples](#live-examples)
+* [Tech stacks](#tech-stacks)
 * [License](#license)
 
 
@@ -212,17 +218,7 @@ Update app/configs/env/vars.js to fit your system.
 Any property defined within app/configs/env/vars.js will overwrite the same value in app/configs/base.js as default.
 
 
-Don't miss the best of technologies:
-
-- [Material Design Lite](http://www.getmdl.io/)
-- ES6 with [Traceur](https://github.com/google/traceur-compiler)
-- [PostCSS](http://postcss.org/)
-- [Gulp](http://gulpjs.com/)
-- [ExpressJS](http://expressjs.com)
-- [Handlebars](http://handlebarsjs.com/)
-
-
-Starting
+Starting:
 
 ```
 node server.js
@@ -233,11 +229,7 @@ pm2 start server.js -i 0 --name=main
 
 ```
 
-Then you would got this:
-
-![Material Design Lite](http://i.imgur.com/SJC0rl5.png)
-
-Original template: http://www.getmdl.io/templates/text-only/index.html
+*Original template:* http://www.getmdl.io/templates/text-only/index.html
 
 
 ### Live examples:
@@ -247,8 +239,20 @@ Original template: http://www.getmdl.io/templates/text-only/index.html
 
 ![TechPush](http://i.imgur.com/ETERBvf.png)
 
-
 ![FOMO](http://i.imgur.com/U72Cyq1.png)
+
+
+### Tech stacks
+
+Don't miss these hot technologies:
+
+- [Material Design Lite](http://www.getmdl.io/)
+- [ES6 with Traceur](https://github.com/google/traceur-compiler)
+- [PostCSS](http://postcss.org/)
+- [Gulp](http://gulpjs.com/)
+- [ExpressJS](http://expressjs.com)
+- [Handlebars](http://handlebarsjs.com/)
+
 
 ### License
 
