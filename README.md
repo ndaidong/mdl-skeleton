@@ -167,6 +167,24 @@ With the medthods we are using, the last output is always fit the requirements o
 - Ready for E2E testing
 
 
+### Protractor
+
+If you want to write E2E test with [Protractor](http://www.protractortest.org), just place the test scripts under /test folder and install the tools as below:
+
+```
+sudo npm install -g protractor
+sudo webdriver-manager update
+webdriver-manager start
+```
+
+With the last command, we've got Selenium server running. Now open another terminal tab to start testing:
+
+```
+cd mdl-skeleton
+protractor test/protractor.conf.js
+```
+
+
 ### Installation
 
 ```
@@ -209,24 +227,15 @@ pm2 start server.js -i 0 --name=main
 
 Original template: http://www.getmdl.io/templates/text-only/index.html
 
+#### Live examples:
 
-### Protractor
+- [TechPush](http://techpush.net/)
+- [FOMO](http://fomo.link/)
 
-If you want to write E2E test with [Protractor](http://www.protractortest.org), just place the test scripts under /test folder and install the tools as below:
+![TechPush](http://i.imgur.com/ETERBvf.png)
 
-```
-sudo npm install -g protractor
-sudo webdriver-manager update
-webdriver-manager start
-```
 
-With the last command, we've got Selenium server running. Now open another terminal tab to start testing:
-
-```
-cd mdl-skeleton
-protractor test/protractor.conf.js
-```
-
+![FOMO](http://i.imgur.com/U72Cyq1.png)
 
 ### License
 
