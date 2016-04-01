@@ -265,7 +265,7 @@ export var reconf = () => {
   };
 
   let paths = {};
-  let files = bconf.files || {};
+  let files = bconf.javascript || {};
   if (bella.isObject(files)) {
     for (let alias in files) {
       if (!bella.hasProperty(files, alias)) {
