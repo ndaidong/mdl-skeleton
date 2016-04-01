@@ -84,9 +84,9 @@ app.use(compiler.io);
 
 So the res.render now expects 3 parameters as below:
 
-- template: template file, similar to res.render(template)
-- data: an object will be Handlebars compile to template file
-- context: another object with it we can declare css, js and SDATA (shared data). While css and js resources will be compiled and groupped to one file, SDATA will be shared to client script as a global object.
+- *template*: template file, similar to res.render(template)
+- *data*: an object will be Handlebars compile to template file
+- *context*: another object with it we can declare css, js and SDATA (shared data). While css and js resources will be compiled and groupped to one file, SDATA will be shared to client script as a global object.
 
 Example:
 
@@ -184,6 +184,8 @@ With the methods we are using, the last output is always fit the requirements of
 - Lint JavaScript using ESLint
 - Standard HTML5 structure with oGraph and Twitter card support
 - Ready for E2E testing
+
+Here are the test results for our website [FOMO](http://fomo.link/) using [SecurityHeader](http://www.webpagetest.org/result/160401_JT_WHW/), [WebPagetest](http://www.webpagetest.org/result/160401_JT_WHW/) and [GTmetrix](https://gtmetrix.com/reports/fomo.link/4Ers5AWc).
 
 
 ### Protractor
