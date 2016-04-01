@@ -248,7 +248,8 @@ pm2 start server.js -i 0 --name=main
 Don't miss these hot technologies:
 
 - [Material Design Lite](http://www.getmdl.io/)
-- [ES6 with Traceur](https://github.com/google/traceur-compiler)
+- [ECMAScript 2015 (ES6)](http://es6-features.org/)
+- [Traceur](https://github.com/google/traceur-compiler)
 - [PostCSS](http://postcss.org/)
 - [Gulp](http://gulpjs.com/)
 - [ExpressJS](http://expressjs.com)
