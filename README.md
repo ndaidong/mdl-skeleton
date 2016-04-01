@@ -6,6 +6,7 @@ How to quickly generate a new website using Node.js and Material Design Lite? Tr
 git clone https://github.com/ndaidong/mdl-skeleton.git
 cd mdl-skeleton
 npm install
+gulp setup
 node server.js
 ```
 
