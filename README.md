@@ -176,7 +176,7 @@ See [/app/workers/builder.js](https://github.com/ndaidong/mdl-skeleton/blob/mast
 
 #### Standard front-end output
 
-With the medthods we are using, the last output is always fit the requirements of today web standard:
+With the methods we are using, the last output is always fit the requirements of today web standard:
 
 - Minify JavaScript, CSS and SVG images
 - Concat JavaScript and CSS files
