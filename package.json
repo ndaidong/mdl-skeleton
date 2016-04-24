@@ -1,5 +1,5 @@
 {
-  "version": "0.4.7",
+  "version": "0.4.8",
   "name": "mdl-skeleton",
   "homepage": "http://techpush.net",
   "description": "Material Design Lite - Skeleton for Node.js",
@@ -70,8 +70,7 @@
       "bella": "https://cdn.rawgit.com/ndaidong/bella.js/master/dist/bella.min.js",
       "fetch": "https://raw.githubusercontent.com/typicode/fetchival/master/index.js",
       "material": "https://storage.googleapis.com/code.getmdl.io/1.1.3/material.js",
-      "promise": "https://cdn.rawgit.com/ndaidong/promise-wtf/master/dist/Promise.min.js",
-      "ractive": "http://cdn.ractivejs.org/latest/ractive.js"
+      "promise": "https://cdn.rawgit.com/ndaidong/promise-wtf/master/dist/Promise.min.js"
     }
   }
 }

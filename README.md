@@ -6,8 +6,8 @@ How to quickly generate a new website using Node.js and Material Design Lite? Tr
 git clone https://github.com/ndaidong/mdl-skeleton.git
 cd mdl-skeleton
 npm install
-gulp setup
-node server.js
+npm run setup
+npm start
 ```
 
 Then you would got this:
@@ -96,7 +96,7 @@ var template = 'account';
 var data = {
   title: 'Account edit'
   username: user.username
-}
+};
 
 var context = {
   css: [
@@ -113,7 +113,7 @@ var context = {
     user: user,
     permission: permission
   }
-}
+};
 
 res.render(template, data, context);
 
@@ -214,7 +214,8 @@ cd mdl-skeleton
 npm install
 mkdir app/configs/env
 cp app/configs/vars.sample.js app/configs/env/vars.js
-gulp setup
+npm run setup
+npm start
 ```
 
 Update app/configs/env/vars.js to fit your system.
@@ -226,8 +227,10 @@ Starting:
 ```
 node server.js
 
-// or with PM2
+// or with npm
+npm start
 
+// or with PM2
 pm2 start server.js -i 0 --name=main
 
 ```
@@ -261,4 +264,3 @@ Don't miss these hot technologies:
 ### License
 
 The MIT License (MIT)
-
