@@ -240,7 +240,7 @@ pm2 start server.js -i 0 --name=main
 
 ### Live examples:
 
-- [TechPush](http://techpush.net/)
+- [TechPush](http://techpush.xyz)
 - [FOMO](http://fomo.link/)
 
 ![TechPush](http://i.imgur.com/ETERBvf.png)
