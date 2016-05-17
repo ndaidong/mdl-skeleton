@@ -19,11 +19,15 @@ export var start = (req, res) => {
     js: [
       'vendor/material',
       'vendor/bella',
-      'vendor/fetch',
-      'vendor/promise',
       'app',
       'modules/es6.test'
-    ]
+    ],
+    sdata: {
+      user: {
+        name: 'tester',
+        id: 1000
+      }
+    }
   };
 
   return res.render('landing', data, context);
