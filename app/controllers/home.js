@@ -20,7 +20,8 @@ export var start = (req, res) => {
       'vendor/material',
       'vendor/bella',
       'app',
-      'modules/es6.test'
+      'modules/es6.test',
+      'modules/sample'
     ],
     sdata: {
       user: {
