@@ -60,6 +60,7 @@ const POSTCSS_PLUGINS = [
 ];
 
 var babel = require('babel-core');
+var UglifyJS = require('uglify-js');
 
 var transpile = (code) => {
   return babel.transform(code, {
@@ -134,40 +135,11 @@ var compileCSS = (files) => {
   });
 };
 
-var compileJS = (files) => {
-
-  return new Promise((resolve, reject) => {
-    let s = '', as = [];
-    if (bella.isString(files)) {
-      files = [ files ];
-    }
-
-    files.forEach((file) => {
-      if (fs.existsSync(file)) {
-        let x = fs.readFileSync(file, 'utf8');
-        if (!file.includes('/vendor')) {
-          let r = transpile(x);
-          x = r.code;
-        }
-        as.push(x);
-      }
-    });
-
-    s = as.join('\n');
-
-    if (s.length > 0) {
-      let ss = '';
-      return resolve(ss + '\n' + s);
-    }
-    return reject(new Error('No JavaScript data'));
-  });
-};
-
 var processCSS = (css) => {
 
   return new Promise((resolve, reject) => {
 
-    let fstats = [];
+    let fstats = [ config.revision ];
     let cssfiles = [];
     if (bella.isString(css)) {
       css = [ css ];
@@ -206,12 +178,46 @@ var processCSS = (css) => {
   });
 };
 
+var compileJS = (files) => {
+
+  return new Promise((resolve, reject) => {
+    let s = '', as = [];
+    if (bella.isString(files)) {
+      files = [ files ];
+    }
+
+    files.forEach((file) => {
+      if (fs.existsSync(file)) {
+        let x = fs.readFileSync(file, 'utf8');
+        if (!file.includes('/vendor')) {
+          let r = transpile(x);
+          x = r.code;
+          if (config.ENV !== 'local') {
+            let minified = UglifyJS.minify(x, {
+              fromString: true
+            });
+            x = minified.code;
+          }
+        }
+        as.push(x);
+      }
+    });
+
+    s = as.join('\n');
+
+    if (s.length > 0) {
+      let ss = '';
+      return resolve(ss + '\n' + s);
+    }
+    return reject(new Error('No JavaScript data'));
+  });
+};
 
 var processJS = (js) => {
 
   return new Promise((resolve, reject) => {
 
-    let fstats = [], jsfiles = [];
+    let fstats = [ config.revision ], jsfiles = [];
     if (bella.isString(js)) {
       js = [ js ];
     }
@@ -224,7 +230,7 @@ var processJS = (js) => {
         if (fs.existsSync(full + '.js')) {
           _full = full + '.js';
         }
-        if ((config.ENV !== 'local' || full.includes(vendorDir)) && fs.existsSync(full + '.min.js')) {
+        if (full.includes(vendorDir) && config.ENV !== 'local' && fs.existsSync(full + '.min.js')) {
           _full = full + '.min.js';
         }
         full = _full;
