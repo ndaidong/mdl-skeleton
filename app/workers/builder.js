@@ -40,7 +40,7 @@ var bconf = pkg.builder || {},
 var js3rdDir = fixPath(jsDir + vendorDir);
 var css3rdDir = fixPath(cssDir + vendorDir);
 
-export var download = (src, saveas) => {
+var download = (src, saveas) => {
   if (fs.existsSync(saveas)) {
     fs.unlink(saveas);
   }
@@ -49,7 +49,7 @@ export var download = (src, saveas) => {
   console.log('Downloaded %s', saveas);
 };
 
-export var createDir = (ls) => {
+var createDir = (ls) => {
   if (bella.isArray(ls)) {
     ls.forEach((d) => {
       d = path.normalize(d);
@@ -66,7 +66,7 @@ export var createDir = (ls) => {
   }
 };
 
-export var removeDir = (ls) => {
+var removeDir = (ls) => {
   if (bella.isArray(ls)) {
     let k = 0;
     ls.forEach((d) => {
@@ -82,7 +82,7 @@ export var removeDir = (ls) => {
   console.log('Done.');
 };
 
-export var copyDir = (from, to) => {
+var copyDir = (from, to) => {
   if (!fs.existsSync(from)) {
     return false;
   }
@@ -94,7 +94,7 @@ export var copyDir = (from, to) => {
   return false;
 };
 
-export var copyFile = (source, target) => {
+var copyFile = (source, target) => {
   return new Promise((resolve, reject) => {
     if (fs.existsSync(target)) {
       fs.unlinkSync(target);
@@ -108,7 +108,7 @@ export var copyFile = (source, target) => {
   });
 };
 
-export var createEmptyFile = (dest) => {
+var createEmptyFile = (dest) => {
   let ext = path.extname(dest);
   let fname = path.basename(dest);
   let content = '';
@@ -122,7 +122,7 @@ export var createEmptyFile = (dest) => {
   });
 };
 
-export var publish = (from, to) => {
+var publish = (from, to) => {
   if (!fs.existsSync(from)) {
     return false;
   }
@@ -134,7 +134,7 @@ export var publish = (from, to) => {
   return null;
 };
 
-export var minify = () => {
+var minify = () => {
   let files = bconf.javascript || {};
   if (bella.isObject(files)) {
     let missed = [];
@@ -166,28 +166,28 @@ export var minify = () => {
   return null;
 };
 
-export var img = () => {
+var img = () => {
   publish(imgDir, distDir + '/images/');
 };
-export var font = () => {
+var font = () => {
   publish(fontDir, distDir + '/fonts/');
 };
 
-export var auth = () => {
+var auth = () => {
   publish(authDir, distDir + '/auth/');
 };
 
-export var tpl = () => {
+var tpl = () => {
   publish(tplDir, distDir + '/templates/');
 };
 
-export var reset = () => {
+var reset = () => {
   removeDir(distDir);
   removeDir(fixPath(jsDir + vendorDir));
   removeDir(fixPath(cssDir + vendorDir));
 };
 
-export var svg = () => {
+var svg = () => {
   let svgo = new SVGO();
   let minsvg = (file) => {
     let s = fs.readFileSync(file, 'utf8');
@@ -212,7 +212,7 @@ export var svg = () => {
   });
 };
 
-export var packages = () => {
+var packages = () => {
   let jsFiles = bconf.javascript || {};
   let cssFiles = bconf.css || {};
   if (bella.isObject(jsFiles)) {
@@ -247,7 +247,7 @@ export var packages = () => {
   }
 };
 
-export var reconf = () => {
+var reconf = () => {
   let saveas = js3rdDir + 'reconf.js';
   let dirs = bconf.directories || [];
   if (bella.isArray(dirs) && dirs.length) {
@@ -307,7 +307,7 @@ export var reconf = () => {
   return null;
 };
 
-export var dir = () => {
+var dir = () => {
   let dirs = bconf.directories || [];
   dirs = dirs.concat([
     distDir + '/js',
@@ -317,7 +317,7 @@ export var dir = () => {
   return null;
 };
 
-export var setup = () => {
+var setup = () => {
   console.log('Start building...');
   dir();
   img();
@@ -328,4 +328,26 @@ export var setup = () => {
   packages();
   minify();
   reconf();
+};
+
+module.exports = {
+  dir: dir,
+  download: download,
+  removeDir: removeDir,
+  createDir: createDir,
+  copyDir: copyDir,
+  copyFile: copyFile,
+  createEmptyFile: createEmptyFile,
+  publish: publish,
+  minify: minify,
+  reset: reset,
+  fixPath: fixPath,
+  auth: auth,
+  font: font,
+  tpl: tpl,
+  img: img,
+  svg: svg,
+  packages: packages,
+  reconf: reconf,
+  setup: setup
 };

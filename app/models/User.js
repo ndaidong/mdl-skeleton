@@ -2,9 +2,9 @@
  *  Sample model
  */
 
-import bella from 'bellajs';
-import crypto from 'crypto';
-import Promise from 'bluebird';
+var bella = require('bellajs');
+var crypto = require('crypto');
+var Promise = require('bluebird');
 
 var User = require('./schemas/User');
 
@@ -20,7 +20,7 @@ var encrypt = (pass, salt = '') => {
   };
 };
 
-export var create = (data) => {
+var create = (data) => {
   return new Promise((resolve, reject) => {
 
     let u = new User(data);
@@ -41,4 +41,8 @@ export var create = (data) => {
     });
   });
 
+};
+
+module.exports = {
+  create: create
 };

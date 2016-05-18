@@ -7,8 +7,8 @@
 /* eslint guard-for-in: 0*/
 /* eslint no-console: 0*/
 
-import fs from 'fs';
-import bella from 'bellajs';
+var fs = require('fs');
+var bella = require('bellajs');
 
 var store = {}, ttl = 15 * 6e4;
 
@@ -65,19 +65,19 @@ bella.scheduler.every('10m', () => {
   return true;
 });
 
-export var get = (id) => {
+var get = (id) => {
   return cacher.get(id) || null;
 };
 
-export var set = (id, data) => {
+var set = (id, data) => {
   return cacher.set(id, data);
 };
 
-export var del = (id) => {
+var del = (id) => {
   return cacher.del(id);
 };
 
-export var fget = (f) => {
+var fget = (f) => {
   let s = '';
   if (fs.existsSync(f)) {
     s = fs.readFileSync(f, 'utf8');
@@ -85,14 +85,23 @@ export var fget = (f) => {
   return s;
 };
 
-export var fset = (f, data) => {
+var fset = (f, data) => {
   let s = bella.isString(data) ? data : JSON.stringify(data);
   return fs.writeFileSync(f, s, 'utf8');
 };
 
-export var fdel = (f) => {
+var fdel = (f) => {
   if (fs.existsSync(f)) {
     return fs.unlinkSync(f);
   }
   return false;
+};
+
+module.exports = {
+  get: get,
+  set: set,
+  del: del,
+  fget: fget,
+  fset: fset,
+  fdel: fdel
 };

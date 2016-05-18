@@ -2,12 +2,6 @@
  * Starting app
  * @ndaidong
  **/
-'use strict';
-
-var traceur = require('traceur');
-traceur.require.makeDefault((filename) => {
-  return !filename.includes('node_modules');
-});
 
 var fs = require('fs');
 var path = require('path');

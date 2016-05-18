@@ -7,6 +7,7 @@
 
 (() => {
 
+  var __ModuleName__ = 'Sample';
   var ENV = typeof module !== 'undefined' && module.exports ? 'node' : 'browser';
 
   var _data = {};
@@ -29,7 +30,10 @@
       root.define(() => {
         return M;
       });
+    } else if (root.exports) {
+      root.exports[__ModuleName__] = M;
+    } else {
+      root[__ModuleName__] = M;
     }
-    root.Sample = M;
   }
 })();
