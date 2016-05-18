@@ -33,7 +33,7 @@ Then you would got this:
 
 #### Make use of advanced techniques
 
-Built-in compiler, that compiles CSS resources with PostCSS and transpiles ES6 with Traceur. Declare these resources within controllers. It also helps to fastly share data from server to client.
+Built-in compiler, that compiles CSS resources with PostCSS and transpiles ES6 with Babel. Declare these resources within controllers. It also helps to fastly share data from server to client.
 
 ```
 /**
@@ -138,7 +138,7 @@ Take a look at [/app/views/](https://github.com/ndaidong/mdl-skeleton/tree/maste
 
 #### Smart builder tool
 
-In-app automation builder runs when node.js process starts, to generate needed directories, download/minify javascript packages and optimize images. You can declare these resources in package.json, no longer need to use bower or browserify.
+In-app automation builder runs when node.js process starts, to generate needed directories, download/minify javascript packages and optimize images. You can declare these resources in package.json file.
 
 ```
 // new group of definition within package.json
