@@ -113,7 +113,7 @@ var compileCSS = (files) => {
     files.forEach((file) => {
       if (fs.existsSync(file)) {
         let x = fs.readFileSync(file, 'utf8');
-        if (!file.includes('/vendor')) {
+        if (!file.includes(vendorDir)) {
           as.push(x);
         } else {
           vs.push(x);
@@ -121,12 +121,12 @@ var compileCSS = (files) => {
       }
     });
 
-    s = as.join('\n');
+    s = as.join('\n\n');
 
     if (s.length > 0) {
-      let ps = vs.join('\n');
+      let ps = vs.join('\n\n');
       return postProcess(s).then((rs) => {
-        return resolve(ps + rs);
+        return resolve(ps + '\n\n' + rs);
       }).catch((err) => {
         return reject(err);
       });
@@ -189,7 +189,7 @@ var compileJS = (files) => {
     files.forEach((file) => {
       if (fs.existsSync(file)) {
         let x = fs.readFileSync(file, 'utf8');
-        if (!file.includes('/vendor')) {
+        if (!file.includes(vendorDir)) {
           let r = transpile(x);
           x = r.code;
           if (config.ENV !== 'local') {
@@ -203,11 +203,10 @@ var compileJS = (files) => {
       }
     });
 
-    s = as.join('\n');
+    s = as.join('\n\n');
 
     if (s.length > 0) {
-      let ss = '';
-      return resolve(ss + '\n' + s);
+      return resolve(s);
     }
     return reject(new Error('No JavaScript data'));
   });
@@ -253,11 +252,7 @@ var processJS = (js) => {
 
     return compileJS(jsfiles).then((code) => {
       try {
-        if (config.ENV !== 'local') {
-          fs.writeFileSync(saveAs, code, 'utf8');
-        } else {
-          fs.writeFileSync(saveAs, code, 'utf8');
-        }
+        fs.writeFileSync(saveAs, code, 'utf8');
         return resolve(pname);
       } catch (e) {
         return reject(e);
