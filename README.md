@@ -254,7 +254,7 @@ Don't miss these hot technologies:
 
 - [Material Design Lite](http://www.getmdl.io/)
 - [ECMAScript 2015 (ES6)](http://es6-features.org/)
-- [Traceur](https://github.com/google/traceur-compiler)
+- [Babel](http://babeljs.io/)
 - [PostCSS](http://postcss.org/)
 - [Gulp](http://gulpjs.com/)
 - [ExpressJS](http://expressjs.com)
