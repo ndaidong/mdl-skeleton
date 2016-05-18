@@ -5,12 +5,12 @@
 
 /* eslint no-console: 0*/
 
-import path from 'path';
-import fs from 'fs';
+var path = require('path');
+var fs = require('fs');
 
-import async from 'async';
-import bella from 'bellajs';
-import Promise from 'bluebird';
+var async = require('async');
+var bella = require('bellajs');
+var Promise = require('bluebird');
 
 var Handlebars = require('handlebars');
 Handlebars.registerHelper({
@@ -40,10 +40,6 @@ Handlebars.registerHelper({
   }
 });
 
-var traceur = require('traceur/src/node/api.js');
-
-var UglifyJS = require('uglify-js');
-
 var postcss = require('postcss');
 var postcssFilter = require('postcss-filter-plugins');
 var cssnano = require('cssnano');
@@ -62,6 +58,14 @@ const POSTCSS_PLUGINS = [
   postcssNesting,
   postcssNested
 ];
+
+var babel = require('babel-core');
+
+var transpile = (code) => {
+  return babel.transform(code, {
+    presets: [ 'es2015' ]
+  });
+};
 
 var fixPath = (p) => {
   if (!p) {
@@ -142,7 +146,8 @@ var compileJS = (files) => {
       if (fs.existsSync(file)) {
         let x = fs.readFileSync(file, 'utf8');
         if (!file.includes('/vendor')) {
-          x = traceur.compile(x);
+          let r = transpile(x);
+          x = r.code;
         }
         as.push(x);
       }
@@ -152,20 +157,13 @@ var compileJS = (files) => {
 
     if (s.length > 0) {
       let ss = '';
-      let traceurRuntime = './node_modules/traceur/bin/traceur-runtime.js';
-      if (fs.existsSync(traceurRuntime)) {
-        ss = fs.readFileSync(traceurRuntime, 'utf8');
-      }
-      let minified = UglifyJS.minify(s, {
-        fromString: true
-      });
-      return resolve(ss + '\n' + minified.code);
+      return resolve(ss + '\n' + s);
     }
     return reject(new Error('No JavaScript data'));
   });
 };
 
-export var processCSS = (css) => {
+var processCSS = (css) => {
 
   return new Promise((resolve, reject) => {
 
@@ -209,7 +207,7 @@ export var processCSS = (css) => {
 };
 
 
-export var processJS = (js) => {
+var processJS = (js) => {
 
   return new Promise((resolve, reject) => {
 
@@ -250,10 +248,7 @@ export var processJS = (js) => {
     return compileJS(jsfiles).then((code) => {
       try {
         if (config.ENV !== 'local') {
-          let minified = UglifyJS.minify(code, {
-            fromString: true
-          });
-          fs.writeFileSync(saveAs, minified.code, 'utf8');
+          fs.writeFileSync(saveAs, code, 'utf8');
         } else {
           fs.writeFileSync(saveAs, code, 'utf8');
         }
@@ -268,7 +263,7 @@ export var processJS = (js) => {
   });
 };
 
-export var build = (layout, data = {}, context = {}) => {
+var build = (layout, data = {}, context = {}) => {
 
   let conf = config.settings;
 
@@ -481,9 +476,13 @@ var render = (template, data, context, res) => {
     });
 };
 
-export var io = (req, res, next) => {
+var io = (req, res, next) => {
   res.render = (template, data, context) => {
     return render(template, data, context, res);
   };
   return next();
+};
+
+module.exports = {
+  io: io
 };

@@ -28,6 +28,8 @@ config.meta = {
 
 config.port = 9999;
 
+config.ENV = 'local';
+
 config.settings = {
   dateformat: 'D, M d, Y h:i:s O',
   memberOnlyRedirect: '/',

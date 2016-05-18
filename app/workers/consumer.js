@@ -7,9 +7,9 @@
 /* eslint guard-for-in: 0*/
 /* eslint no-console: 0*/
 
-import bella from 'bellajs';
-import request from 'request';
-import Promise from 'bluebird';
+var bella = require('bellajs');
+var request = require('request');
+var Promise = require('bluebird');
 
 var config = require('../configs/base');
 
@@ -38,7 +38,7 @@ var parse = (data) => {
   return s;
 };
 
-export var get = (endpoint, params, token) => {
+var get = (endpoint, params, token) => {
   let url = restURL + endpoint + (params ? '?' + parse(params) : '');
   return new Promise((resolve, reject) => {
     if (endpoint !== '/auth') {
@@ -77,7 +77,7 @@ export var get = (endpoint, params, token) => {
   });
 };
 
-export var post = (endpoint, data, token) => {
+var post = (endpoint, data, token) => {
   let url = restURL + endpoint;
 
   return new Promise((resolve, reject) => {
@@ -150,9 +150,16 @@ var sendRequest = (method, endpoint, data, token) => {
   });
 };
 
-export var put = (endpoint, data, token) => {
+var put = (endpoint, data, token) => {
   return sendRequest('PUT', endpoint, data, token);
 };
-export var del = (endpoint, data, token) => {
+var del = (endpoint, data, token) => {
   return sendRequest('DELETE', endpoint, data, token);
+};
+
+module.exports = {
+  put: put,
+  del: del,
+  get: get,
+  post: post
 };

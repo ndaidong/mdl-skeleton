@@ -2,7 +2,7 @@
  * HomeController
  **/
 
-export var start = (req, res) => {
+var start = (req, res) => {
 
   let data = {
     meta: {
@@ -19,9 +19,10 @@ export var start = (req, res) => {
     js: [
       'vendor/material',
       'vendor/bella',
-      'app',
+      'vendor/vdom',
       'modules/es6.test',
-      'modules/sample'
+      'modules/sample',
+      'app'
     ],
     sdata: {
       user: {
@@ -32,4 +33,8 @@ export var start = (req, res) => {
   };
 
   return res.render('landing', data, context);
+};
+
+module.exports = {
+  start: start
 };
