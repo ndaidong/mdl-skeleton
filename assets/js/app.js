@@ -36,4 +36,10 @@
     return _sdata.user || false;
   };
 
+  /* global DOM Sample */
+  DOM.ready(() => {
+    Sample.set('k', 19999);
+    console.log(Sample.get('k')); // eslint-disable-line
+  });
+
 })(window.SDATA);
