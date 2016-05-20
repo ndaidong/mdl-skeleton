@@ -185,7 +185,7 @@ With the methods we are using, the last output is always fit the requirements of
 - Standard HTML5 structure with oGraph and Twitter card support
 - Ready for E2E testing
 
-Here are the test results for our website [FOMO](http://fomo.link/) using [SecurityHeader](http://www.webpagetest.org/result/160401_JT_WHW/), [WebPagetest](http://www.webpagetest.org/result/160401_JT_WHW/) and [GTmetrix](https://gtmetrix.com/reports/fomo.link/4Ers5AWc).
+Here are the test results for our website [FOMO](http://fomo.link/) using [SecurityHeader](https://securityheaders.io/?q=http%3A%2F%2Ffomo.link%2F), [WebPagetest](http://www.webpagetest.org/result/160401_JT_WHW/) and [GTmetrix](https://gtmetrix.com/reports/fomo.link/YIHdv7eN).
 
 
 ### Protractor
