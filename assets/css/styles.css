@@ -251,3 +251,12 @@ html, body {
 .mdl-demo .mdl-menu__container {
   z-index: 99;
 }
+
+/* Sticky footer */
+.mdl-layout__content {
+  display: flex;
+  flex-flow: column nowrap;
+}
+.mdl-layout__content > *:not(.mdl-layout-spacer) {
+  flex: none;
+}
