@@ -60,12 +60,18 @@ const POSTCSS_PLUGINS = [
 ];
 
 var babel = require('babel-core');
-var UglifyJS = require('uglify-js');
+var parser = require('shift-parser');
+var codegen = require('shift-codegen').default;
 
 var transpile = (code) => {
   return babel.transform(code, {
     presets: [ 'es2015' ]
   });
+};
+
+var jsminify = (code) => {
+  var ast = parser.parseScript(code);
+  return codegen(ast);
 };
 
 var fixPath = (p) => {
@@ -193,17 +199,14 @@ var compileJS = (files) => {
           let r = transpile(x);
           x = r.code;
           if (config.ENV !== 'local') {
-            let minified = UglifyJS.minify(x, {
-              fromString: true
-            });
-            x = minified.code;
+            x = jsminify(x);
           }
         }
         as.push(x);
       }
     });
 
-    s = as.join('\n\n');
+    s = as.join(';');
 
     if (s.length > 0) {
       return resolve(s);
@@ -252,7 +255,8 @@ var processJS = (js) => {
 
     return compileJS(jsfiles).then((code) => {
       try {
-        fs.writeFileSync(saveAs, code, 'utf8');
+        let c = bella.replaceAll(code, '"use strict";', '');
+        fs.writeFileSync(saveAs, c, 'utf8');
         return resolve(pname);
       } catch (e) {
         return reject(e);
@@ -485,5 +489,6 @@ var io = (req, res, next) => {
 };
 
 module.exports = {
-  io: io
+  io: io,
+  jsminify: jsminify
 };

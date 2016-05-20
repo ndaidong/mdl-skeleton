@@ -47,8 +47,9 @@
     "robots.txt": "latest",
     "sanitize-html": "latest",
     "serve-favicon": "latest",
-    "svgo": "latest",
-    "uglify-js": "latest"
+    "shift-codegen": "latest",
+    "shift-parser": "latest",
+    "svgo": "latest"
   },
   "devDependencies": {
     "gulp": "latest"

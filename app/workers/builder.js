@@ -14,8 +14,9 @@ var mkdirp = require('mkdirp').sync;
 var cpdir = require('copy-dir').sync;
 var readdir = require('recursive-readdir');
 
-var UglifyJS = require('uglify-js');
 var SVGO = require('svgo');
+
+var compiler = require('./compiler');
 
 var fixPath = (p) => {
   if (!p) {
@@ -147,10 +148,8 @@ var minify = () => {
       if (fs.existsSync(dest) && !fs.existsSync(min)) {
         let s = fs.readFileSync(dest, 'utf8');
         if (s && s.length > 0) {
-          let minified = UglifyJS.minify(s, {
-            fromString: true
-          });
-          fs.writeFileSync(min, minified.code, 'utf8');
+          let minified = compiler.jsminify(s);
+          fs.writeFileSync(min, minified, 'utf8');
           console.log('Minified: %s', dest);
         } else {
           fs.unlinkSync(dest);
