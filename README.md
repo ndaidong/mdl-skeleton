@@ -256,7 +256,7 @@ Don't miss these hot technologies:
 - [ECMAScript 2015 (ES6)](http://es6-features.org/)
 - [Babel](http://babeljs.io/)
 - [PostCSS](http://postcss.org/)
-- [Gulp](http://gulpjs.com/)
+- [Jake](http://jakejs.com/)
 - [ExpressJS](http://expressjs.com)
 - [Handlebars](http://handlebarsjs.com/)
 
