@@ -470,8 +470,7 @@ var render = (template, data, context, res) => {
   build(template, data, context)
     .then((s) => {
       if (res && !res.headersSent) {
-        return res.status(200)
-          .send(s);
+        return res.status(200).send(s);
       }
       return res.end();
     })
