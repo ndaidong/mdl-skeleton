@@ -55,7 +55,7 @@
 
     "comma-dangle": 2,               // disallow or enforce trailing commas (recommended)
     "no-cond-assign": 2,             // disallow assignment in conditional expressions (recommended)
-    "no-console": 2,                 // disallow use of console in the node environment (recommended)
+    "no-console": 0,                 // disallow use of console in the node environment (recommended)
     "no-constant-condition": 2,      // disallow use of constant expressions in conditions (recommended)
     "no-control-regex": 2,           // disallow control characters in regular expressions (recommended)
     "no-debugger": 2,                // disallow use of debugger (recommended)

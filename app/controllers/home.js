@@ -19,7 +19,7 @@ var start = (req, res) => {
     js: [
       'vendor/material',
       'vendor/bella',
-      'vendor/vdom',
+      'vendor/doc',
       'modules/es6.test',
       'modules/sample',
       'app'

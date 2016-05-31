@@ -15,8 +15,8 @@
   "main": "./server.js",
   "scripts": {
     "start": "node server.js",
-    "reset": "./node_modules/.bin/gulp reset",
-    "setup": "./node_modules/.bin/gulp setup"
+    "reset": "./node_modules/.bin/jake reset",
+    "setup": "./node_modules/.bin/jake setup"
   },
   "dependencies": {
     "async": "latest",
@@ -52,7 +52,7 @@
     "svgo": "latest"
   },
   "devDependencies": {
-    "gulp": "latest"
+    "jake": "latest"
   },
   "builder": {
     "directories": [
@@ -71,7 +71,7 @@
     "javascript": {
       "bella": "https://cdn.rawgit.com/ndaidong/bella.js/master/dist/bella.min.js",
       "material": "https://storage.googleapis.com/code.getmdl.io/1.1.3/material.js",
-      "vdom": "https://raw.githubusercontent.com/ndaidong/vdom/master/dist/vdom.min.js"
+      "doc": "https://raw.githubusercontent.com/ndaidong/doc/master/dist/doc.min.js"
     }
   }
 }
