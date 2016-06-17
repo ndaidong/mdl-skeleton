@@ -1,7 +1,7 @@
 exports.config = {
   directConnect: true,
   capabilities: {
-    'browserName': 'chrome'
+    browserName: 'chrome'
   },
   specs: ['../test/e2e/*.js'],
   jasmineNodeOpts: {
