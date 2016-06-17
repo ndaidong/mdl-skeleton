@@ -16,7 +16,7 @@ var encrypt = (pass, salt = '') => {
   hash.update(pass);
   return {
     hash: hash.digest('hex'),
-    salt: salt
+    salt
   };
 };
 
@@ -44,5 +44,5 @@ var create = (data) => {
 };
 
 module.exports = {
-  create: create
+  create
 };

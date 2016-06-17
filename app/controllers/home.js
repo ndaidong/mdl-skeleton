@@ -36,5 +36,5 @@ var start = (req, res) => {
 };
 
 module.exports = {
-  start: start
+  start
 };

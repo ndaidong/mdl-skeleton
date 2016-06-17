@@ -3,8 +3,6 @@
  * @ndaidong
 **/
 
-'use strict';
-
 ((name, factory) => {
   var ENV = typeof module !== 'undefined' && module.exports ? 'node' : 'browser';
   if (ENV === 'node') {

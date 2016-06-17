@@ -64,7 +64,7 @@ var codegen = require('shift-codegen').default;
 
 var transpile = (code) => {
   return babel.transform(code, {
-    presets: [ 'es2015' ]
+    presets: ['es2015']
   });
 };
 
@@ -110,15 +110,18 @@ var postProcess = (css) => {
 var compileCSS = (files) => {
 
   return new Promise((resolve, reject) => {
-    let s = '', as = [], vs = [];
+    let s = '';
+    let as = [];
+    let vs = [];
     if (bella.isString(files)) {
-      files = [ files ];
+      files = [files];
     }
 
     files.forEach((file) => {
       if (fs.existsSync(file)) {
         let x = fs.readFileSync(file, 'utf8');
-        if (!file.includes(vendorDir)) {
+        let c = !file.includes(vendorDir);
+        if (c) {
           as.push(x);
         } else {
           vs.push(x);
@@ -144,10 +147,10 @@ var processCSS = (css) => {
 
   return new Promise((resolve, reject) => {
 
-    let fstats = [ config.revision ];
+    let fstats = [config.revision];
     let cssfiles = [];
     if (bella.isString(css)) {
-      css = [ css ];
+      css = [css];
     }
 
     css.forEach((file) => {
@@ -186,9 +189,10 @@ var processCSS = (css) => {
 var compileJS = (files) => {
 
   return new Promise((resolve, reject) => {
-    let s = '', as = [];
+    let s = '';
+    let as = [];
     if (bella.isString(files)) {
-      files = [ files ];
+      files = [files];
     }
 
     files.forEach((file) => {
@@ -218,9 +222,10 @@ var processJS = (js) => {
 
   return new Promise((resolve, reject) => {
 
-    let fstats = [ config.revision ], jsfiles = [];
+    let fstats = [config.revision];
+    let jsfiles = [];
     if (bella.isString(js)) {
-      js = [ js ];
+      js = [js];
     }
 
     js.forEach((file) => {
@@ -279,7 +284,7 @@ var build = (layout, data = {}, context = {}) => {
   let getPartial = (ss, dd) => {
 
     let getPlaceHolders = (_s) => {
-      let reg = /\{@includes\s+(\'?([A-Za-z0-9-.\/]+)\'?|\"?([A-Za-z0-9-.\/]+)\"?)\}/;
+      let reg = /\{@includes\s+('?([A-Za-z0-9-.\/]+)'?|"?([A-Za-z0-9-.\/]+)"?)\}/;
       return _s.match(reg);
     };
 
@@ -317,7 +322,7 @@ var build = (layout, data = {}, context = {}) => {
   };
 
   let getContainer = (ss, dd) => {
-    let reg = /\{@extends\s+(\'?([A-Za-z0-9-.\/]+)\'?|\"?([A-Za-z0-9-.\/]+)\"?)\}/i;
+    let reg = /\{@extends\s+('?([A-Za-z0-9-.\/]+)'?|"?([A-Za-z0-9-.\/]+)"?)\}/i;
     let matches = ss.match(reg);
     if (matches && matches.length > 2) {
       let place = matches[0];
@@ -465,17 +470,15 @@ var build = (layout, data = {}, context = {}) => {
 };
 
 var render = (template, data, context, res) => {
-  build(template, data, context)
-    .then((s) => {
-      if (res && !res.headersSent) {
-        return res.status(200).send(s);
-      }
-      return res.end();
-    })
-    .catch((e) => {
-      console.trace(e);
-      res.render500();
-    });
+  build(template, data, context).then((s) => {
+    if (res && !res.headersSent) {
+      return res.status(200).send(s);
+    }
+    return res.end();
+  }).catch((e) => {
+    console.trace(e);
+    res.render500();
+  });
 };
 
 var io = (req, res, next) => {
@@ -486,6 +489,6 @@ var io = (req, res, next) => {
 };
 
 module.exports = {
-  io: io,
-  jsminify: jsminify
+  io,
+  jsminify
 };

@@ -23,8 +23,8 @@ nums.forEach((v) => {
 });
 
 // string
-var customer = { name: 'Foo' };
-var card = { amount: 7, product: 'Bar', unitprice: 42 };
+var customer = {name: 'Foo'};
+var card = {amount: 7, product: 'Bar', unitprice: 42};
 var message = `Hello ${customer.name},
 want to buy ${card.amount} ${card.product} for
 a total of ${card.amount * card.unitprice} bucks?`;
@@ -49,8 +49,12 @@ class Monster extends Character {
     this.health_ += 10;
   }
 
-  get isAlive() { return this.health_ > 0; }
-  get health() { return this.health_; }
+  get isAlive() {
+    return this.health_ > 0;
+  }
+  get health() {
+    return this.health_;
+  }
   set health(value) {
     if (value < 0) {
       throw new Error('Health must be non-negative.');
