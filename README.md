@@ -70,11 +70,9 @@ module.exports = {
 ```
 See [/app/workers/compiler.js](https://github.com/ndaidong/mdl-skeleton/blob/master/app/workers/compiler.js)
 
-The res.render method expects 3 parameters as below:
+Note that Express's *res.render* method has been added the third parameter *context*, an object with it we can declare css, js and SDATA (shared data) for each of context (page).
 
-- *template*: template file, similar to res.render(template)
-- *data*: an object will be Handlebars compile to template file
-- *context*: another object with it we can declare css, js and SDATA (shared data). While css and js resources will be compiled and groupped to one file, SDATA will be shared to client script as a global object.
+While css and js resources will be compiled, minified, and merged into just one file, SDATA will be shared to client script as a global object.
 
 Example:
 
