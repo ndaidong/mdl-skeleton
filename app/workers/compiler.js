@@ -1,9 +1,7 @@
 /**
- * Compile and transpile client data
+ * For handling assets
  * @ndaidong
  **/
-
-/* eslint no-console: 0*/
 
 var path = require('path');
 var fs = require('fs');
