@@ -8,9 +8,8 @@
 var path = require('path');
 var fs = require('fs');
 
-var async = require('async');
 var bella = require('bellajs');
-var Promise = require('bluebird');
+var Promise = require('promise-wtf');
 
 var Handlebars = require('handlebars');
 Handlebars.registerHelper({
@@ -70,7 +69,7 @@ var transpile = (code) => {
 };
 
 var jsminify = (code) => {
-  var ast = parser.parseScript(code);
+  let ast = parser.parseScript(code);
   return codegen(ast);
 };
 
@@ -344,7 +343,7 @@ var build = (layout, data = {}, context = {}) => {
   }
 
   return new Promise((resolve, reject) => {
-    return async.series([
+    return Promise.series([
       (next) => {
         if (!fs.existsSync(file)) {
           console.log('Layout missing: %s', file);
@@ -456,12 +455,11 @@ var build = (layout, data = {}, context = {}) => {
         sHtml = sHtml.replace(/>\s+</gm, '><');
         return next();
       }
-    ], (err) => {
-      if (err) {
-        console.trace(err);
-        return reject(err);
-      }
+    ]).then(() => {
       return resolve(sHtml);
+    }).catch((err) => {
+      console.trace(err);
+      return reject(err);
     });
   });
 };
