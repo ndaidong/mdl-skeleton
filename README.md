@@ -6,14 +6,8 @@ How to quickly generate a new website using Node.js and Material Design Lite? Tr
 git clone https://github.com/ndaidong/mdl-skeleton.git
 cd mdl-skeleton
 npm install
-npm run setup
 npm start
 ```
-
-Then you would got this:
-
-![Material Design Lite](http://i.imgur.com/SJC0rl5.png)
-
 
 # Contents
 
@@ -74,15 +68,7 @@ export var start = (req, res) => {
 ```
 See [/app/workers/compiler.js](https://github.com/ndaidong/mdl-skeleton/blob/master/app/workers/compiler.js)
 
-*Note:*
-
-We have overwritten ExpressJS' res.render function by defining the following line within server.js:
-
-```
-app.use(compiler.io);
-```
-
-So the res.render now expects 3 parameters as below:
+The res.render method expects 3 parameters as below:
 
 - *template*: template file, similar to res.render(template)
 - *data*: an object will be Handlebars compile to template file
@@ -216,6 +202,11 @@ npm start
 pm2 start server.js -i 0 --name=main
 
 ```
+
+Then you would got this:
+
+![Material Design Lite](http://i.imgur.com/SJC0rl5.png)
+
 
 *Original template:* http://www.getmdl.io/templates/text-only/index.html
 
