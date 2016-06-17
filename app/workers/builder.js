@@ -27,6 +27,8 @@ var fixPath = (p) => {
   return p;
 };
 
+var config = require('../../configs/base');
+
 var pkg = require('../../package');
 var bconf = pkg.builder || {},
   jsDir = fixPath(bconf.jsDir),
@@ -100,9 +102,9 @@ var copyFile = (source, target) => {
     if (fs.existsSync(target)) {
       fs.unlinkSync(target);
     }
-    var rd = fs.createReadStream(source);
+    let rd = fs.createReadStream(source);
     rd.on('error', reject);
-    var wr = fs.createWriteStream(target);
+    let wr = fs.createWriteStream(target);
     wr.on('error', reject);
     wr.on('finish', resolve);
     rd.pipe(wr);
@@ -306,6 +308,53 @@ var reconf = () => {
   return null;
 };
 
+var genAndroidManifest = () => {
+  let f = `${imgDir}brand/manifest.json`;
+  let icons = [
+    {
+      src: '\/images\/brand\/android-chrome-36x36.png',
+      sizes: '36x36',
+      type: 'image\/png',
+      density: 0.75
+    },
+    {
+      src: '\/images\/brand\/android-chrome-48x48.png',
+      sizes: '48x48',
+      type: 'image\/png',
+      density: 1
+    },
+    {
+      src: '\/images\/brand\/android-chrome-72x72.png',
+      sizes: '72x72',
+      type: 'image\/png',
+      density: 1.5
+    },
+    {
+      src: '\/images\/brand\/android-chrome-96x96.png',
+      sizes: '96x96',
+      type: 'image\/png',
+      density: 2
+    },
+    {
+      src: '\/images\/brand\/android-chrome-144x144.png',
+      sizes: '144x144',
+      type: 'image\/png',
+      density: 3
+    },
+    {
+      src: '\/images\/brand\/android-chrome-192x192.png',
+      sizes: '192x192',
+      type: 'image\/png',
+      density: 4
+    }
+  ];
+  let o = {
+    name: config.title || config.name,
+    icons: icons
+  };
+  fs.writeFileSync(f, JSON.stringify(o), 'utf8');
+};
+
 var dir = () => {
   let dirs = bconf.directories || [];
   dirs = dirs.concat([
@@ -316,7 +365,7 @@ var dir = () => {
   return null;
 };
 
-var setup = () => {
+var setup = (c = config) => {
   console.log('Start building...');
   dir();
   img();
@@ -327,6 +376,8 @@ var setup = () => {
   packages();
   minify();
   reconf();
+
+  genAndroidManifest(c);
 };
 
 module.exports = {

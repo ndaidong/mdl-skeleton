@@ -259,6 +259,7 @@ Don't miss these hot technologies:
 - [Jake](http://jakejs.com/)
 - [ExpressJS](http://expressjs.com)
 - [Handlebars](http://handlebarsjs.com/)
+- [Real Favicon Generator](http://realfavicongenerator.net/)
 
 
 ### License

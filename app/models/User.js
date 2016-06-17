@@ -4,7 +4,7 @@
 
 var bella = require('bellajs');
 var crypto = require('crypto');
-var Promise = require('bluebird');
+var Promise = require('promise-wtf');
 
 var User = require('./schemas/User');
 
