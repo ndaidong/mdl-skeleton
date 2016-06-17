@@ -23,8 +23,8 @@ Then you would got this:
   * [Smart builder tool](#smart-builder-tool)
   * [Standard front-end output](#standard-front-end-output)
 * [Installation](#installation)
-* [Protractor](#protractor)
 * [Live examples](#live-examples)
+* [Protractor](#protractor)
 * [Tech stacks](#tech-stacks)
 * [License](#license)
 
@@ -188,24 +188,6 @@ With the methods we are using, the last output is always fit the requirements of
 Here are the test results for our website [FOMO](http://fomo.link/) using [SecurityHeader](https://securityheaders.io/?q=http%3A%2F%2Ffomo.link%2F), [WebPagetest](http://www.webpagetest.org/result/160401_JT_WHW/) and [GTmetrix](https://gtmetrix.com/reports/fomo.link/YIHdv7eN).
 
 
-### Protractor
-
-If you want to write E2E test with [Protractor](http://www.protractortest.org), just place the test scripts under /test folder and install the tools as below:
-
-```
-sudo npm install -g protractor
-sudo webdriver-manager update
-webdriver-manager start
-```
-
-With the last command, we've got Selenium server running. Now open another terminal tab to start testing:
-
-```
-cd mdl-skeleton
-protractor test/protractor.conf.js
-```
-
-
 ### Installation
 
 ```
@@ -248,6 +230,46 @@ pm2 start server.js -i 0 --name=main
 ![FOMO](http://i.imgur.com/U72Cyq1.png)
 
 
+### Protractor
+
+If you want to write E2E test with [Protractor](http://www.protractortest.org), please do the following steps:
+
+1. Install protractor & update Selenium driver
+
+  ```
+  sudo npm install -g protractor
+  sudo webdriver-manager update
+  ```
+
+2. Start Selenium driver
+
+  ```
+  webdriver-manager start
+  ```
+
+3. Start the website
+
+  At another terminal tab, move the cursor into project folder, then...
+
+  ```
+  cd mdl-skeleton
+  npm start
+  ```
+
+4. Run test scripts:
+
+  At the third terminal tab, also move the cursor into project folder, then...
+
+  ```
+  cd mdl-skeleton
+  protractor test/protractor.conf.js
+  ```
+
+5. Update test scenario
+
+  Under /test folder, now you can update protractor configurations and test cases to fit your own project.
+
+
 ### Tech stacks
 
 Don't miss these hot technologies:
@@ -256,6 +278,7 @@ Don't miss these hot technologies:
 - [ECMAScript 2015 (ES6)](http://es6-features.org/)
 - [Babel](http://babeljs.io/)
 - [PostCSS](http://postcss.org/)
+- [Protractor](http://www.protractortest.org/)
 - [Jake](http://jakejs.com/)
 - [ExpressJS](http://expressjs.com)
 - [Handlebars](http://handlebarsjs.com/)
