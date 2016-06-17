@@ -1,5 +1,5 @@
 {
-  "version": "0.6.0",
+  "version": "0.6.1",
   "name": "mdl-skeleton",
   "homepage": "http://techpush.xyz",
   "description": "Material Design Lite - Skeleton for Node.js",
@@ -10,7 +10,7 @@
   "author": "@ndaidong",
   "license": "MIT",
   "engines": {
-    "node": ">= 4.0"
+    "node": ">= 6.0"
   },
   "main": "./server.js",
   "scripts": {
