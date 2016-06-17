@@ -32,19 +32,19 @@ Built-in compiler, that compiles CSS resources with PostCSS and transpiles ES6 w
 ```
 /**
  * HomeController
-**/
+ **/
 
-export var start = (req, res) => {
+var start = (req, res) => {
 
   // this block will be parsed by Handlebars engine and compiled to the template
   let data = {
     meta: {
-      title: 'Name & Title'
+      title: 'MDL skeleton'
     },
-    user: res.user
-  }
+    title: 'Name & Title'
+  };
 
-  // this will be processed by PostCSS, Traceur
+  // this will be processed by PostCSS, Babel
   let context = {
     css: [
       'vendor/mdl',
@@ -52,18 +52,20 @@ export var start = (req, res) => {
     ],
     js: [
       'vendor/material',
-      'vendor/bella',
-      'vendor/fetch',
-      'vendor/promise',
+      'vendor/doc',
       'app'
     ],
     sdata: {
       user: user // this will be shared to client script
     }
-  }
+  };
 
   return res.render('landing', data, context);
-}
+};
+
+module.exports = {
+  start
+};
 
 ```
 See [/app/workers/compiler.js](https://github.com/ndaidong/mdl-skeleton/blob/master/app/workers/compiler.js)
