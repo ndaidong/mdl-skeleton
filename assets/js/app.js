@@ -3,6 +3,9 @@
  * Init app
  * @ndaidong
  */
+
+/* global Bella */
+
 ((sdata) => {
 
   var App = window.App = {};

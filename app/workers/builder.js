@@ -3,8 +3,6 @@
  * @ndaidong
  **/
 
-/* eslint no-console: 0*/
-
 var fs = require('fs');
 var path = require('path');
 var exec = require('child_process').execSync;
@@ -30,15 +28,15 @@ var fixPath = (p) => {
 var config = require('../../configs/base');
 
 var pkg = require('../../package');
-var bconf = pkg.builder || {},
-  jsDir = fixPath(bconf.jsDir),
-  cssDir = fixPath(bconf.cssDir),
-  imgDir = fixPath(bconf.imgDir),
-  authDir = fixPath(bconf.authDir),
-  fontDir = fixPath(bconf.fontDir),
-  distDir = fixPath(bconf.distDir),
-  vendorDir = fixPath(bconf.vendorDir),
-  tplDir = fixPath(bconf.tplDir);
+var bconf = pkg.builder || {};
+var jsDir = fixPath(bconf.jsDir);
+var cssDir = fixPath(bconf.cssDir);
+var imgDir = fixPath(bconf.imgDir);
+var authDir = fixPath(bconf.authDir);
+var fontDir = fixPath(bconf.fontDir);
+var distDir = fixPath(bconf.distDir);
+var vendorDir = fixPath(bconf.vendorDir);
+var tplDir = fixPath(bconf.tplDir);
 
 var js3rdDir = fixPath(jsDir + vendorDir);
 var css3rdDir = fixPath(cssDir + vendorDir);
@@ -198,7 +196,7 @@ var svg = () => {
     });
   };
 
-  return readdir(distDir + 'images/', [ '*.png', '*.jpg', '*.gif', '.ico' ], (err, files) => {
+  return readdir(distDir + 'images/', ['*.png', '*.jpg', '*.gif', '.ico'], (err, files) => {
     if (err) {
       console.trace(err);
     }
@@ -256,6 +254,7 @@ var reconf = () => {
       if (!fs.existsSync(d)) {
         mkdirp(d);
       }
+      return null;
     });
   }
 
@@ -312,45 +311,48 @@ var genAndroidManifest = () => {
   let f = `${imgDir}brand/manifest.json`;
   let icons = [
     {
-      src: '\/images\/brand\/android-chrome-36x36.png',
+      src: '/images/brand/android-chrome-36x36.png',
       sizes: '36x36',
-      type: 'image\/png',
+      type: 'image/png',
       density: 0.75
     },
     {
-      src: '\/images\/brand\/android-chrome-48x48.png',
+      src: '/images/brand/android-chrome-48x48.png',
       sizes: '48x48',
-      type: 'image\/png',
+      type: 'image/png',
       density: 1
     },
     {
-      src: '\/images\/brand\/android-chrome-72x72.png',
+      src: '/images/brand/android-chrome-72x72.png',
       sizes: '72x72',
-      type: 'image\/png',
+      type: 'image/png',
       density: 1.5
     },
     {
-      src: '\/images\/brand\/android-chrome-96x96.png',
+      src: '/images/brand/android-chrome-96x96.png',
       sizes: '96x96',
-      type: 'image\/png',
+      type: 'image/png',
       density: 2
     },
     {
-      src: '\/images\/brand\/android-chrome-144x144.png',
+      src: '/images/brand/android-chrome-144x144.png',
       sizes: '144x144',
-      type: 'image\/png',
+      type: 'image/png',
       density: 3
     },
     {
-      src: '\/images\/brand\/android-chrome-192x192.png',
+      src: '/images/brand/android-chrome-192x192.png',
       sizes: '192x192',
-      type: 'image\/png',
+      type: 'image/png',
       density: 4
     }
   ];
+
+  let meta = config.meta || {};
+
   let o = {
-    name: config.title || config.name,
-    icons: icons
+    name: meta.title || meta.name || config.name,
+    icons
   };
   fs.writeFileSync(f, JSON.stringify(o), 'utf8');
 };
@@ -381,23 +383,23 @@ var setup = (c = config) => {
 };
 
 module.exports = {
-  dir: dir,
-  download: download,
-  removeDir: removeDir,
-  createDir: createDir,
-  copyDir: copyDir,
-  copyFile: copyFile,
-  createEmptyFile: createEmptyFile,
-  publish: publish,
-  minify: minify,
-  reset: reset,
-  fixPath: fixPath,
-  auth: auth,
-  font: font,
-  tpl: tpl,
-  img: img,
-  svg: svg,
-  packages: packages,
-  reconf: reconf,
-  setup: setup
+  dir,
+  download,
+  removeDir,
+  createDir,
+  copyDir,
+  copyFile,
+  createEmptyFile,
+  publish,
+  minify,
+  reset,
+  fixPath,
+  auth,
+  font,
+  tpl,
+  img,
+  svg,
+  packages,
+  reconf,
+  setup
 };
