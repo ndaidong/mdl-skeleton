@@ -1,11 +1,9 @@
 /**
- * Common scenario for Gulp
+ * Common scenario
  * @ndaidong at Twitter
  **/
 
  /* global task */
-
-'use strict'; // enable strict mode to use "let" in node.js 4.x
 
 var builder = require('./app/workers/builder');
 

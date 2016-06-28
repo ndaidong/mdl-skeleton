@@ -25,8 +25,6 @@ var fixPath = (p) => {
   return p;
 };
 
-var config = require('../../configs/base');
-
 var pkg = require('../../package');
 var bconf = pkg.builder || {};
 var jsDir = fixPath(bconf.jsDir);
@@ -307,56 +305,6 @@ var reconf = () => {
   return null;
 };
 
-var genAndroidManifest = () => {
-  let f = `${imgDir}brand/manifest.json`;
-  let icons = [
-    {
-      src: '/images/brand/android-chrome-36x36.png',
-      sizes: '36x36',
-      type: 'image/png',
-      density: 0.75
-    },
-    {
-      src: '/images/brand/android-chrome-48x48.png',
-      sizes: '48x48',
-      type: 'image/png',
-      density: 1
-    },
-    {
-      src: '/images/brand/android-chrome-72x72.png',
-      sizes: '72x72',
-      type: 'image/png',
-      density: 1.5
-    },
-    {
-      src: '/images/brand/android-chrome-96x96.png',
-      sizes: '96x96',
-      type: 'image/png',
-      density: 2
-    },
-    {
-      src: '/images/brand/android-chrome-144x144.png',
-      sizes: '144x144',
-      type: 'image/png',
-      density: 3
-    },
-    {
-      src: '/images/brand/android-chrome-192x192.png',
-      sizes: '192x192',
-      type: 'image/png',
-      density: 4
-    }
-  ];
-
-  let meta = config.meta || {};
-
-  let o = {
-    name: meta.title || meta.name || config.name,
-    icons
-  };
-  fs.writeFileSync(f, JSON.stringify(o), 'utf8');
-};
-
 var dir = () => {
   let dirs = bconf.directories || [];
   dirs = dirs.concat([
@@ -367,7 +315,7 @@ var dir = () => {
   return null;
 };
 
-var setup = (c = config) => {
+var setup = () => {
   console.log('Start building...');
   dir();
   img();
@@ -378,8 +326,6 @@ var setup = (c = config) => {
   packages();
   minify();
   reconf();
-
-  genAndroidManifest(c);
 };
 
 module.exports = {
