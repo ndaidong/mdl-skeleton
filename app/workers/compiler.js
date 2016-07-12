@@ -41,19 +41,21 @@ var postcss = require('postcss');
 var postcssFilter = require('postcss-filter-plugins');
 var cssnano = require('cssnano');
 var cssnext = require('postcss-cssnext');
-var postcssMixin = require('postcss-mixins');
-var postcssNested = require('postcss-nested');
-var postcssNesting = require('postcss-nesting');
+var precss = require('precss');
+var scss = require('postcss-scss');
+var rucksack = require('rucksack-css');
+var mqpacker = require('css-mqpacker');
 
 const POSTCSS_PLUGINS = [
   postcssFilter({
     silent: true
   }),
+  mqpacker({
+    sort: true
+  }),
+  precss,
   cssnext,
-  cssnano,
-  postcssMixin,
-  postcssNesting,
-  postcssNested
+  rucksack
 ];
 
 var babel = require('babel-core');
@@ -95,8 +97,12 @@ var vendorDir = fixPath(builder.vendorDir);
 
 var postProcess = (css) => {
   return new Promise((resolve, reject) => {
-    return postcss(POSTCSS_PLUGINS)
-      .process(css)
+    let plugins = POSTCSS_PLUGINS.slice(0);
+    if (config.ENV !== 'local') {
+      plugins.push(cssnano);
+    }
+    return postcss(plugins)
+      .process(css, {parser: scss})
       .then((result) => {
         return resolve(result.css);
       }).catch((err) => {
@@ -488,5 +494,6 @@ var io = (req, res, next) => {
 
 module.exports = {
   io,
-  jsminify
+  jsminify,
+  fixPath
 };

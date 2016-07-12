@@ -266,14 +266,15 @@ If you want to write E2E test with [Protractor](http://www.protractortest.org), 
 Don't miss these hot technologies:
 
 - [Material Design Lite](http://www.getmdl.io/)
-- [ECMAScript 2015 (ES6)](http://es6-features.org/)
-- [Babel](http://babeljs.io/)
-- [PostCSS](http://postcss.org/)
-- [Protractor](http://www.protractortest.org/)
-- [Jake](http://jakejs.com/)
-- [ExpressJS](http://expressjs.com)
-- [Handlebars](http://handlebarsjs.com/)
-- [Real Favicon Generator](http://realfavicongenerator.net/)
+- [ES6](http://es6-features.org/) with [Babel](http://babeljs.io/)
+- Modern CSS techniques with [PostCSS](http://postcss.org/):
+  - [CSSNext](http://cssnext.io/)
+  - [rucksack](https://simplaio.github.io/rucksack/)
+  - [mqpacker](https://github.com/hail2u/node-css-mqpacker)
+  - [PreCSS](https://github.com/jonathantneal/precss)
+  - [CSSNano](http://cssnano.co/)
+- Templating with [Handlebars](http://handlebarsjs.com/)
+- E2E testing with [Protractor](http://www.protractortest.org/)
 
 
 ### License

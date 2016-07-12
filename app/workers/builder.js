@@ -13,17 +13,13 @@ var cpdir = require('copy-dir').sync;
 var readdir = require('recursive-readdir');
 
 var SVGO = require('svgo');
+var imagemin = require('imagemin');
+var imageminMozjpeg = require('imagemin-mozjpeg');
+var imageminPngquant = require('imagemin-pngquant');
 
 var compiler = require('./compiler');
 
-var fixPath = (p) => {
-  if (!p) {
-    return '';
-  }
-  p = path.normalize(p);
-  p += p.endsWith('/') ? '' : '/';
-  return p;
-};
+var fixPath = compiler.fixPath;
 
 var pkg = require('../../package');
 var bconf = pkg.builder || {};
@@ -185,7 +181,9 @@ var reset = () => {
 };
 
 var svg = () => {
+
   let svgo = new SVGO();
+
   let minsvg = (file) => {
     let s = fs.readFileSync(file, 'utf8');
     svgo.optimize(s, (result) => {
@@ -194,7 +192,29 @@ var svg = () => {
     });
   };
 
-  return readdir(distDir + 'images/', ['*.png', '*.jpg', '*.gif', '.ico'], (err, files) => {
+  let minimg = (file) => {
+    imagemin([file], {
+      plugins: [
+        imageminMozjpeg({targa: false}),
+        imageminPngquant({quality: '65-80'})
+      ]
+    }).then((ls) => {
+      ls.forEach((item) => {
+        if (item && item.data) {
+          fs.writeFile(file, item.data, (er) => {
+            if (er) {
+              console.log(er);
+            }
+          });
+        }
+      });
+    }).catch((e) => {
+      console.log(e);
+    });
+  };
+
+  let rdir = fixPath(distDir + '/images');
+  readdir(rdir, (err, files) => {
     if (err) {
       console.trace(err);
     }
@@ -203,6 +223,8 @@ var svg = () => {
         let b = path.extname(f);
         if (b === '.svg') {
           minsvg(f);
+        } else if (b === '.jpg' || b === '.jpeg' || b === '.png') {
+          minimg(f);
         }
       });
     }
