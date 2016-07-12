@@ -126,7 +126,6 @@ app.use((error, req, res) => {
 });
 
 var onServerReady = () => {
-  require('./app/workers/builder').setup();
   console.log('Server started at the port %d in %s mode', config.port, config.ENV);
   console.log('http://127.0.0.1:' + config.port);
   console.log(config.meta.url);

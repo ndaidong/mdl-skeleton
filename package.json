@@ -1,5 +1,5 @@
 {
-  "version": "0.6.2",
+  "version": "0.7.2",
   "name": "mdl-skeleton",
   "homepage": "http://techpush.xyz",
   "description": "Material Design Lite - Skeleton for Node.js",
@@ -14,9 +14,9 @@
   },
   "main": "./server.js",
   "scripts": {
-    "start": "node server.js",
-    "reset": "jake reset",
-    "setup": "jake setup"
+    "setup": "node ./bin/setup",
+    "start": "npm run setup && node server",
+    "reset": "node ./bin/reset"
   },
   "dependencies": {
     "babel-core": "^6.9.1",
@@ -50,7 +50,14 @@
     "svgo": "^0.6.6"
   },
   "devDependencies": {
-    "jake": "latest"
+    "css-mqpacker": "^5.0.1",
+    "html-minifier": "^2.1.7",
+    "imagemin": "^5.2.2",
+    "imagemin-mozjpeg": "^6.0.0",
+    "imagemin-pngquant": "^5.0.0",
+    "postcss-scss": "^0.1.8",
+    "precss": "^1.4.0",
+    "rucksack-css": "^0.8.6"
   },
   "builder": {
     "directories": [
