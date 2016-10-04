@@ -1,7 +1,7 @@
 {
-  "version": "0.7.3",
+  "version": "0.7.4",
   "name": "mdl-skeleton",
-  "homepage": "http://techpush.xyz",
+  "homepage": "https://techpush.xyz",
   "description": "Material Design Lite - Skeleton for Node.js",
   "repository": {
     "type": "git",
@@ -16,7 +16,8 @@
   "scripts": {
     "setup": "node ./bin/setup",
     "start": "npm run setup && node server",
-    "reset": "node ./bin/reset"
+    "reset": "node ./bin/reset",
+    "lint": "eslint ."
   },
   "dependencies": {
     "babel-core": "6.*.*",
@@ -55,6 +56,10 @@
     "shift-parser": "5.*.*",
     "svgo": "0.*.*"
   },
+  "devDependencies": {
+    "eslint": "latest",
+    "eslint-config-ggc": "latest"
+  },
   "builder": {
     "directories": [
       "storage/cache",
@@ -67,11 +72,11 @@
     "distDir": "dist",
     "vendorDir": "vendor",
     "css": {
-      "mdl": "https://code.getmdl.io/1.1.3/material.indigo-pink.min.css"
+      "mdl": "https://code.getmdl.io/1.2.1/material.indigo-pink.min.css"
     },
     "javascript": {
       "bella": "https://cdn.rawgit.com/ndaidong/bella.js/master/dist/bella.min.js",
-      "material": "https://storage.googleapis.com/code.getmdl.io/1.1.3/material.js",
+      "material": "https://storage.googleapis.com/code.getmdl.io/1.2.1/material.js",
       "doc": "https://raw.githubusercontent.com/ndaidong/doc/master/dist/doc.min.js"
     }
   }
