@@ -213,7 +213,7 @@ Then you would got this:
 
 ### Live examples:
 
-- [TechPush](http://techpush.xyz)
+- [TechPush](https://techpush.xyz)
 - [FOMO](http://fomo.link/)
 
 ![TechPush](http://i.imgur.com/ETERBvf.png)

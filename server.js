@@ -20,7 +20,7 @@ var helmet = require('helmet');
 var csp = require('helmet-csp');
 var hsts = require('hsts');
 
-var app = express();
+var app = module.exports = express();
 
 var config = require('./configs/base');
 var envFile = './configs/env/vars';

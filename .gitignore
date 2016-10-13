@@ -9,6 +9,9 @@ logs
 *.seed
 
 node_modules
+coverage
+.nyc_output
+
 storage
 assets/js/vendor
 assets/css/vendor
