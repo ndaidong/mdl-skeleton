@@ -239,7 +239,13 @@ test('It must have title "MDL skeleton"', async () => {
 });
 ```
 
-Then:
+Ensure that the web has been started:
+
+```
+npm start
+```
+
+Then, from another command line window/tab, we run test:
 
 ```
 npm test
@@ -249,7 +255,7 @@ Here is the result:
 
 ![E2E testing with TestCafe](http://i.imgur.com/HYEnE2i.png)
 
-You can add more test cases, and/or modify npm test script in package.json to test with more engines.
+You can add more test cases.
 
 TestCafe supports async/await syntax that is just available in node.js v7+, but you can use transpilers or Promise as normal.
 

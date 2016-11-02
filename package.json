@@ -18,7 +18,7 @@
     "start": "npm run setup && node server",
     "reset": "node ./bin/reset",
     "lint": "eslint .",
-    "test": "testcafe chrome tests/"
+    "test": "testcafe all tests/"
   },
   "dependencies": {
     "babel-core": "6.*.*",
