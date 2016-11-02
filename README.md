@@ -18,7 +18,7 @@ npm start
   * [Standard front-end output](#standard-front-end-output)
 * [Installation](#installation)
 * [Live examples](#live-examples)
-* [Protractor](#protractor)
+* [TestCafe](#testcafe)
 * [Tech stacks](#tech-stacks)
 * [License](#license)
 
@@ -221,44 +221,35 @@ Then you would got this:
 ![FOMO](http://i.imgur.com/U72Cyq1.png)
 
 
-### Protractor
+### TestCafe
 
-If you want to write E2E test with [Protractor](http://www.protractortest.org), please do the following steps:
+Writing E2E test is now dead simple with [TestCafe](https://devexpress.github.io/testcafe/). View sample script in ./tests folder to get started:
 
-1. Install protractor & update Selenium driver
+```
+var assert = require('assert');
+var selector = require('testcafe').Selector;
 
-  ```
-  sudo npm install -g protractor
-  sudo webdriver-manager update
-  ```
+fixture('Homepage').page('http://127.0.0.1:9999');
 
-2. Start Selenium driver
+const getTitle = selector(() => document.getElementsByTagName('title'));
 
-  ```
-  webdriver-manager start
-  ```
+test('It must have title "MDL skeleton"', async () => {
+  let title = await getTitle();
+  assert.ok(title.textContent === 'MDL skeleton');
+});
+```
 
-3. Start the website
+Then:
 
-  At another terminal tab, move the cursor into project folder, then...
+```
+npm test
+```
 
-  ```
-  cd mdl-skeleton
-  npm start
-  ```
+Here is the result:
 
-4. Run test scripts:
+[!E2E testing with TestCafe](http://i.imgur.com/HYEnE2i.png)
 
-  At the third terminal tab, also move the cursor into project folder, then...
-
-  ```
-  cd mdl-skeleton
-  protractor test/protractor.conf.js
-  ```
-
-5. Update test scenario
-
-  Under /test folder, now you can update protractor configurations and test cases to fit your own project.
+TestCafe supports async/await syntax that is just available in node.js v7+, but you can use transpilers or Promise as normal.
 
 
 ### Tech stacks
@@ -274,7 +265,7 @@ Don't miss these hot technologies:
   - [PreCSS](https://github.com/jonathantneal/precss)
   - [CSSNano](http://cssnano.co/)
 - Templating with [Handlebars](http://handlebarsjs.com/)
-- E2E testing with [Protractor](http://www.protractortest.org/)
+- E2E testing with [TestCafe](https://devexpress.github.io/testcafe/)
 
 
 ### License

@@ -1,5 +1,5 @@
 {
-  "version": "0.7.4",
+  "version": "0.7.6",
   "name": "mdl-skeleton",
   "homepage": "https://techpush.xyz",
   "description": "Material Design Lite - Skeleton for Node.js",
@@ -17,7 +17,8 @@
     "setup": "node ./bin/setup",
     "start": "npm run setup && node server",
     "reset": "node ./bin/reset",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test": "testcafe chrome tests/"
   },
   "dependencies": {
     "babel-core": "6.*.*",
@@ -58,7 +59,8 @@
   },
   "devDependencies": {
     "eslint": "latest",
-    "eslint-config-ggc": "latest"
+    "eslint-config-ggc": "latest",
+    "testcafe": "latest"
   },
   "builder": {
     "directories": [
