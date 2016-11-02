@@ -288,7 +288,7 @@ var build = (layout, data = {}, context = {}) => {
   let getPartial = (ss, dd) => {
 
     let getPlaceHolders = (_s) => {
-      let reg = /\{@includes\s+('?([A-Za-z0-9-.\/]+)'?|"?([A-Za-z0-9-.\/]+)"?)\}/;
+      let reg = /\{@includes\s+('?([A-Za-z0-9-./]+)'?|"?([A-Za-z0-9-./]+)"?)\}/;
       return _s.match(reg);
     };
 
@@ -326,7 +326,7 @@ var build = (layout, data = {}, context = {}) => {
   };
 
   let getContainer = (ss, dd) => {
-    let reg = /\{@extends\s+('?([A-Za-z0-9-.\/]+)'?|"?([A-Za-z0-9-.\/]+)"?)\}/i;
+    let reg = /\{@extends\s+('?([A-Za-z0-9-./]+)'?|"?([A-Za-z0-9-./]+)"?)\}/i;
     let matches = ss.match(reg);
     if (matches && matches.length > 2) {
       let place = matches[0];
