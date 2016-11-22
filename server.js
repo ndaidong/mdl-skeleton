@@ -3,24 +3,12 @@
  * @ndaidong
  **/
 
-var fs = require('fs');
-var path = require('path');
+const fs = require('fs');
+const path = require('path');
 
-var bella = require('bellajs');
-var express = require('express');
-var bodyParser = require('body-parser');
-var cookieParser = require('cookie-parser');
-var favicon = require('serve-favicon');
-var robots = require('robots.txt');
-var morgan = require('morgan');
-var DeviceDetector = require('device-detector');
+const bella = require('bellajs');
+
 var compiler = require('./app/workers/compiler');
-
-var helmet = require('helmet');
-var csp = require('helmet-csp');
-var hsts = require('hsts');
-
-var app = module.exports = express();
 
 var config = require('./configs/base');
 var envFile = './configs/env/vars';
@@ -32,104 +20,51 @@ if (fs.existsSync(envFile + '.js')) {
 
 config.revision = bella.id;
 
-app.set('config', config);
-app.set('port', config.port);
-app.set('etag', 'strong');
+const debug = require('debug');
+const info = debug('app:info');
+const error = debug('app:error');
 
-app.use(helmet());
-app.use(csp(config.csp));
-app.use(hsts(config.hsts));
-app.use(helmet.xssFilter());
-app.use(helmet.frameguard());
-app.use(helmet.ieNoOpen());
-app.use(helmet.noSniff());
-app.use(helmet.hidePoweredBy({
-  setTo: config.meta.name
-}));
+const Koa = require('koa');
+const router = require('koa-router')();
+const favicon = require('koa-favicon');
+const assets = require('koa-static');
+const bodyParser = require('koa-bodyparser');
 
-app.use(robots(path.join(__dirname, '/robots.txt')));
+const app = module.exports = new Koa();
+
 app.use(favicon(path.join(__dirname, '/assets/images') + '/brand/favicon.ico'));
 
-var staticOpt = {
-  maxAge: 24 * 60 * 6e4,
-  etag: true,
-  lastModified: true
-};
+app.use(assets(path.join(__dirname, 'assets'), config.staticData));
+app.use(assets(path.join(__dirname, 'dist'), config.staticData));
 
-app.use(express.static(path.join(__dirname, 'assets'), staticOpt));
-app.use(express.static(path.join(__dirname, 'dist'), staticOpt));
-
-app.use(bodyParser.json({
-  limit: '2mb'
+app.use(bodyParser({
+  encode: 'utf-8',
+  formLimit: '128kb',
+  jsonLimit: '1mb',
+  onerror: (err, ctx) => {
+    ctx.throw('body parse error', 422);
+    error(err);
+  }
 }));
-app.use(bodyParser.urlencoded({
-  limit: '2mb',
-  extended: true
-}));
-app.use(cookieParser());
-
-app.use((req, res, next) => {
-  let ua = req.headers['user-agent'];
-  if (ua) {
-    let di = DeviceDetector.parse(ua);
-    res.device = di;
-  }
-  res.render404 = () => {
-    let s = fs.readFileSync('./app/views/errors/404.html', 'utf8');
-    res.status(404).send(s);
-  };
-  res.render500 = () => {
-    let s = fs.readFileSync('./app/views/errors/500.html', 'utf8');
-    res.status(500).send(s);
-  };
-  next();
-});
-
-morgan.token('navigator', (req, res) => {
-  let d = res.device;
-  if (d && bella.isObject(d)) {
-    if (d.type === 'Bot') {
-      return bella.trim(d.engine + ' ' + d.version);
-    }
-    return bella.trim(d.browser + ' ' + d.version) + ', ' + bella.trim(d.os + ' ' + d.type);
-  }
-  return 'Unknown device';
-});
-morgan.token('user', (req, res) => {
-  let u = res.user;
-  if (u && bella.isObject(u)) {
-    return u.name;
-  }
-  return 'Guest';
-});
-morgan.token('path', (req) => {
-  return req.path;
-});
-
-var mgTpl = ':method :path :status - :res[content-length] bytes :response-time ms - :user, :navigator - [:date[web]]';
-app.use(morgan(mgTpl));
 
 app.use(compiler.io);
 
 fs.readdirSync('./app/routers').forEach((file) => {
   if (path.extname(file) === '.js') {
-    require('./app/routers/' + file)(app);
+    require('./app/routers/' + file)(router);
   }
 });
 
-app.use((req, res) => {
-  return res.render404();
-});
+app.use(router.routes()).use(router.allowedMethods());
 
-app.use((error, req, res) => {
-  return res.render500();
+app.on('error', (err, ctx) => {
+  error('server error', err, ctx);
 });
 
 var onServerReady = () => {
-  require('./app/workers/builder').setup();
-  console.log('Server started at the port %d in %s mode', config.port, config.ENV);
-  console.log('http://127.0.0.1:' + config.port);
-  console.log(config.meta.url);
+  info(`Server started at the port ${config.port} in ${config.ENV} mode`);
+  info('Access website via', `http://127.0.0.1:${config.port}`);
+  info('Public URL:', config.meta.url || 'None');
 };
 
 app.listen(config.port, onServerReady);

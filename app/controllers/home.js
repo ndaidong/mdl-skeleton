@@ -2,8 +2,7 @@
  * HomeController
  **/
 
-var start = (req, res) => {
-
+var start = (ctx) => {
   let data = {
     meta: {
       title: 'MDL skeleton'
@@ -31,10 +30,7 @@ var start = (req, res) => {
       }
     }
   };
-
-  return res.render('landing', data, context);
+  ctx.render('landing', data, context);
 };
 
-module.exports = {
-  start
-};
+module.exports = start;

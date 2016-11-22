@@ -39,6 +39,12 @@ config.settings = {
   tplFileExtension: '.html'
 };
 
+config.staticData = {
+  maxAge: 24 * 60 * 6e4,
+  etag: true,
+  lastModified: true
+};
+
 /*eslint-disable */
 config.csp = {
   defaultSrc: ["'self'"],

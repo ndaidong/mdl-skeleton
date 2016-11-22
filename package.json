@@ -15,18 +15,38 @@
   "main": "./server.js",
   "scripts": {
     "setup": "node ./bin/setup",
-    "start": "npm run setup && node server",
+    "start": "DEBUG=*:* node --harmony-async-await server",
     "reset": "node ./bin/reset",
     "lint": "eslint .",
     "test": "testcafe all tests/"
   },
   "dependencies": {
     "babel-core": "6.x.x",
+    "babel-plugin-transform-remove-strict-mode": "0.x.x",
     "babel-preset-env": "0.x.x",
     "bellajs": "6.x.x",
-    "koa": "1.x.x",
-    "koa-hbs": "0.x.x",
-    "promise-wtf": "1.x.x"
+    "copy-dir": "0.x.x",
+    "css-mqpacker": "5.x.x",
+    "cssnano": "3.x.x",
+    "debug": "2.x.x",
+    "handlebars": "4.x.x",
+    "imagemin": "5.x.x",
+    "imagemin-mozjpeg": "6.x.x",
+    "imagemin-pngquant": "5.x.x",
+    "koa": "next",
+    "koa-bodyparser": "next",
+    "koa-favicon": "next",
+    "koa-router": "next",
+    "koa-static": "next",
+    "mkdirp": "0.x.x",
+    "postcss": "5.x.x",
+    "postcss-cssnext": "2.x.x",
+    "postcss-filter-plugins": "2.x.x",
+    "promise-wtf": "1.x.x",
+    "recursive-readdir": "2.x.x",
+    "shift-codegen": "5.x.x",
+    "shift-parser": "5.x.x",
+    "svgo": "0.x.x"
   },
   "devDependencies": {
     "eslint": "latest",
@@ -48,9 +68,9 @@
       "mdl": "https://code.getmdl.io/1.2.1/material.indigo-pink.min.css"
     },
     "javascript": {
-      "bella": "https://cdn.rawgit.com/ndaidong/bella.js/master/dist/bella.min.js",
+      "bella": "https://cdn.rawgit.com/ndaidong/bella.js/master/dist/bella.js",
       "material": "https://storage.googleapis.com/code.getmdl.io/1.2.1/material.js",
-      "doc": "https://raw.githubusercontent.com/ndaidong/doc/master/dist/doc.min.js"
+      "doc": "https://raw.githubusercontent.com/ndaidong/doc/master/dist/doc.js"
     }
   }
 }

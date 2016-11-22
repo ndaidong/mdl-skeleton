@@ -9,6 +9,14 @@ var fs = require('fs');
 var bella = require('bellajs');
 var Promise = require('promise-wtf');
 
+const debug = require('debug');
+const info = debug('compiler:info');
+const error = debug('compiler:error');
+
+var getFileContent = (f) => {
+  return fs.existsSync(f) ? fs.readFileSync(f, 'utf8') : '';
+};
+
 var Handlebars = require('handlebars');
 Handlebars.registerHelper({
   eq: (v1, v2) => {
@@ -41,9 +49,6 @@ var postcss = require('postcss');
 var postcssFilter = require('postcss-filter-plugins');
 var cssnano = require('cssnano');
 var cssnext = require('postcss-cssnext');
-var precss = require('precss');
-var scss = require('postcss-scss');
-var rucksack = require('rucksack-css');
 var mqpacker = require('css-mqpacker');
 
 const POSTCSS_PLUGINS = [
@@ -53,9 +58,7 @@ const POSTCSS_PLUGINS = [
   mqpacker({
     sort: true
   }),
-  precss,
-  cssnext,
-  rucksack
+  cssnext
 ];
 
 var babel = require('babel-core');
@@ -64,7 +67,25 @@ var codegen = require('shift-codegen').default;
 
 var transpile = (code) => {
   return babel.transform(code, {
-    presets: ['es2015']
+    presets: [
+      [
+        'env', {
+          targets: {
+            browsers: [
+              'safari 9',
+              'ie 11',
+              'Android 4',
+              'iOS 7'
+            ]
+          }
+        }
+      ]
+    ],
+    plugins: [
+      'transform-remove-strict-mode'
+    ],
+    comments: false,
+    sourceMaps: true
   });
 };
 
@@ -102,7 +123,7 @@ var postProcess = (css) => {
       plugins.push(cssnano);
     }
     return postcss(plugins)
-      .process(css, {parser: scss})
+      .process(css)
       .then((result) => {
         return resolve(result.css);
       }).catch((err) => {
@@ -355,7 +376,7 @@ var build = (layout, data = {}, context = {}) => {
     return Promise.series([
       (next) => {
         if (!fs.existsSync(file)) {
-          console.log('Layout missing: %s', file);
+          info(`Layout missing: ${file}`);
           continuable = false;
         }
         next();
@@ -405,7 +426,7 @@ var build = (layout, data = {}, context = {}) => {
           sHtml = template(data);
         } catch (e) {
           sHtml = 'Something went wrong. Please try again later.';
-          console.trace(e);
+          error(e);
         }
         return next();
       },
@@ -422,7 +443,7 @@ var build = (layout, data = {}, context = {}) => {
           sHtml = sHtml.replace('{@style}', s);
           return sHtml;
         }).catch((e) => {
-          console.trace(e);
+          error(e);
           return e;
         }).finally(next);
       },
@@ -437,10 +458,8 @@ var build = (layout, data = {}, context = {}) => {
         return processJS(js).then((src) => {
           let s = `<script type="text/javascript" src="${src}?rev=${config.revision}"></script>`;
           sHtml = sHtml.replace('{@script}', s);
-          return null;
         }).catch((e) => {
-          console.trace(e);
-          return e;
+          error(e);
         }).finally(next);
       },
       (next) => {
@@ -467,29 +486,46 @@ var build = (layout, data = {}, context = {}) => {
     ]).then(() => {
       return resolve(sHtml);
     }).catch((err) => {
-      console.trace(err);
+      error(err);
       return reject(err);
     });
   });
 };
 
-var render = (template, data, context, res) => {
+var render = (template, data, context, ctx) => {
   build(template, data, context).then((s) => {
-    if (res && !res.headersSent) {
-      return res.status(200).send(s);
+    if (ctx && !ctx.headerSent) {
+      ctx.status = 200;
+      ctx.body = s;
     }
-    return res.end();
   }).catch((e) => {
-    console.trace(e);
-    res.render500();
+    error(e);
+    ctx.render500();
   });
 };
 
-var io = (req, res, next) => {
-  res.render = (template, data, context) => {
-    return render(template, data, context, res);
+var io = (ctx, next) => {
+
+  ctx.render404 = () => {
+    let s = getFileContent('./app/views/errors/404.html');
+    ctx.status = 404;
+    ctx.body = s;
   };
-  return next();
+
+  ctx.render500 = () => {
+    let s = getFileContent('./app/views/errors/500.html');
+    ctx.status = 500;
+    ctx.body = s;
+  };
+
+  ctx.render = async (template, data, context) => {
+    await setTimeout(() => {
+      ctx.status = 200;
+      ctx.body = 'HElllo';
+      ctx.context = context;
+    }, 500);
+  };
+  next();
 };
 
 module.exports = {
