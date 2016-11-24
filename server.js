@@ -5,6 +5,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const pjoin = path.join;
 
 const bella = require('bellajs');
 
@@ -32,10 +33,11 @@ const bodyParser = require('koa-bodyparser');
 
 const app = module.exports = new Koa();
 
-app.use(favicon(path.join(__dirname, '/assets/images') + '/brand/favicon.ico'));
+app.use(favicon(pjoin(__dirname, '/assets/images') + '/brand/favicon.ico'));
 
-app.use(assets(path.join(__dirname, 'assets'), config.staticData));
-app.use(assets(path.join(__dirname, 'dist'), config.staticData));
+let staticData = config.staticData;
+app.use(assets(pjoin(__dirname, 'assets'), staticData));
+app.use(assets(pjoin(__dirname, 'dist'), staticData));
 
 app.use(bodyParser({
   encode: 'utf-8',
@@ -47,7 +49,7 @@ app.use(bodyParser({
   }
 }));
 
-app.use(compiler.io);
+compiler.io(app);
 
 fs.readdirSync('./app/routers').forEach((file) => {
   if (path.extname(file) === '.js') {

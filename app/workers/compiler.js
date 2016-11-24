@@ -492,41 +492,50 @@ var build = (layout, data = {}, context = {}) => {
   });
 };
 
-var render = (template, data, context, ctx) => {
-  build(template, data, context).then((s) => {
-    if (ctx && !ctx.headerSent) {
-      ctx.status = 200;
+
+var render = (ctx) => {
+  let {
+    template, data, context
+  } = ctx;
+
+  return Promise.resolve(build(template, data, context));
+};
+
+
+var io = (app) => {
+
+  app.use((ctx, next) => {
+    ctx.render404 = () => {
+      let s = getFileContent('./app/views/errors/404.html');
+      ctx.status = 404;
       ctx.body = s;
-    }
-  }).catch((e) => {
-    error(e);
-    ctx.render500();
+    };
+
+    ctx.render500 = () => {
+      let s = getFileContent('./app/views/errors/500.html');
+      ctx.status = 500;
+      ctx.body = s;
+    };
+
+    ctx.render = (template, data, context) => {
+      ctx.data = {
+        template,
+        data,
+        context
+      };
+    };
+
+    next();
+  });
+
+  app.use(async (ctx, next) => {
+    let data = await render(ctx);
+    ctx.status = data.status;
+    ctx.body = data.html;
+    next();
   });
 };
 
-var io = (ctx, next) => {
-
-  ctx.render404 = () => {
-    let s = getFileContent('./app/views/errors/404.html');
-    ctx.status = 404;
-    ctx.body = s;
-  };
-
-  ctx.render500 = () => {
-    let s = getFileContent('./app/views/errors/500.html');
-    ctx.status = 500;
-    ctx.body = s;
-  };
-
-  ctx.render = async (template, data, context) => {
-    await setTimeout(() => {
-      ctx.status = 200;
-      ctx.body = 'HElllo';
-      ctx.context = context;
-    }, 500);
-  };
-  next();
-};
 
 module.exports = {
   io,
