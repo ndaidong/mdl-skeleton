@@ -35,7 +35,7 @@ const app = module.exports = new Koa();
 
 app.use(favicon(pjoin(__dirname, '/assets/images') + '/brand/favicon.ico'));
 
-let staticData = config.staticData;
+var staticData = config.staticData;
 app.use(assets(pjoin(__dirname, 'assets'), staticData));
 app.use(assets(pjoin(__dirname, 'dist'), staticData));
 
