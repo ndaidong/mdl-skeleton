@@ -30,6 +30,7 @@ var start = (ctx) => {
       }
     }
   };
+
   ctx.render('landing', data, context);
 };
 

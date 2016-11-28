@@ -33,6 +33,10 @@ const bodyParser = require('koa-bodyparser');
 
 const app = module.exports = new Koa();
 
+app.on('error', (err, ctx) => {
+  error('server error', err, ctx);
+});
+
 app.use(favicon(pjoin(__dirname, '/assets/images') + '/brand/favicon.ico'));
 
 var staticData = config.staticData;
@@ -57,11 +61,13 @@ fs.readdirSync('./app/routers').forEach((file) => {
   }
 });
 
-app.use(router.routes()).use(router.allowedMethods());
+app.use(router.routes()).use(router.allowedMethods({throw: true}));
 
-app.on('error', (err, ctx) => {
-  error('server error', err, ctx);
+
+app.use((ctx) => {
+  ctx.render(404);
 });
+
 
 var onServerReady = () => {
   info(`Server started at the port ${config.port} in ${config.ENV} mode`);

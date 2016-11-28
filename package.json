@@ -42,6 +42,7 @@
     "postcss": "5.x.x",
     "postcss-cssnext": "2.x.x",
     "postcss-filter-plugins": "2.x.x",
+    "postcss-nesting": "^2.3.1",
     "promise-wtf": "1.x.x",
     "recursive-readdir": "2.x.x",
     "shift-codegen": "5.x.x",
