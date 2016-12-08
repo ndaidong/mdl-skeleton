@@ -63,7 +63,6 @@ fs.readdirSync('./app/routers').forEach((file) => {
 
 app.use(router.routes()).use(router.allowedMethods({throw: true}));
 
-
 app.use((ctx) => {
   ctx.render(404);
 });

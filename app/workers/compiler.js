@@ -5,6 +5,7 @@
 
 var path = require('path');
 var fs = require('fs');
+var http = require('http');
 
 var bella = require('bellajs');
 var Promise = require('promise-wtf');
@@ -15,6 +16,14 @@ const error = debug('compiler:error');
 
 var getFileContent = (f) => {
   return fs.existsSync(f) ? fs.readFileSync(f, 'utf8') : '';
+};
+
+var setFileContent = (f, content) => {
+  return fs.writeFileSync(f, content, 'utf8');
+};
+
+var getHTTPStatus = (code) => {
+  return http.STATUS_CODES[code] || 'Unknown error';
 };
 
 var Handlebars = require('handlebars');
@@ -134,7 +143,7 @@ var postProcess = (css) => {
   });
 };
 
-var parseLayout = async (input) => {
+var parseLayout = (input) => {
   let conf = config.settings;
 
   let dir = conf.viewDir + '/';
@@ -227,7 +236,7 @@ var parseLayout = async (input) => {
   return input;
 };
 
-var compileCSS = async (files) => {
+var compileCSS = (files) => {
   let s = '';
   let as = [];
   let vs = [];
@@ -253,52 +262,52 @@ var compileCSS = async (files) => {
     throw new Error('No CSS data');
   }
   let ps = vs.join('\n\n');
-  let rs = await postProcess(s);
+  let rs = postProcess(s);
   return ps + '\n\n' + rs;
 };
 
-var parseCSS = async (input) => {
-  let {context, body} = input;
-  let css = context.css || false;
-  if (!css) {
-    return input;
-  }
-
-  let fstats = [config.revision];
-  let cssfiles = [];
-  if (bella.isString(css)) {
-    css = [css];
-  }
-
-  css.forEach((file) => {
-    let full = cssDir + file;
-    let part = path.parse(full);
-    let ext = part.ext;
-    if (!ext) {
-      full += '.css';
+var parseCSS = (input) => {
+  return new Promise((resolve) => {
+    let {context, body} = input;
+    let css = context.css || false;
+    if (!css) {
+      return resolve(input);
     }
-    if (fs.existsSync(full)) {
-      let stat = fs.statSync(full);
-      fstats.push(stat.mtime);
-      cssfiles.push(full);
+
+    let fstats = [config.revision];
+    let cssfiles = [];
+    if (bella.isString(css)) {
+      css = [css];
     }
+
+    css.forEach((file) => {
+      let full = cssDir + file;
+      let part = path.parse(full);
+      let ext = part.ext;
+      if (!ext) {
+        full += '.css';
+      }
+      if (fs.existsSync(full)) {
+        let stat = fs.statSync(full);
+        fstats.push(stat.mtime);
+        cssfiles.push(full);
+      }
+    });
+
+    let fname = bella.md5(fstats.join(';'));
+
+    let pname = '/css/' + fname + '.css';
+    let saveAs = path.normalize(distDir + pname);
+
+    compileCSS(cssfiles).then((code) => {
+      setFileContent(saveAs, code);
+    });
+
+    let style = `<link rel="stylesheet" type="text/css" href="${pname}?rev=${config.revision}"`;
+    input.body = body.replace('{@style}', style);
+
+    return resolve(input);
   });
-
-  let fname = bella.md5(fstats.join(';'));
-
-  let pname = '/css/' + fname + '.css';
-  let saveAs = distDir + pname;
-
-  if (!fs.existsSync(saveAs)) {
-    let code = await compileCSS(cssfiles);
-    fs.writeFileSync(saveAs, code, 'utf8');
-  }
-
-  let style = `<link rel="stylesheet" type="text/css" href="${pname}?rev=${config.revision}"`;
-  input.body = body.replace('{@style}', style);
-  let o = await input;
-
-  return o;
 };
 
 
@@ -331,84 +340,113 @@ var compileJS = (files) => {
   return s;
 };
 
-var parseJS = async (input) => {
-
-  let {context, body} = input;
-  let js = context.js || false;
-  if (!js) {
-    return input;
-  }
-
-  let fstats = [config.revision];
-  let jsfiles = [];
-  if (bella.isString(js)) {
-    js = [js];
-  }
-
-  js.forEach((file) => {
-    let full = jsDir + file;
-    let ext = path.extname(full);
-    if (!ext || ext !== '.js') {
-      let _full = '';
-      if (fs.existsSync(full + '.js')) {
-        _full = full + '.js';
-      }
-      if (full.includes(vendorDir) && config.ENV !== 'local' && fs.existsSync(full + '.min.js')) {
-        _full = full + '.min.js';
-      }
-      full = _full;
+var parseJS = (input) => {
+  return new Promise((resolve) => {
+    let {context, body} = input;
+    let js = context.js || false;
+    if (!js) {
+      return resolve(input);
     }
-    if (fs.existsSync(full)) {
-      let stat = fs.statSync(full);
-      fstats.push(stat.mtime);
-      jsfiles.push(full);
+
+    let fstats = [config.revision];
+    let jsfiles = [];
+    if (bella.isString(js)) {
+      js = [js];
     }
+
+    js.forEach((file) => {
+      let full = jsDir + file;
+      let ext = path.extname(full);
+      if (!ext || ext !== '.js') {
+        let _full = '';
+        if (fs.existsSync(full + '.js')) {
+          _full = full + '.js';
+        }
+        if (full.includes(vendorDir) && config.ENV !== 'local' && fs.existsSync(full + '.min.js')) {
+          _full = full + '.min.js';
+        }
+        full = _full;
+      }
+      if (fs.existsSync(full)) {
+        let stat = fs.statSync(full);
+        fstats.push(stat.mtime);
+        jsfiles.push(full);
+      }
+    });
+
+    let fname = bella.md5(fstats.join(';'));
+
+    let pname = '/js/' + fname + '.js';
+    let saveAs = path.normalize(distDir + pname);
+
+    compileJS(jsfiles).then((code) => {
+      setFileContent(saveAs, code);
+    });
+
+    let script = `<script type="text/javascript" src="${pname}?rev=${config.revision}"></script>`;
+    input.body = body.replace('{@script}', script);
+    return resolve(input);
   });
+};
 
-  let fname = bella.md5(fstats.join(';'));
+var normalize = (input) => {
+  let {body = ''} = input;
+  input.body = removeNewLines(body);
+  return Promise.resolve(input);
+};
 
-  let pname = '/js/' + fname + '.js';
-  let saveAs = distDir + pname;
-
-  if (!fs.existsSync(saveAs)) {
-    let code = compileJS(jsfiles);
-    fs.writeFileSync(saveAs, code, 'utf8');
+var writeOut = (ctx, status = 200, body = '') => {
+  if (ctx.response.headerSent) {
+    info('Header sent. Stop streaming...');
+  } else {
+    ctx.status = status;
+    ctx.body = body;
   }
+};
 
-  let script = `<script type="text/javascript" src="${pname}?rev=${config.revision}"></script>`;
-  input.body = body.replace('{@script}', script);
-  return input;
+var compose = (...args) => {
+  return (..._args) => {
+    let self = this;
+    for (let i = args.length - 1; i >= 0; i--) {
+      _args = [args[i].apply(self, args)];
+    }
+    return _args[0];
+  };
 };
 
 var render = (input) => {
-  return parseLayout(input)
-          .then(parseCSS);
+
+  let {
+    ctx,
+    template
+  } = input;
+
+  if (bella.isNumber(template)) {
+    let errorCode = template;
+    let html = getFileContent('./app/views/error.html');
+    let message = getHTTPStatus(errorCode);
+    let body = bella.template(html).compile({
+      title: `${errorCode} ${message}`,
+      errorCode: String(errorCode),
+      message
+    });
+    return writeOut(ctx, errorCode, body);
+  }
+
+  let fn = compose(parseLayout, parseCSS, parseJS, normalize);
+  return fn(input)
+    .then((output) => {
+      writeOut(ctx, 200, output.body);
+    }).catch((err) => {
+      error(err);
+    });
 };
 
 
 var io = (app) => {
-
   app.use((ctx, next) => {
-    ctx.render = async (template, data, context) => {
-      let status = 200;
-      let body = '';
-      if (bella.isNumber(template)) {
-        status = template;
-        if (template === 404) {
-          body = await getFileContent('./app/views/errors/404.html');
-        } else if (template === 500) {
-          body = await getFileContent('./app/views/errors/500.html');
-        }
-      } else {
-        let output = await render({template, data, context, ctx});
-        status = output.status || 200;
-        body = output.body || '';
-      }
-
-      if (!ctx.headerSent) {
-        ctx.status = status;
-        ctx.body = body;
-      }
+    ctx.render = (template, data, context) => {
+      return render({ctx, template, data, context});
     };
     next();
   });
@@ -420,3 +458,4 @@ module.exports = {
   jsminify,
   fixPath
 };
+
