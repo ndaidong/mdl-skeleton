@@ -143,7 +143,7 @@ var postProcess = (css) => {
   });
 };
 
-var parseLayout = (input) => {
+var parseLayout = async (input) => {
   let conf = config.settings;
 
   let dir = conf.viewDir + '/';
@@ -266,7 +266,7 @@ var compileCSS = (files) => {
   return ps + '\n\n' + rs;
 };
 
-var parseCSS = (input) => {
+var parseCSS = async (input) => {
   return new Promise((resolve) => {
     let {context, body} = input;
     let css = context.css || false;
@@ -311,7 +311,7 @@ var parseCSS = (input) => {
 };
 
 
-var compileJS = (files) => {
+var compileJS = async (files) => {
   let s = '';
   let as = [];
   if (bella.isString(files)) {
@@ -340,59 +340,56 @@ var compileJS = (files) => {
   return s;
 };
 
-var parseJS = (input) => {
-  return new Promise((resolve) => {
-    let {context, body} = input;
-    let js = context.js || false;
-    if (!js) {
-      return resolve(input);
-    }
+var parseJS = async (input) => {
+  let {context, body} = input;
+  let js = context.js || false;
+  if (!js) {
+    return input;
+  }
 
-    let fstats = [config.revision];
-    let jsfiles = [];
-    if (bella.isString(js)) {
-      js = [js];
-    }
+  let fstats = [config.revision];
+  let jsfiles = [];
+  if (bella.isString(js)) {
+    js = [js];
+  }
 
-    js.forEach((file) => {
-      let full = jsDir + file;
-      let ext = path.extname(full);
-      if (!ext || ext !== '.js') {
-        let _full = '';
-        if (fs.existsSync(full + '.js')) {
-          _full = full + '.js';
-        }
-        if (full.includes(vendorDir) && config.ENV !== 'local' && fs.existsSync(full + '.min.js')) {
-          _full = full + '.min.js';
-        }
-        full = _full;
+  js.forEach((file) => {
+    let full = jsDir + file;
+    let ext = path.extname(full);
+    if (!ext || ext !== '.js') {
+      let _full = '';
+      if (fs.existsSync(full + '.js')) {
+        _full = full + '.js';
       }
-      if (fs.existsSync(full)) {
-        let stat = fs.statSync(full);
-        fstats.push(stat.mtime);
-        jsfiles.push(full);
+      if (full.includes(vendorDir) && config.ENV !== 'local' && fs.existsSync(full + '.min.js')) {
+        _full = full + '.min.js';
       }
-    });
-
-    let fname = bella.md5(fstats.join(';'));
-
-    let pname = '/js/' + fname + '.js';
-    let saveAs = path.normalize(distDir + pname);
-
-    compileJS(jsfiles).then((code) => {
-      setFileContent(saveAs, code);
-    });
-
-    let script = `<script type="text/javascript" src="${pname}?rev=${config.revision}"></script>`;
-    input.body = body.replace('{@script}', script);
-    return resolve(input);
+      full = _full;
+    }
+    if (fs.existsSync(full)) {
+      let stat = fs.statSync(full);
+      fstats.push(stat.mtime);
+      jsfiles.push(full);
+    }
   });
+
+  let fname = bella.md5(fstats.join(';'));
+
+  let pname = '/js/' + fname + '.js';
+  let saveAs = path.normalize(distDir + pname);
+
+  let code = await compileJS(jsfiles);
+  setFileContent(saveAs, code);
+
+  let script = `<script type="text/javascript" src="${pname}?rev=${config.revision}"></script>`;
+  input.body = body.replace('{@script}', script);
+  return input;
 };
 
-var normalize = (input) => {
+var normalize = async (input) => {
   let {body = ''} = input;
   input.body = removeNewLines(body);
-  return Promise.resolve(input);
+  return input;
 };
 
 var writeOut = (ctx, status = 200, body = '') => {
@@ -404,17 +401,7 @@ var writeOut = (ctx, status = 200, body = '') => {
   }
 };
 
-var compose = (...args) => {
-  return (..._args) => {
-    let self = this;
-    for (let i = args.length - 1; i >= 0; i--) {
-      _args = [args[i].apply(self, args)];
-    }
-    return _args[0];
-  };
-};
-
-var render = (input) => {
+var render = async (input) => {
 
   let {
     ctx,
@@ -430,25 +417,27 @@ var render = (input) => {
       errorCode: String(errorCode),
       message
     });
-    return writeOut(ctx, errorCode, body);
+    writeOut(ctx, errorCode, body);
   }
 
-  let fn = compose(parseLayout, parseCSS, parseJS, normalize);
-  return fn(input)
-    .then((output) => {
+  if (!ctx.response.headerSent) {
+    try {
+      let output = await parseLayout(input);
+      output = await parseJS(output);
+      output = await normalize(output);
       writeOut(ctx, 200, output.body);
-    }).catch((err) => {
+    } catch (err) {
       error(err);
-    });
+    }
+  }
 };
 
 
 var io = (app) => {
   app.use((ctx, next) => {
     ctx.render = (template, data, context) => {
-      return render({ctx, template, data, context});
+      return render({ctx, template, data, context}, next);
     };
-    next();
   });
 };
 
