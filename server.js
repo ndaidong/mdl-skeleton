@@ -11,13 +11,7 @@ const bella = require('bellajs');
 
 var compiler = require('./app/workers/compiler');
 
-var config = require('./configs/base');
-var envFile = './configs/env/vars';
-if (fs.existsSync(envFile + '.js')) {
-  let configEnv = require(envFile);
-  let configAll = bella.copies(configEnv, config);
-  config = configAll;
-}
+var config = require('./configs');
 
 config.revision = bella.id;
 

@@ -119,7 +119,7 @@ var removeNewLines = (s) => {
 };
 
 var pkg = require('../../package.json');
-var config = require('./../../configs/base');
+var config = require('./../../configs');
 
 var builder = pkg.builder;
 var cssDir = fixPath(builder.cssDir);

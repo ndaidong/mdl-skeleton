@@ -1,46 +1,4 @@
-var pkg = require('./../package.json');
-
-var config = {
-  ENV: 'dev'
-};
-
-config.name = pkg.name || '';
-config.version = pkg.version || '';
-config.description = pkg.description || '';
-config.keywords = pkg.keywords || '';
-config.author = pkg.author || '';
-
-config.baseDir = '/';
-
-config.meta = {
-  name: 'mdl-skeleton',
-  alias: '',
-  slogan: '',
-  description: '',
-  keywords: '',
-  image: '',
-  author: '',
-  title: 'Material Design Lite',
-  domain: '',
-  url: '',
-  canonical: ''
-};
-
-config.port = 9999;
-
-config.settings = {
-  dateformat: 'D, M d, Y h:i:s O',
-  viewDir: './app/views/',
-  tplFileExtension: '.html'
-};
-
-config.staticData = {
-  maxAge: 24 * 60 * 6e4,
-  etag: true,
-  lastModified: true
-};
-
-config.csp = {
+module.exports = {
   directives: {
     defaultSrc: [
       `'self'`
@@ -99,11 +57,3 @@ config.csp = {
   safari5: false,
   loose: true
 };
-
-config.hsts = {
-  maxAge: 10886400000,
-  includeSubDomains: true,
-  force: true
-};
-
-module.exports = config;
