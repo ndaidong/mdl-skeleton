@@ -2,7 +2,8 @@
  * HomeController
  **/
 
-var start = (ctx) => {
+var start = async (ctx) => {
+
   let data = {
     meta: {
       title: 'MDL skeleton'
@@ -31,7 +32,9 @@ var start = (ctx) => {
     }
   };
 
-  ctx.render('landing', data, context);
+
+  let {compiler} = ctx;
+  await compiler.render('landing', data, context, ctx);
 };
 
 module.exports = start;

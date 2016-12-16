@@ -47,7 +47,7 @@ app.use(bodyParser({
   }
 }));
 
-compiler.io(app);
+app.context.compiler = compiler;
 
 fs.readdirSync('./app/routers').forEach((file) => {
   if (path.extname(file) === '.js') {
@@ -57,10 +57,11 @@ fs.readdirSync('./app/routers').forEach((file) => {
 
 app.use(router.routes()).use(router.allowedMethods({throw: true}));
 
-app.use((ctx) => {
-  ctx.render(404);
+app.use(async (ctx) => {
+  let output = await compiler.compile({template: 404});
+  ctx.status = output.status;
+  ctx.body = output.body;
 });
-
 
 var onServerReady = () => {
   info(`Server started at the port ${config.port} in ${config.ENV} mode`);

@@ -127,20 +127,13 @@ var jsDir = fixPath(builder.jsDir);
 var distDir = fixPath(builder.distDir);
 var vendorDir = fixPath(builder.vendorDir);
 
-var postProcess = (css) => {
-  return new Promise((resolve, reject) => {
-    let plugins = POSTCSS_PLUGINS.slice(0);
-    if (config.ENV !== 'local') {
-      plugins.push(cssnano);
-    }
-    return postcss(plugins)
-      .process(css)
-      .then((result) => {
-        return resolve(result.css);
-      }).catch((err) => {
-        return reject(err);
-      });
-  });
+var postProcess = async (css) => {
+  let plugins = POSTCSS_PLUGINS.slice(0);
+  if (config.ENV !== 'local') {
+    plugins.push(cssnano);
+  }
+  let result = await postcss(plugins).process(css);
+  return result.css;
 };
 
 var parseLayout = async (input) => {
@@ -213,14 +206,14 @@ var parseLayout = async (input) => {
     return html;
   };
 
-  let sLayout = getFileContent(file);
+  let sLayout = await getFileContent(file);
 
   if (!sLayout) {
     throw new Error(`Template not found or wrong path: ${file}`);
   }
 
-  sLayout = addToContainer(sLayout, dir);
-  sLayout = insertPartials(sLayout, dir);
+  sLayout = await addToContainer(sLayout, dir);
+  sLayout = await insertPartials(sLayout, dir);
 
   try {
     let tmp = data.meta || {};
@@ -236,7 +229,7 @@ var parseLayout = async (input) => {
   return input;
 };
 
-var compileCSS = (files) => {
+var compileCSS = async (files) => {
   let s = '';
   let as = [];
   let vs = [];
@@ -262,56 +255,53 @@ var compileCSS = (files) => {
     throw new Error('No CSS data');
   }
   let ps = vs.join('\n\n');
-  let rs = postProcess(s);
+  let rs = await postProcess(s);
   return ps + '\n\n' + rs;
 };
 
 var parseCSS = async (input) => {
-  return new Promise((resolve) => {
-    let {context, body} = input;
-    let css = context.css || false;
-    if (!css) {
-      return resolve(input);
+  let {context, body} = input;
+  let css = context.css || false;
+  if (!css) {
+    return input;
+  }
+
+  let fstats = [config.revision];
+  let cssfiles = [];
+  if (bella.isString(css)) {
+    css = [css];
+  }
+
+  css.forEach((file) => {
+    let full = cssDir + file;
+    let part = path.parse(full);
+    let ext = part.ext;
+    if (!ext) {
+      full += '.css';
     }
-
-    let fstats = [config.revision];
-    let cssfiles = [];
-    if (bella.isString(css)) {
-      css = [css];
+    if (fs.existsSync(full)) {
+      let stat = fs.statSync(full);
+      fstats.push(stat.mtime);
+      cssfiles.push(full);
     }
-
-    css.forEach((file) => {
-      let full = cssDir + file;
-      let part = path.parse(full);
-      let ext = part.ext;
-      if (!ext) {
-        full += '.css';
-      }
-      if (fs.existsSync(full)) {
-        let stat = fs.statSync(full);
-        fstats.push(stat.mtime);
-        cssfiles.push(full);
-      }
-    });
-
-    let fname = bella.md5(fstats.join(';'));
-
-    let pname = '/css/' + fname + '.css';
-    let saveAs = path.normalize(distDir + pname);
-
-    compileCSS(cssfiles).then((code) => {
-      setFileContent(saveAs, code);
-    });
-
-    let style = `<link rel="stylesheet" type="text/css" href="${pname}?rev=${config.revision}"`;
-    input.body = body.replace('{@style}', style);
-
-    return resolve(input);
   });
+
+  let fname = bella.md5(fstats.join(';'));
+
+  let pname = '/css/' + fname + '.css';
+  let saveAs = path.normalize(distDir + pname);
+
+  let code = await compileCSS(cssfiles);
+  setFileContent(saveAs, code);
+
+  let style = `<link rel="stylesheet" type="text/css" href="${pname}?rev=${config.revision}"`;
+  input.body = body.replace('{@style}', style);
+
+  return input;
 };
 
 
-var compileJS = async (files) => {
+var compileJS = (files) => {
   let s = '';
   let as = [];
   if (bella.isString(files)) {
@@ -386,64 +376,54 @@ var parseJS = async (input) => {
   return input;
 };
 
-var normalize = async (input) => {
+var normalize = (input) => {
   let {body = ''} = input;
   input.body = removeNewLines(body);
   return input;
 };
 
-var writeOut = (ctx, status = 200, body = '') => {
-  if (ctx.response.headerSent) {
-    info('Header sent. Stop streaming...');
-  } else {
-    ctx.status = status;
-    ctx.body = body;
-  }
-};
-
-var render = async (input) => {
+var compile = async (input) => {
 
   let {
-    ctx,
     template
   } = input;
 
   if (bella.isNumber(template)) {
     let errorCode = template;
-    let html = getFileContent('./app/views/error.html');
+    let html = await getFileContent('./app/views/error.html');
     let message = getHTTPStatus(errorCode);
     let body = bella.template(html).compile({
       title: `${errorCode} ${message}`,
       errorCode: String(errorCode),
       message
     });
-    writeOut(ctx, errorCode, body);
-  }
-
-  if (!ctx.response.headerSent) {
-    try {
-      let output = await parseLayout(input);
-      output = await parseJS(output);
-      output = await normalize(output);
-      writeOut(ctx, 200, output.body);
-    } catch (err) {
-      error(err);
-    }
-  }
-};
-
-
-var io = (app) => {
-  app.use((ctx, next) => {
-    ctx.render = (template, data, context) => {
-      return render({ctx, template, data, context}, next);
+    return {
+      status: errorCode,
+      body
     };
-  });
+  }
+
+  let output = await parseLayout(input);
+  output = await parseCSS(output);
+  output = await parseJS(output);
+  output = await normalize(output);
+
+  return {
+    status: 200,
+    body: output.body
+  };
 };
 
+
+var render = async (template, data, context, ctx) => {
+  let output = await compile({template, data, context});
+  ctx.status = output.status;
+  ctx.body = output.body;
+};
 
 module.exports = {
-  io,
+  compile,
+  render,
   jsminify,
   fixPath
 };

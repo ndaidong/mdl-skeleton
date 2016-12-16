@@ -14,7 +14,7 @@
   },
   "main": "./server.js",
   "scripts": {
-    "setup": "node ./bin/setup",
+    "setup": "node --harmony-async-await ./bin/setup",
     "start": "DEBUG=*:* node --harmony-async-await server",
     "reset": "node ./bin/reset",
     "lint": "eslint .",
