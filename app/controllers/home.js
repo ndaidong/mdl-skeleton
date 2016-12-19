@@ -32,9 +32,7 @@ var start = async (ctx) => {
     }
   };
 
-
-  let {compiler} = ctx;
-  await compiler.render('landing', data, context, ctx);
+  await ctx.render('landing', data, context);
 };
 
 module.exports = start;

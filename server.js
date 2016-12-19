@@ -27,10 +27,6 @@ const bodyParser = require('koa-bodyparser');
 
 const app = module.exports = new Koa();
 
-app.on('error', (err, ctx) => {
-  error('server error', err, ctx);
-});
-
 app.use(favicon(pjoin(__dirname, '/assets/images') + '/brand/favicon.ico'));
 
 var staticData = config.staticData;
@@ -47,7 +43,7 @@ app.use(bodyParser({
   }
 }));
 
-app.context.compiler = compiler;
+app.context.render = compiler.render;
 
 fs.readdirSync('./app/routers').forEach((file) => {
   if (path.extname(file) === '.js') {
@@ -58,9 +54,12 @@ fs.readdirSync('./app/routers').forEach((file) => {
 app.use(router.routes()).use(router.allowedMethods({throw: true}));
 
 app.use(async (ctx) => {
-  let output = await compiler.compile({template: 404});
-  ctx.status = output.status;
-  ctx.body = output.body;
+  await ctx.render(404);
+});
+
+app.on('error', async (err, ctx) => {
+  error(err);
+  await ctx.render(500);
 });
 
 var onServerReady = () => {

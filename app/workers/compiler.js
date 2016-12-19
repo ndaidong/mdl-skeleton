@@ -8,7 +8,6 @@ var fs = require('fs');
 var http = require('http');
 
 var bella = require('bellajs');
-var Promise = require('promise-wtf');
 
 const debug = require('debug');
 const info = debug('compiler:info');
@@ -58,7 +57,6 @@ var postcss = require('postcss');
 var postcssFilter = require('postcss-filter-plugins');
 var cssnano = require('cssnano');
 var cssnext = require('postcss-cssnext');
-var nesting = require('postcss-nesting');
 var mqpacker = require('css-mqpacker');
 
 const POSTCSS_PLUGINS = [
@@ -66,7 +64,6 @@ const POSTCSS_PLUGINS = [
     silent: true
   }),
   cssnext,
-  nesting,
   mqpacker({
     sort: true
   })
@@ -137,6 +134,9 @@ var postProcess = async (css) => {
 };
 
 var parseLayout = async (input) => {
+
+  info('parseLayout: start parsing layout...');
+
   let conf = config.settings;
 
   let dir = conf.viewDir + '/';
@@ -215,6 +215,8 @@ var parseLayout = async (input) => {
   sLayout = await addToContainer(sLayout, dir);
   sLayout = await insertPartials(sLayout, dir);
 
+  info('parseLayout: layout parsed');
+
   try {
     let tmp = data.meta || {};
     data.meta = bella.copies(tmp, config.meta);
@@ -230,6 +232,7 @@ var parseLayout = async (input) => {
 };
 
 var compileCSS = async (files) => {
+
   let s = '';
   let as = [];
   let vs = [];
@@ -260,6 +263,9 @@ var compileCSS = async (files) => {
 };
 
 var parseCSS = async (input) => {
+
+  info('parseCSS: start parsing CSS...');
+
   let {context, body} = input;
   let css = context.css || false;
   if (!css) {
@@ -297,6 +303,8 @@ var parseCSS = async (input) => {
   let style = `<link rel="stylesheet" type="text/css" href="${pname}?rev=${config.revision}"`;
   input.body = body.replace('{@style}', style);
 
+  info('parseCSS: CSS has been parsed.');
+
   return input;
 };
 
@@ -331,6 +339,9 @@ var compileJS = (files) => {
 };
 
 var parseJS = async (input) => {
+
+  info('parseJS: start parsing JS...');
+
   let {context, body} = input;
   let js = context.js || false;
   if (!js) {
@@ -373,20 +384,47 @@ var parseJS = async (input) => {
 
   let script = `<script type="text/javascript" src="${pname}?rev=${config.revision}"></script>`;
   input.body = body.replace('{@script}', script);
+
+  info('parseJS: JS has been parsed.');
+
+  return input;
+};
+
+var setContextData = (input) => {
+
+  info('setContextData: start generating context data...');
+
+  let {context, body} = input;
+  let sdata = context.data || {};
+  let script = `<script type="text/javascript">window.SDATA=${JSON.stringify(sdata)}</script>`;
+  input.body = body.replace('{@sdata}', script);
+
+  info('setContextData: context data generated');
+
   return input;
 };
 
 var normalize = (input) => {
+
+  info('normalize: start normalizing HTML...');
+
   let {body = ''} = input;
   input.body = removeNewLines(body);
+
+  info('normalize: HTML normalized');
+
   return input;
 };
 
 var compile = async (input) => {
 
+  info('compile: Start compiling...');
+
   let {
     template
   } = input;
+
+  let output;
 
   if (bella.isNumber(template)) {
     let errorCode = template;
@@ -397,32 +435,41 @@ var compile = async (input) => {
       errorCode: String(errorCode),
       message
     });
-    return {
+    output = {
       status: errorCode,
       body
     };
+  } else {
+    try {
+      let tmp = await parseLayout(input);
+      tmp = await parseCSS(tmp);
+      tmp = await parseJS(tmp);
+      tmp = await setContextData(tmp);
+      tmp = await normalize(tmp);
+      output = {
+        status: 200,
+        body: tmp.body
+      };
+    } catch (err) {
+      error(err);
+      output = compile({template: 500});
+    }
   }
 
-  let output = await parseLayout(input);
-  output = await parseCSS(output);
-  output = await parseJS(output);
-  output = await normalize(output);
+  info('compile: compiling done');
 
-  return {
-    status: 200,
-    body: output.body
-  };
+  return output;
 };
 
 
-var render = async (template, data, context, ctx) => {
+var render = async function render(template, data, context) {
+  let ctx = this; // eslint-disable-line
   let output = await compile({template, data, context});
   ctx.status = output.status;
   ctx.body = output.body;
 };
 
 module.exports = {
-  compile,
   render,
   jsminify,
   fixPath
