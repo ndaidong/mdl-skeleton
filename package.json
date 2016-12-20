@@ -1,5 +1,5 @@
 {
-  "version": "0.7.6",
+  "version": "1.0.0",
   "name": "mdl-skeleton",
   "homepage": "https://techpush.xyz",
   "description": "Material Design Lite - Skeleton for Node.js",
@@ -14,9 +14,10 @@
   },
   "main": "./server.js",
   "scripts": {
-    "setup": "node --harmony-async-await ./bin/setup",
+    "setup": "DEBUG=*:* node --harmony-async-await ./scripts/setup",
+    "reset": "DEBUG=*:* node --harmony-async-await ./scripts/reset",
     "start": "DEBUG=*:* node --harmony-async-await server",
-    "reset": "node ./bin/reset",
+    "live": "node --harmony-async-await server",
     "lint": "eslint .",
     "test": "testcafe all tests/"
   },

@@ -1,42 +1,52 @@
 module.exports = {
+  reportUri: '/csp-report',
+  reportOnly: false,
   directives: {
-    defaultSrc: [
+    'default-src': [
       `'self'`
     ],
-    scriptSrc: [
+    'script-src': [
       `'self'`,
       `'unsafe-inline'`,
       `'unsafe-eval'`,
       '*.googleapis.com',
       '*.gstatic.com',
-      '*.google-analytics.com'
+      '*.google-analytics.com',
+      '*.google.com',
+      '*.twitter.com'
     ],
-    styleSrc: [
+    'style-src': [
       `'self'`,
       `'unsafe-inline'`,
       '*.googleapis.com',
       '*.gstatic.com',
-      '*.google-analytics.com'
+      '*.google-analytics.com',
+      '*.google.com',
+      '*.twitter.com'
     ],
-    fontSrc: [
+    'font-src': [
       `'self'`,
       `'unsafe-inline'`,
-      `data:`,
+      'data:',
       '*.googleapis.com',
       '*.gstatic.com',
-      '*.google-analytics.com'
+      '*.google-analytics.com',
+      '*.google.com',
+      '*.twitter.com'
     ],
-    imgSrc: [
+    'img-src': [
       `'self'`,
-      `data:`,
+      'data:',
       '*.googleapis.com',
       '*.gstatic.com',
-      '*.google-analytics.com'
+      '*.google-analytics.com',
+      '*.google.com',
+      '*.twitter.com'
     ],
-    frameSrc: [
+    'frame-src': [
       `'self'`
     ],
-    connectSrc: [
+    'connect-src': [
       `'self'`
     ],
     sandbox: [
@@ -46,14 +56,8 @@ module.exports = {
       'allow-same-origin',
       'allow-top-navigation'
     ],
-    objectSrc: [
+    'object-src': [
       `'none'`
-    ],
-    reportUri: '/report-violation'
-  },
-  reportOnly: false,
-  setAllHeaders: false,
-  disableAndroid: false,
-  safari5: false,
-  loose: true
+    ]
+  }
 };

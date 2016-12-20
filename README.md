@@ -34,9 +34,8 @@ Built-in compiler, that compiles CSS resources with PostCSS and transpiles ES6 w
  * HomeController
  **/
 
-var start = (req, res) => {
+var start = async (ctx) => {
 
-  // this block will be parsed by Handlebars engine and compiled to the template
   let data = {
     meta: {
       title: 'MDL skeleton'
@@ -44,7 +43,6 @@ var start = (req, res) => {
     title: 'Name & Title'
   };
 
-  // this will be processed by PostCSS, Babel
   let context = {
     css: [
       'vendor/mdl',
@@ -52,25 +50,25 @@ var start = (req, res) => {
     ],
     js: [
       'vendor/material',
-      'vendor/doc',
+      'modules/es6.test',
+      'modules/sample',
       'app'
     ],
     sdata: {
-      user: user // this will be shared to client script
+      user: {
+        name: 'tester',
+        id: 1000
+      }
     }
   };
 
-  return res.render('landing', data, context);
+  await ctx.render('landing', data, context);
 };
 
-module.exports = {
-  start
-};
+module.exports = start;
 
 ```
 See [/app/workers/compiler.js](https://github.com/ndaidong/mdl-skeleton/blob/master/app/workers/compiler.js)
-
-Note that Express's *res.render* method has been added the third parameter *context*, an object with it we can declare css, js and SDATA (shared data) for each of context (page).
 
 While css and js resources will be compiled, minified, and merged into just one file, SDATA will be shared to client script as a global object.
 
@@ -101,7 +99,7 @@ var context = {
   }
 };
 
-res.render(template, data, context);
+await ctx.render(template, data, context);
 
 // client side script can access sdata via window.SDATA
 ```
@@ -179,28 +177,9 @@ Here are the test results for our website [FOMO](http://fomo.link/) using [Secur
 ```
 git clone https://github.com/ndaidong/mdl-skeleton.git
 cd mdl-skeleton
-npm install
-mkdir app/configs/env
-cp app/configs/vars.sample.js app/configs/env/vars.js
+npm install // or yarn
 npm run setup
 npm start
-```
-
-Update app/configs/env/vars.js to fit your system.
-Any property defined within app/configs/env/vars.js will overwrite the same value in app/configs/base.js as default.
-
-
-Starting:
-
-```
-node server.js
-
-// or with npm
-npm start
-
-// or with PM2
-pm2 start server.js -i 0 --name=main
-
 ```
 
 Then you would got this:
@@ -265,6 +244,7 @@ TestCafe supports async/await syntax that is just available in node.js v7+, but 
 Don't miss these hot technologies:
 
 - [Material Design Lite](http://www.getmdl.io/)
+- [Koa](https://github.com/koajs/koa/tree/v2.x) latest
 - [ES6](http://es6-features.org/) with [Babel](http://babeljs.io/)
 - Modern CSS techniques with [PostCSS](http://postcss.org/):
   - [CSSNext](http://cssnext.io/)

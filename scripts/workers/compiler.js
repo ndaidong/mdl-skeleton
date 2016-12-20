@@ -1,5 +1,5 @@
 /**
- * For handling assets
+ * For handling layout and assets
  * @ndaidong
  **/
 
@@ -9,9 +9,9 @@ var http = require('http');
 
 var bella = require('bellajs');
 
-const debug = require('debug');
-const info = debug('compiler:info');
-const error = debug('compiler:error');
+var debug = require('debug');
+var info = debug('compiler:info');
+var error = debug('compiler:error');
 
 var getFileContent = (f) => {
   return fs.existsSync(f) ? fs.readFileSync(f, 'utf8') : '';

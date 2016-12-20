@@ -9,14 +9,14 @@ const pjoin = path.join;
 
 const bella = require('bellajs');
 
-var compiler = require('./app/workers/compiler');
+var builder = require('./scripts/workers/builder');
+var compiler = require('./scripts/workers/compiler');
 
 var config = require('./configs');
 
 config.revision = bella.id;
 
 const debug = require('debug');
-const info = debug('app:info');
 const error = debug('app:error');
 
 const Koa = require('koa');
@@ -26,6 +26,11 @@ const assets = require('koa-static');
 const bodyParser = require('koa-bodyparser');
 
 const app = module.exports = new Koa();
+
+app.use(async (ctx, next) => {
+  await next(); // eslint-disable-line callback-return
+  ctx.set(config.headers);
+});
 
 app.use(favicon(pjoin(__dirname, '/assets/images') + '/brand/favicon.ico'));
 
@@ -63,9 +68,10 @@ app.on('error', async (err, ctx) => {
 });
 
 var onServerReady = () => {
-  info(`Server started at the port ${config.port} in ${config.ENV} mode`);
-  info('Access website via', `http://127.0.0.1:${config.port}`);
-  info('Public URL:', config.meta.url || 'None');
+  builder.setup();
+  console.log(`Server started at the port ${config.port} in ${config.ENV} mode`);
+  console.log('Access website via', `http://127.0.0.1:${config.port}`);
+  console.log('Public URL:', config.meta.url || 'None');
 };
 
 app.listen(config.port, onServerReady);

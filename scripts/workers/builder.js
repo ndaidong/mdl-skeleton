@@ -17,6 +17,10 @@ var imagemin = require('imagemin');
 var imageminMozjpeg = require('imagemin-mozjpeg');
 var imageminPngquant = require('imagemin-pngquant');
 
+var debug = require('debug');
+var info = debug('compiler:info');
+var error = debug('compiler:error');
+
 var compiler = require('./compiler');
 
 var fixPath = compiler.fixPath;
@@ -39,9 +43,9 @@ var download = (src, saveas) => {
   if (fs.existsSync(saveas)) {
     fs.unlink(saveas);
   }
-  console.log('Downloading %s ...', src);
+  info('Downloading %s ...', src);
   exec('wget -O ' + saveas + ' ' + src);
-  console.log('Downloaded %s', saveas);
+  info('Downloaded %s', saveas);
 };
 
 var createDir = (ls) => {
@@ -50,7 +54,7 @@ var createDir = (ls) => {
       d = path.normalize(d);
       if (!fs.existsSync(d)) {
         mkdirp(d);
-        console.log('Created dir "%s"... ', d);
+        info('Created dir "%s"... ', d);
       }
     });
   } else {
@@ -68,13 +72,13 @@ var removeDir = (ls) => {
       d = path.normalize(d);
       exec('rm -rf ' + d);
       ++k;
-      console.log('%s, removed dir "%s"... ', k, d);
+      info('%s, removed dir "%s"... ', k, d);
     });
   } else {
     ls = path.normalize(ls);
     exec('rm -rf ' + ls);
   }
-  console.log('Done.');
+  info('Done.');
 };
 
 var copyDir = (from, to) => {
@@ -144,7 +148,7 @@ var minify = () => {
         if (s && s.length > 0) {
           let minified = compiler.jsminify(s);
           fs.writeFileSync(min, minified, 'utf8');
-          console.log('Minified: %s', dest);
+          info('Minified: %s', dest);
         } else {
           fs.unlinkSync(dest);
           missed.push(dest);
@@ -152,8 +156,8 @@ var minify = () => {
       }
     }
     if (missed.length > 0) {
-      console.log('Missing the following files:');
-      console.log(missed);
+      info('Missing the following files:');
+      info(missed);
     }
   }
   return null;
@@ -203,20 +207,20 @@ var svg = () => {
         if (item && item.data) {
           fs.writeFile(file, item.data, (er) => {
             if (er) {
-              console.log(er);
+              error(er);
             }
           });
         }
       });
     }).catch((e) => {
-      console.log(e);
+      error(e);
     });
   };
 
   let rdir = fixPath(distDir + '/images');
   readdir(rdir, (err, files) => {
     if (err) {
-      console.trace(err);
+      error(err);
     }
     if (files && files.length) {
       files.forEach((f) => {
@@ -323,7 +327,7 @@ var reconf = () => {
   collect('modules', paths);
   c.paths = paths;
   fs.writeFileSync(saveas, ';var RECONF=window.RECONF=' + JSON.stringify(c) + ';');
-  console.log('Packages are ready to use.');
+  info('Packages are ready to use.');
   return null;
 };
 
@@ -338,7 +342,7 @@ var dir = () => {
 };
 
 var setup = () => {
-  console.log('Start building...');
+  info('Start building...');
   dir();
   img();
   svg();

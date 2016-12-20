@@ -3,11 +3,11 @@ var error = debug('app:error');
 
 var pkg = require('./../package.json');
 
-var csp = require('./csp');
 var meta = require('./meta');
-var hsts = require('./hsts');
 var settings = require('./settings');
 var staticData = require('./static');
+
+var headers = require('./headers');
 
 var env = process.env || {}; // eslint-disable-line no-process-env
 
@@ -39,7 +39,7 @@ config.settings = settings;
 config.staticData = staticData;
 
 config.meta = meta;
-config.csp = csp;
-config.hsts = hsts;
+
+config.headers = headers;
 
 module.exports = config;
