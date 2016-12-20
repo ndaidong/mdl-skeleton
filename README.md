@@ -1,5 +1,11 @@
 # Material Design Lite skeleton
 
+With the newest stacks: Koa2, PostCSS, Handlebars and Testcafe.
+
+[![Build Status](https://travis-ci.org/ndaidong/mdl-skeleton.svg?branch=master)](https://travis-ci.org/ndaidong/mdl-skeleton)
+[![Dependency Status](https://gemnasium.com/badges/github.com/ndaidong/mdl-skeleton.svg)](https://gemnasium.com/github.com/ndaidong/mdl-skeleton)
+
+
 How to quickly generate a new website using Node.js and Material Design Lite? Try this:
 
 ```
