@@ -7,4 +7,5 @@ node_js:
 before_script:
   - export TZ=Etc/GMT-7
 after_success:
+  - yarn
   - npm test

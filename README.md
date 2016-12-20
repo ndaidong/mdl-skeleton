@@ -74,7 +74,7 @@ var start = async (ctx) => {
 module.exports = start;
 
 ```
-See [/app/workers/compiler.js](https://github.com/ndaidong/mdl-skeleton/blob/master/app/workers/compiler.js)
+See [/scripts/workers/compiler.js](https://github.com/ndaidong/mdl-skeleton/blob/master/scripts/workers/compiler.js)
 
 While css and js resources will be compiled, minified, and merged into just one file, SDATA will be shared to client script as a global object.
 
@@ -162,7 +162,7 @@ In-app automation builder runs when node.js process starts, to generate needed d
 // - copy css, js, images under "assets/" to "dist/"
 ```
 
-See [/app/workers/builder.js](https://github.com/ndaidong/mdl-skeleton/blob/master/app/workers/builder.js)
+See [/scripts/workers/builder.js](https://github.com/ndaidong/mdl-skeleton/blob/master/scripts/workers/builder.js)
 
 #### Standard front-end output
 
@@ -250,7 +250,7 @@ TestCafe supports async/await syntax that is just available in node.js v7+, but 
 Don't miss these hot technologies:
 
 - [Material Design Lite](http://www.getmdl.io/)
-- [Koa](https://github.com/koajs/koa/tree/v2.x) latest
+- [Koa](https://github.com/koajs/koa/tree/v2.x)@next
 - [ES6](http://es6-features.org/) with [Babel](http://babeljs.io/)
 - Modern CSS techniques with [PostCSS](http://postcss.org/):
   - [CSSNext](http://cssnext.io/)
