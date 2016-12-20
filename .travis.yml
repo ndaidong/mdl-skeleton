@@ -1,0 +1,9 @@
+language: node_js
+node_js:
+  - "7.2"
+  - "7.1"
+  - "7.0"
+before_script:
+  - export TZ=Etc/GMT-7
+after_success:
+  - npm test

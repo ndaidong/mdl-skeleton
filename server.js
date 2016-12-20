@@ -25,7 +25,7 @@ const favicon = require('koa-favicon');
 const assets = require('koa-static');
 const bodyParser = require('koa-bodyparser');
 
-const app = module.exports = new Koa();
+const app = new Koa();
 
 app.use(async (ctx, next) => {
   await next(); // eslint-disable-line callback-return
@@ -48,6 +48,7 @@ app.use(bodyParser({
   }
 }));
 
+app.context.config = config;
 app.context.render = compiler.render;
 
 fs.readdirSync('./app/routers').forEach((file) => {
@@ -75,3 +76,5 @@ var onServerReady = () => {
 };
 
 app.listen(config.port, onServerReady);
+
+module.exports = app;

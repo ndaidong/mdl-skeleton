@@ -2,7 +2,7 @@
  * Default router
 **/
 
-const homeController = require('../controllers/home');
+const homeController = require('../pages/home');
 
 module.exports = (router) => {
   router.get('/', homeController);

@@ -1,5 +1,5 @@
 /**
- * HomeController
+ * home/index.js
  **/
 
 var start = async (ctx) => {
