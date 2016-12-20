@@ -71,7 +71,7 @@
     "distDir": "dist",
     "vendorDir": "vendor",
     "css": {
-      "mdl": "https://code.getmdl.io/1.2.1/material.indigo-pink.min.css"
+      "mdl": "http://code.getmdl.io/1.2.1/material.indigo-pink.min.css"
     },
     "javascript": {
       "bella": "https://cdn.rawgit.com/ndaidong/bellajs/master/dist/bella.js",
