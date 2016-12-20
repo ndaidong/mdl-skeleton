@@ -2,7 +2,7 @@
  * HomeController
  **/
 
-var start = (req, res) => {
+var start = async (ctx) => {
 
   let data = {
     meta: {
@@ -32,9 +32,7 @@ var start = (req, res) => {
     }
   };
 
-  return res.render('landing', data, context);
+  await ctx.render('landing', data, context);
 };
 
-module.exports = {
-  start
-};
+module.exports = start;

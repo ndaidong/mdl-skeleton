@@ -1,5 +1,5 @@
 {
-  "version": "0.7.6",
+  "version": "1.0.0",
   "name": "mdl-skeleton",
   "homepage": "https://techpush.xyz",
   "description": "Material Design Lite - Skeleton for Node.js",
@@ -10,52 +10,43 @@
   "author": "@ndaidong",
   "license": "MIT",
   "engines": {
-    "node": ">= 6.0"
+    "node": ">= 7.0"
   },
   "main": "./server.js",
   "scripts": {
-    "setup": "node ./bin/setup",
-    "start": "npm run setup && node server",
-    "reset": "node ./bin/reset",
+    "setup": "DEBUG=*:* node --harmony-async-await ./scripts/setup",
+    "reset": "DEBUG=*:* node --harmony-async-await ./scripts/reset",
+    "start": "DEBUG=*:* node --harmony-async-await server",
+    "live": "node --harmony-async-await server",
     "lint": "eslint .",
     "test": "testcafe all tests/"
   },
   "dependencies": {
-    "babel-core": "6.*.*",
-    "babel-preset-es2015": "6.*.*",
-    "bellajs": "5.*.*",
-    "body-parser": "1.*.*",
-    "cookie-parser": "1.*.*",
-    "copy-dir": "0.*.*",
-    "css-mqpacker": "5.*.*",
-    "cssnano": "3.*.*",
-    "device-detector": "0.*.*",
-    "express": "4.*.*",
-    "handlebars": "4.*.*",
-    "helmet": "2.*.*",
-    "imagemin": "5.*.*",
-    "imagemin-mozjpeg": "6.*.*",
-    "imagemin-pngquant": "5.*.*",
-    "mkdirp": "0.*.*",
-    "mongoose": "4.*.*",
-    "morgan": "1.*.*",
-    "postcss": "5.*.*",
-    "postcss-cssnext": "2.*.*",
-    "postcss-filter-plugins": "2.*.*",
-    "postcss-mixins": "5.*.*",
-    "postcss-nested": "1.*.*",
-    "postcss-nesting": "2.*.*",
-    "postcss-scss": "0.*.*",
-    "precss": "1.*.*",
-    "promise-wtf": "1.*.*",
-    "recursive-readdir": "2.*.*",
-    "robots.txt": "1.*.*",
-    "rucksack-css": "0.*.*",
-    "sanitize-html": "1.*.*",
-    "serve-favicon": "2.*.*",
-    "shift-codegen": "5.*.*",
-    "shift-parser": "5.*.*",
-    "svgo": "0.*.*"
+    "babel-core": "6.x.x",
+    "babel-plugin-transform-remove-strict-mode": "0.x.x",
+    "babel-preset-env": "0.x.x",
+    "bellajs": "6.x.x",
+    "copy-dir": "0.x.x",
+    "css-mqpacker": "5.x.x",
+    "cssnano": "3.x.x",
+    "debug": "2.x.x",
+    "handlebars": "4.x.x",
+    "imagemin": "5.x.x",
+    "imagemin-mozjpeg": "6.x.x",
+    "imagemin-pngquant": "5.x.x",
+    "koa": "next",
+    "koa-bodyparser": "next",
+    "koa-favicon": "next",
+    "koa-router": "next",
+    "koa-static": "next",
+    "mkdirp": "0.x.x",
+    "postcss": "5.x.x",
+    "postcss-cssnext": "2.x.x",
+    "postcss-filter-plugins": "2.x.x",
+    "recursive-readdir": "2.x.x",
+    "shift-codegen": "5.x.x",
+    "shift-parser": "5.x.x",
+    "svgo": "0.x.x"
   },
   "devDependencies": {
     "eslint": "latest",
@@ -77,9 +68,9 @@
       "mdl": "https://code.getmdl.io/1.2.1/material.indigo-pink.min.css"
     },
     "javascript": {
-      "bella": "https://cdn.rawgit.com/ndaidong/bella.js/master/dist/bella.min.js",
-      "material": "https://storage.googleapis.com/code.getmdl.io/1.2.1/material.js",
-      "doc": "https://raw.githubusercontent.com/ndaidong/doc/master/dist/doc.min.js"
+      "bella": "https://cdn.rawgit.com/ndaidong/bellajs/master/dist/bella.js",
+      "doc": "https://cdn.rawgit.com/ndaidong/doc/master/dist/doc.js",
+      "material": "https://storage.googleapis.com/code.getmdl.io/1.2.1/material.js"
     }
   }
 }
