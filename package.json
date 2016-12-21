@@ -49,6 +49,7 @@
     "postcss-cssnext": "2.x.x",
     "postcss-filter-plugins": "2.x.x",
     "recursive-readdir": "2.x.x",
+    "resheader": "1.x.x",
     "shift-codegen": "5.x.x",
     "shift-parser": "5.x.x",
     "svgo": "0.x.x"
