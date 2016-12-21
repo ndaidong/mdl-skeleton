@@ -1,3 +1,4 @@
+ubuntu-version: 16.04
 language: node_js
 node_js:
   - "7.2.1"
