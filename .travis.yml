@@ -1,8 +1,9 @@
-ubuntu-version: 16.04
+sudo: required
+dist: trusty
 language: node_js
 node_js:
-  - "7.2.1"
-  - "7.2.0"
+  - "7.3"
+  - "7.2"
   - "7.1"
   - "7.0"
 before_script:
