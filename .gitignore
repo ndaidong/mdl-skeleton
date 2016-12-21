@@ -11,6 +11,8 @@ node_modules
 coverage
 .nyc_output
 
+output
+
 storage
 assets/js/vendor
 assets/css/vendor

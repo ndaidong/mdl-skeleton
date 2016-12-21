@@ -1,5 +1,11 @@
 # Material Design Lite skeleton
 
+With the newest stacks: Koa2, PostCSS, Handlebars and Testcafe.
+
+[![Build Status](https://travis-ci.org/ndaidong/mdl-skeleton.svg?branch=master)](https://travis-ci.org/ndaidong/mdl-skeleton)
+[![Dependency Status](https://gemnasium.com/badges/github.com/ndaidong/mdl-skeleton.svg)](https://gemnasium.com/github.com/ndaidong/mdl-skeleton)
+
+
 How to quickly generate a new website using Node.js and Material Design Lite? Try this:
 
 ```
@@ -158,7 +164,6 @@ In-app automation builder runs when node.js process starts, to generate needed d
 
 See [/scripts/workers/builder.js](https://github.com/ndaidong/mdl-skeleton/blob/master/scripts/workers/builder.js)
 
-
 #### Standard front-end output
 
 With the methods we are using, the last output is always fit the requirements of today web standard:
@@ -245,7 +250,7 @@ TestCafe supports async/await syntax that is just available in node.js v7+, but 
 Don't miss these hot technologies:
 
 - [Material Design Lite](http://www.getmdl.io/)
-- [Koa](https://github.com/koajs/koa/tree/v2.x) latest
+- [Koa](https://github.com/koajs/koa/tree/v2.x)@next
 - [ES6](http://es6-features.org/) with [Babel](http://babeljs.io/)
 - Modern CSS techniques with [PostCSS](http://postcss.org/):
   - [CSSNext](http://cssnext.io/)

@@ -19,12 +19,15 @@
     "start": "DEBUG=*:* node --harmony-async-await server",
     "live": "node --harmony-async-await server",
     "lint": "eslint .",
-    "test": "testcafe all tests/"
+    "tape": "node --harmony-async-await ./node_modules/.bin/tape tests/start.js | tap-spec",
+    "pretest": "npm run lint",
+    "test": "npm run tape",
+    "e2e": "testcafe all tests/e2e"
   },
   "dependencies": {
     "babel-core": "6.x.x",
     "babel-plugin-transform-remove-strict-mode": "0.x.x",
-    "babel-preset-env": "0.x.x",
+    "babel-preset-env": "1.x.x",
     "bellajs": "6.x.x",
     "copy-dir": "0.x.x",
     "css-mqpacker": "5.x.x",
@@ -49,9 +52,12 @@
     "svgo": "0.x.x"
   },
   "devDependencies": {
-    "eslint": "latest",
-    "eslint-config-ggc": "latest",
-    "testcafe": "latest"
+    "eslint": "3.x.x",
+    "eslint-config-ggc": "1.x.x",
+    "supertest": "2.x.x",
+    "tap-spec": "4.x.x",
+    "tape": "4.x.x",
+    "testcafe": "0.x.x"
   },
   "builder": {
     "directories": [
