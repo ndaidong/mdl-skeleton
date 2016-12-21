@@ -12,7 +12,7 @@ var {
   parseHSTS,
   parseHPKP,
   parseCSP
-} = require('./../../scripts/workers/headerParser');
+} = require('resheader');
 
 
 var h = Object.assign(base, parseHSTS(hsts), parseHPKP(hpkp), parseCSP(csp));
