@@ -52,12 +52,12 @@
     "svgo": "0.x.x"
   },
   "devDependencies": {
-    "eslint": "3.x.x",
-    "eslint-config-ggc": "1.x.x",
-    "supertest": "2.x.x",
-    "tap-spec": "4.x.x",
-    "tape": "4.x.x",
-    "testcafe": "0.x.x"
+    "eslint": "latest",
+    "eslint-config-ggc": "latest",
+    "supertest": "latest",
+    "tap-spec": "latest",
+    "tape": "latest",
+    "testcafe": "latest"
   },
   "builder": {
     "directories": [
