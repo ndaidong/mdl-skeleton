@@ -19,9 +19,11 @@
     "start": "DEBUG=*:* node --harmony-async-await server",
     "live": "node --harmony-async-await server",
     "lint": "eslint .",
+    "nsp": "nsp check --output checkstyle",
     "tape": "node --harmony-async-await ./node_modules/.bin/tape tests/start.js | tap-spec",
     "pretest": "npm run lint",
     "test": "npm run tape",
+    "posttest": "npm run nsp",
     "e2e": "testcafe all tests/e2e"
   },
   "dependencies": {
@@ -52,12 +54,13 @@
     "svgo": "0.x.x"
   },
   "devDependencies": {
-    "eslint": "3.x.x",
-    "eslint-config-ggc": "1.x.x",
-    "supertest": "2.x.x",
-    "tap-spec": "4.x.x",
-    "tape": "4.x.x",
-    "testcafe": "0.x.x"
+    "eslint": "latest",
+    "eslint-config-ggc": "latest",
+    "nsp": "latest",
+    "supertest": "latest",
+    "tap-spec": "latest",
+    "tape": "latest",
+    "testcafe": "latest"
   },
   "builder": {
     "directories": [
