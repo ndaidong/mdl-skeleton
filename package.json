@@ -36,6 +36,7 @@
     "cssnano": "3.x.x",
     "debug": "2.x.x",
     "handlebars": "4.x.x",
+    "html-minifier": "3.x.x",
     "imagemin": "5.x.x",
     "imagemin-mozjpeg": "6.x.x",
     "imagemin-pngquant": "5.x.x",
