@@ -53,6 +53,8 @@ Handlebars.registerHelper({
   }
 });
 
+var htmlMinify = require('html-minifier').minify;
+
 var postcss = require('postcss');
 var postcssFilter = require('postcss-filter-plugins');
 var cssnano = require('cssnano');
@@ -102,6 +104,17 @@ var jsminify = (code) => {
   return codegen(ast);
 };
 
+var htmlminify = (code) => {
+  return htmlMinify(code, {
+    minifyCSS: true,
+    minifyJS: true,
+    removeComments: true,
+    collapseWhitespace: true,
+    conservativeCollapse: true,
+    removeTagWhitespace: true
+  });
+};
+
 var fixPath = (p) => {
   if (!p) {
     return '';
@@ -109,10 +122,6 @@ var fixPath = (p) => {
   p = path.normalize(p);
   p += p.endsWith('/') ? '' : '/';
   return p;
-};
-
-var removeNewLines = (s) => {
-  return s.replace(/(?:\r\n|\r|\n)+/gm, '');
 };
 
 var pkg = require('../../package.json');
@@ -300,7 +309,7 @@ var parseCSS = async (input) => {
   let code = await compileCSS(cssfiles);
   setFileContent(saveAs, code);
 
-  let style = `<link rel="stylesheet" type="text/css" href="${pname}?rev=${config.revision}"`;
+  let style = `<link rel="stylesheet" type="text/css" href="${pname}?rev=${config.revision}">`;
   input.body = body.replace('{@style}', style);
 
   info('parseCSS: CSS has been parsed.');
@@ -409,7 +418,7 @@ var normalize = (input) => {
   info('normalize: start normalizing HTML...');
 
   let {body = ''} = input;
-  input.body = removeNewLines(body);
+  input.body = htmlminify(body);
 
   info('normalize: HTML normalized');
 
