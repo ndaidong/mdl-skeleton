@@ -404,7 +404,7 @@ var setContextData = (input) => {
   info('setContextData: start generating context data...');
 
   let {context, body} = input;
-  let sdata = context.data || {};
+  let sdata = context.sdata || {};
   let script = `<script type="text/javascript">window.SDATA=${JSON.stringify(sdata)}</script>`;
   input.body = body.replace('{@sdata}', script);
 
