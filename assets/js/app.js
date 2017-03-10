@@ -8,7 +8,7 @@
 
 ((sdata) => {
 
-  var App = window.App = {};
+  var App = {};
 
   var _sdata = sdata;
   var _store = {};
@@ -38,6 +38,8 @@
   App.me = () => {
     return _sdata.user || false;
   };
+
+  window.App = App;
 
   /* global doc Sample */
   doc.ready(() => {
