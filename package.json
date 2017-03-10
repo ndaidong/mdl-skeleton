@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "name": "mdl-skeleton",
   "homepage": "https://techpush.xyz",
   "description": "Material Design Lite - Skeleton for Node.js",
@@ -10,17 +10,17 @@
   "author": "@ndaidong",
   "license": "MIT",
   "engines": {
-    "node": ">= 7.0"
+    "node": ">= 7.6"
   },
   "main": "./server.js",
   "scripts": {
-    "setup": "DEBUG=*:* node --harmony-async-await ./scripts/setup",
-    "reset": "DEBUG=*:* node --harmony-async-await ./scripts/reset",
-    "start": "DEBUG=*:* node --harmony-async-await server",
-    "live": "node --harmony-async-await server",
+    "setup": "DEBUG=*:* node ./scripts/setup",
+    "reset": "DEBUG=*:* node ./scripts/reset",
+    "start": "DEBUG=*:* node server",
+    "live": "node server",
     "lint": "eslint .",
     "nsp": "nsp check --output checkstyle",
-    "tape": "node --harmony-async-await ./node_modules/.bin/tape tests/start.js | tap-spec",
+    "tape": "tape tests/start.js | tap-spec",
     "pretest": "npm run lint",
     "test": "npm run tape",
     "posttest": "npm run nsp",
@@ -50,19 +50,19 @@
     "postcss-cssnext": "2.x.x",
     "postcss-filter-plugins": "2.x.x",
     "recursive-readdir": "2.x.x",
-    "resheader": "1.x.x",
+    "resheader": "2.x.x",
     "shift-codegen": "5.x.x",
     "shift-parser": "5.x.x",
     "svgo": "0.x.x"
   },
   "devDependencies": {
-    "eslint": "latest",
-    "eslint-config-ggc": "latest",
-    "nsp": "latest",
-    "supertest": "latest",
-    "tap-spec": "latest",
-    "tape": "latest",
-    "testcafe": "latest"
+    "eslint": "3.x.x",
+    "eslint-config-ggc": "1.x.x",
+    "nsp": "2.x.x",
+    "supertest": "3.x.x",
+    "tap-spec": "4.x.x",
+    "tape": "4.x.x",
+    "testcafe": "0.x.x"
   },
   "builder": {
     "directories": [

@@ -1,0 +1,17 @@
+version: "2"
+services:
+  main:
+    image: ndaidong/webserver
+    volumes:
+      - .:/home:z
+    ports:
+      - "9999:9999"
+    environment:
+      - APP_PORT=9999
+      - NODE_ENV=production
+    # restart: always
+    entrypoint: |
+      bash -c 'bash -s <<EOF
+      npm install
+      npm start
+      EOF'

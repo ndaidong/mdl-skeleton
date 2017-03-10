@@ -183,10 +183,14 @@ Here are the test results for our website [FOMO](http://fomo.link/) using [Secur
 ```
 git clone https://github.com/ndaidong/mdl-skeleton.git
 cd mdl-skeleton
+
+// install packages and start
 npm install // or yarn
-npm run setup
 npm start
-```
+
+// or run it within a docker container
+docker-compose up
+``
 
 Then you would got this:
 

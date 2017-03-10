@@ -2,10 +2,8 @@ sudo: required
 dist: trusty
 language: node_js
 node_js:
-  - "7.3"
-  - "7.2"
-  - "7.1"
-  - "7.0"
+  - "7.7"
+  - "7.6"
 before_script:
   - export TZ=Etc/GMT-7
 after_success:
