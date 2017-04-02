@@ -7,7 +7,7 @@ var test = require('tape');
  * Import specs
  */
 
-var dirs = ['', 'home'];
+var dirs = ['', 'basic'];
 
 dirs.forEach((dir) => {
   let where = './tests/specs/' + dir;
