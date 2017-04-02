@@ -5,9 +5,9 @@ services:
     volumes:
       - .:/home:z
     ports:
-      - "9999:9999"
+      - "8081:8081"
     environment:
-      - APP_PORT=9999
+      - APP_PORT=8081
       - NODE_ENV=production
     # restart: always
     entrypoint: |

@@ -1,13 +1,14 @@
 module.exports = {
-  name: 'mdl-skeleton',
-  alias: '',
-  slogan: '',
-  description: '',
+  name: 'Site name',
+  alias: 'site-name',
+  slogan: 'Your site slogan',
+  description: 'Something about this website',
   keywords: '',
   image: '',
-  author: '',
-  title: 'Material Design Lite',
-  domain: '',
-  url: '',
-  canonical: ''
+  author: '@yourname',
+  title: 'Site title',
+  domain: 'abc.xyz',
+  url: 'http://abc.xyz',
+  canonical: 'http://abc.xyz/amp',
+  themeColor: '#2F3BA2'
 };

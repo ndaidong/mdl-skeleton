@@ -1,59 +1,63 @@
 {
-  "version": "1.1.0",
+  "version": "2.0.0",
   "name": "mdl-skeleton",
   "homepage": "https://techpush.xyz",
-  "description": "Material Design Lite - Skeleton for Node.js",
+  "description": "Material Design skeleton for Koa & Rollup",
   "repository": {
     "type": "git",
     "url": "git@github.com:ndaidong/mdl-skeleton"
   },
   "author": "@ndaidong",
-  "license": "MIT",
   "engines": {
     "node": ">= 7.6"
   },
   "main": "./server.js",
   "scripts": {
-    "setup": "DEBUG=*:* node ./scripts/setup",
-    "reset": "DEBUG=*:* node ./scripts/reset",
-    "start": "DEBUG=*:* node server",
-    "live": "node server",
+    "start": "NODE_ENV=development DEBUG=app:* node server",
+    "live": "NODE_ENV=production node server",
     "lint": "eslint .",
     "nsp": "nsp check --output checkstyle",
     "tape": "tape tests/start.js | tap-spec",
     "pretest": "npm run lint",
     "test": "npm run tape",
     "posttest": "npm run nsp",
-    "e2e": "testcafe all tests/e2e"
+    "testcafe": "testcafe chrome tests/e2e"
   },
   "dependencies": {
     "babel-core": "6.x.x",
+    "babel-plugin-external-helpers": "6.x.x",
     "babel-plugin-transform-remove-strict-mode": "0.x.x",
     "babel-preset-env": "1.x.x",
+    "babel-preset-es2015-rollup": "3.x.x",
     "bellajs": "6.x.x",
-    "copy-dir": "0.x.x",
+    "cheerio": "0.x.x",
     "css-mqpacker": "5.x.x",
     "cssnano": "3.x.x",
     "debug": "2.x.x",
-    "handlebars": "4.x.x",
     "html-minifier": "3.x.x",
-    "imagemin": "5.x.x",
-    "imagemin-mozjpeg": "6.x.x",
-    "imagemin-pngquant": "5.x.x",
-    "koa": "next",
-    "koa-bodyparser": "next",
-    "koa-favicon": "next",
-    "koa-router": "next",
-    "koa-static": "next",
+    "koa": "2.x.x",
+    "koa-bodyparser": "4.x.x",
+    "koa-favicon": "2.x.x",
+    "koa-helmet": "3.x.x",
+    "koa-response-time": "2.x.x",
+    "koa-router": "7.x.x",
+    "koa-static": "3.x.x",
+    "lru-cache": "4.x.x",
     "mkdirp": "0.x.x",
+    "muicss": "0.x.x",
+    "mustache": "2.x.x",
     "postcss": "5.x.x",
     "postcss-cssnext": "2.x.x",
     "postcss-filter-plugins": "2.x.x",
-    "recursive-readdir": "2.x.x",
-    "resheader": "2.x.x",
-    "shift-codegen": "5.x.x",
-    "shift-parser": "5.x.x",
-    "svgo": "0.x.x"
+    "postcss-nested": "1.x.x",
+    "promise.prototype.finally": "2.x.x",
+    "response-time": "2.x.x",
+    "rollup": "0.x.x",
+    "rollup-plugin-babel": "2.x.x",
+    "rollup-plugin-commonjs": "8.x.x",
+    "rollup-plugin-node-resolve": "3.x.x",
+    "rollup-plugin-uglify": "1.x.x",
+    "uglify-js": "2.x.x"
   },
   "devDependencies": {
     "eslint": "3.x.x",
@@ -64,24 +68,5 @@
     "tape": "4.x.x",
     "testcafe": "0.x.x"
   },
-  "builder": {
-    "directories": [
-      "storage/cache",
-      "storage/tmp"
-    ],
-    "cssDir": "assets/css",
-    "jsDir": "assets/js",
-    "imgDir": "assets/images",
-    "fontDir": "assets/fonts",
-    "distDir": "dist",
-    "vendorDir": "vendor",
-    "css": {
-      "mdl": "https://code.getmdl.io/1.2.1/material.indigo-pink.min.css"
-    },
-    "javascript": {
-      "bella": "https://cdn.rawgit.com/ndaidong/bellajs/master/dist/bella.js",
-      "doc": "https://cdn.rawgit.com/ndaidong/doc/master/dist/doc.js",
-      "material": "https://storage.googleapis.com/code.getmdl.io/1.2.1/material.js"
-    }
-  }
+  "license": "MIT"
 }

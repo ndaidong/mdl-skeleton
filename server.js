@@ -8,35 +8,55 @@ const path = require('path');
 const pjoin = path.join;
 
 const bella = require('bellajs');
-
-var builder = require('./scripts/workers/builder');
-var compiler = require('./scripts/workers/compiler');
-
-var config = require('./configs');
-
-config.revision = bella.id;
-
 const debug = require('debug');
 const error = debug('app:error');
 
 const Koa = require('koa');
+const helmet = require('koa-helmet');
 const router = require('koa-router')();
 const favicon = require('koa-favicon');
-const assets = require('koa-static');
+const kstatic = require('koa-static');
 const bodyParser = require('koa-bodyparser');
+const responseTime = require('koa-response-time');
+
+var config = require('./configs');
+config.revision = bella.id;
+
+var {builder, compiler} = require('./scripts');
 
 const app = new Koa();
 
-app.use(async (ctx, next) => {
-  await next(); // eslint-disable-line callback-return
-  ctx.set(config.headers);
-});
+app.context.config = config;
 
-app.use(favicon(pjoin(__dirname, '/assets/images') + '/brand/favicon.ico'));
+app.use(helmet());
+app.use(responseTime());
 
-var staticData = config.staticData;
-app.use(assets(pjoin(__dirname, 'assets'), staticData));
-app.use(assets(pjoin(__dirname, 'dist'), staticData));
+app.use(favicon(pjoin(__dirname, '/assets/seo/favicon.ico')));
+app.use(kstatic(pjoin(__dirname, '/assets/seo/robots.txt')));
+
+var {
+  ENV,
+  host: HOST,
+  port: PORT,
+  meta: META
+} = config;
+
+var staticData = {
+  cacheControl: false,
+  etag: false
+};
+
+if (ENV === 'production') {
+  staticData = {
+    etag: true,
+    maxAge: 24 * 60 * 6e4,
+    cacheControl: true,
+    lastModified: true
+  };
+}
+
+app.use(kstatic(pjoin(__dirname, 'assets'), staticData));
+app.use(kstatic(pjoin(__dirname, 'dist'), staticData));
 
 app.use(bodyParser({
   encode: 'utf-8',
@@ -48,33 +68,32 @@ app.use(bodyParser({
   }
 }));
 
-app.context.config = config;
-app.context.render = compiler.render;
+app.context.render = compiler;
 
-fs.readdirSync('./app/routers').forEach((file) => {
+fs.readdirSync('./routers').forEach((file) => {
   if (path.extname(file) === '.js') {
-    require('./app/routers/' + file)(router);
+    require('./routers/' + file)(router);
   }
 });
 
 app.use(router.routes()).use(router.allowedMethods({throw: true}));
 
-app.use(async (ctx) => {
-  await ctx.render(404);
+app.use((ctx) => {
+  ctx.render(404);
 });
 
-app.on('error', async (err, ctx) => {
+app.use((err, ctx) => {
   error(err);
-  await ctx.render(500);
+  ctx.render(500);
 });
 
 var onServerReady = () => {
-  builder.setup();
-  console.log(`Server started at the port ${config.port} in ${config.ENV} mode`);
-  console.log('Access website via', `http://127.0.0.1:${config.port}`);
-  console.log('Public URL:', config.meta.url || 'None');
+  builder.setup(config);
+  console.log(`Server started at the port ${PORT} in ${ENV} mode`);
+  console.log('Access website via', `${HOST}:${PORT}`);
+  console.log(`Public URL: ${META.url || 'None'}`);
 };
 
-app.listen(config.port, onServerReady);
+app.listen(PORT, onServerReady);
 
 module.exports = app;

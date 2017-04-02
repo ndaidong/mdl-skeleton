@@ -1,3 +1,8 @@
+/**
+ * configs/index
+ * @ndaidong
+ **/
+
 var debug = require('debug');
 var error = debug('app:error');
 
@@ -5,14 +10,12 @@ var pkg = require('./../package.json');
 
 var meta = require('./meta');
 var settings = require('./settings');
-var staticData = require('./static');
-
-var headers = require('./headers');
 
 var env = process.env || {}; // eslint-disable-line no-process-env
 
 [
   'NODE_ENV',
+  'APP_HOST',
   'APP_PORT'
 ].forEach((name) => {
   if (!env[name]) {
@@ -26,20 +29,13 @@ var config = {
 
 config.name = pkg.name || '';
 config.version = pkg.version || '';
-config.description = pkg.description || '';
-config.keywords = pkg.keywords || '';
-config.author = pkg.author || '';
 
 config.baseDir = env.BASE_DIR || '/';
 
-config.port = env.APP_PORT || '9999';
+config.host = env.APP_HOST || 'http://127.0.0.1';
+config.port = env.APP_PORT || '8081';
 
 config.settings = settings;
-
-config.staticData = staticData;
-
 config.meta = meta;
-
-config.headers = headers;
 
 module.exports = config;
