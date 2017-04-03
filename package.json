@@ -1,5 +1,5 @@
 {
-  "version": "2.0.0",
+  "version": "2.1.0",
   "name": "mdl-skeleton",
   "homepage": "https://techpush.xyz",
   "description": "Material Design skeleton for Koa & Rollup",
@@ -19,9 +19,10 @@
     "nsp": "nsp check --output checkstyle",
     "tape": "tape tests/start.js | tap-spec",
     "pretest": "npm run lint",
-    "test": "npm run tape",
+    "test": "NODE_ENV=test npm run tape",
     "posttest": "npm run nsp",
-    "testcafe": "testcafe chrome tests/e2e"
+    "testcafe": "testcafe chrome tests/e2e",
+    "reset": "node ./scripts/reset"
   },
   "dependencies": {
     "babel-core": "6.x.x",
@@ -44,7 +45,6 @@
     "koa-static": "3.x.x",
     "lru-cache": "4.x.x",
     "mkdirp": "0.x.x",
-    "muicss": "0.x.x",
     "mustache": "2.x.x",
     "postcss": "5.x.x",
     "postcss-cssnext": "2.x.x",
@@ -67,6 +67,14 @@
     "tap-spec": "4.x.x",
     "tape": "4.x.x",
     "testcafe": "0.x.x"
+  },
+  "setup": {
+    "css": {
+      "mui": "http://cdn.muicss.com/mui-0.9.12/css/mui.min.css"
+    },
+    "js": {
+      "mui": "http://cdn.muicss.com/mui-0.9.12/js/mui.min.js"
+    }
   },
   "license": "MIT"
 }
