@@ -5,9 +5,13 @@
 
 var start = (ctx) => {
 
+  let n = ctx.session.views || 0;
+  ctx.session.views = ++n;
+
   let data = {
     title: 'Welcome',
-    message: 'Why we do what we do?'
+    message: 'Why we do what we do?',
+    views: n
   };
 
   let context = {
@@ -22,6 +26,7 @@ var start = (ctx) => {
       entry: 'js/app.js'
     },
     SDATA: {
+      views: n,
       loginStatus: false,
       timestamp: Date.now()
     }

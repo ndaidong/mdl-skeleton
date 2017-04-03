@@ -6,5 +6,6 @@ module.exports = {
     './node_modules',
     './assets'
   ],
+  storeDir: './storage',
   tplFileExtension: '.html'
 };
