@@ -22,7 +22,8 @@ var start = (ctx) => {
       entry: 'js/app.js'
     },
     SDATA: {
-      username: 'alice'
+      username: 'mdl-skeleton',
+      email: 'developer@mdl.com'
     }
   };
 

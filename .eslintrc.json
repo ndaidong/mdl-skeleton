@@ -1,3 +1,6 @@
 {
-  "extends": "eslint-config-ggc"
+  "extends": "eslint-config-ggc",
+  "globals": {
+    "SDATA": true
+  }
 }
