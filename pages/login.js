@@ -12,14 +12,17 @@ var start = (ctx) => {
 
   let context = {
     css: [
-      'muicss/dist/css/mui.min.css',
+      'vendor/css/mui.css',
       'css/style.css'
     ],
     js: {
       files: [
-        'muicss/dist/js/mui.min.js'
+        'vendor/js/mui.js'
       ],
       entry: 'js/app.js'
+    },
+    SDATA: {
+      username: 'alice'
     }
   };
 

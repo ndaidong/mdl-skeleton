@@ -1,12 +1,8 @@
-sudo: required
-dist: trusty
 language: node_js
 node_js:
+  - "7.8"
   - "7.7"
   - "7.6"
-before_script:
-  - export TZ=Etc/GMT-7
 after_success:
-  - yarn
-  - npm run setup
+  - npm install
   - npm test

@@ -1,12 +1,15 @@
 // parseCSS
 
 var fs = require('fs');
+var path = require('path');
 
 var debug = require('debug');
 var info = debug('app:info');
 
 var readFile = require('./readFile');
 var compileCSS = require('./compileCSS');
+
+var isVendorAsset = require('./isVendorAsset');
 
 var config = require('../../configs');
 var {
@@ -24,15 +27,25 @@ var distintCSS = (css) => {
   let externals = [];
   let internals = [];
   css.forEach((f) => {
-    let arr = [f].concat(assetsDirs.map((dir) => {
+    let part = path.parse(f);
+    if (!part.ext) {
+      f += '.css';
+    }
+
+    let arr = [
+      f,
+      `${distDir}/${f}`,
+      `${distDir}/vendor/css/${f}`
+    ].concat(assetsDirs.map((dir) => {
       return `${dir}/${f}`;
     }));
+
     let s = '';
     for (let i = 0; i < arr.length; i++) {
       let ff = arr[i];
       s = readFile(ff);
       if (s) {
-        if (f.includes('node_modules/')) {
+        if (isVendorAsset(f)) {
           externals.push(s);
         } else {
           internals.push(s);

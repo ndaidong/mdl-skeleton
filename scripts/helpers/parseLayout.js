@@ -17,7 +17,7 @@ var readFile = require('./readFile');
 var parseCSS = require('./parseCSS');
 var parseJS = require('./parseJS');
 
-var optimize = (html, css = '', js = '') => {
+var optimize = (html, sdata = {}, css = '', js = '') => {
 
   info('Optimizing HTML structure...');
   let $ = cheerio.load(html, {
@@ -30,6 +30,9 @@ var optimize = (html, css = '', js = '') => {
     let styleTag = `<link rel="stylesheet" type="text/css" href="${css}?rev=${rev}" />`;
     $('head').append(styleTag);
   }
+
+  let script = `<script type="text/javascript">window.SDATA=${JSON.stringify(sdata)}</script>`;
+  $('body').append(script);
 
   if (js) {
     let scriptTag = `<script type="text/javascript" src="${js}?rev=${rev}"></script>`;
@@ -131,14 +134,15 @@ var parseLayout = (input, pathMD5 = '') => {
 
   let {
     css = [],
-    js = {}
+    js = {},
+    SDATA = {}
   } = context;
 
   let cssFile = css ? parseCSS(css, pathMD5) : '';
   let jsFile = js ? parseJS(js, pathMD5) : '';
 
   info('Finish parsing HTML layout.');
-  return optimize(html, cssFile, jsFile);
+  return optimize(html, SDATA, cssFile, jsFile);
 };
 
 module.exports = parseLayout;
