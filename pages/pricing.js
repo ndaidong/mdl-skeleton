@@ -22,7 +22,12 @@ var start = (ctx) => {
       entry: 'js/app.js'
     },
     SDATA: {
-      username: 'alice'
+      packages: {
+        regular: '100$',
+        silver: '200$',
+        gold: '400$',
+        preminium: '1000$'
+      }
     }
   };
 

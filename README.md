@@ -1,6 +1,6 @@
-# Material Design Lite skeleton
+# Material Design skeleton
 
-With the newest stacks: Koa, Rollup, PostCSS and Testcafe.
+With the newest stacks: Koa, Rollup, Babel, PostCSS and MUICSS.
 
 [![Build Status](https://travis-ci.org/ndaidong/mdl-skeleton.svg?branch=master)](https://travis-ci.org/ndaidong/mdl-skeleton)
 [![Dependency Status](https://gemnasium.com/badges/github.com/ndaidong/mdl-skeleton.svg)](https://gemnasium.com/github.com/ndaidong/mdl-skeleton)
@@ -59,7 +59,10 @@ This tiny util may save for you so much time in comparison with installing the w
 
 Once the website is running, any request will be processed by routers and pages. The routers  are defined in "/routers", by [koa-router](https://www.npmjs.com/package/koa-router).
 
-Each of path will be mapped to a "page", where we set the values for response. These values include: template data, JavaScript and CSS resources. Here is a simple page:
+Each of path will be mapped to a "page", where we set the values for response. These values include: layout, template data and context data. Context data means JavaScript, CSS and shared data - a block of data that server sends to client as a JavaScript global object.
+
+Here is a simple page:
+
 
 ```
 // pages/home
@@ -83,7 +86,9 @@ var start = (ctx) => {
       entry: 'js/app.js'
     },
     SDATA: {
-      username: 'alice'
+      username: 'alice',
+      email: 'alice@mailinator.com',
+      age: 16
     }
   };
 
@@ -95,11 +100,11 @@ module.exports = start;
 
 While template data is belong to Mustache engine, JavaScript and CSS resources are optimized by a set of smart tools as Rollup, Babel, PostCSS.
 
-ctx.render expects 3 parameters:
+*ctx.render* expects 3 parameters:
 
 - layout: the main layout for this page
 - data: to be processed by template engine
-- context: includes CSS/JS and shared data (from server to client)
+- context: includes CSS/JS and shared data
 
 Note that:
 
@@ -154,7 +159,6 @@ The following file will get 3 partials added before being inserted into a contai
 - [RollupJS](https://rollupjs.org/):
   - [Babel](http://babeljs.io/)
   - [ES2015](http://es6-features.org/)
-  - [ES2015](http://es6-features.org/)
 - [PostCSS](http://postcss.org/):
   - [CSSNext](http://cssnext.io/)
   - [rucksack](https://simplaio.github.io/rucksack/)
@@ -163,6 +167,7 @@ The following file will get 3 partials added before being inserted into a contai
   - [CSSNano](http://cssnano.co/)
 - Template engine: [Mustache](http://mustache.github.io/)
 - E2E testing: [TestCafe](https://devexpress.github.io/testcafe/)
+- Default CSS framework: [MUICSS](https://www.muicss.com/)
 
 
 # License

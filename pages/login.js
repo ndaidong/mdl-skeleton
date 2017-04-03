@@ -22,7 +22,8 @@ var start = (ctx) => {
       entry: 'js/app.js'
     },
     SDATA: {
-      username: 'alice'
+      clientId: 'abcdxyz',
+      clientKey: '123456789'
     }
   };
 
