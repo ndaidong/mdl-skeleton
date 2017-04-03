@@ -53,8 +53,10 @@ var prepareResources = (res, dir) => {
 
 var setup = (config) => {
 
-  let {distDir} = config.settings;
+  let {distDir, storeDir} = config.settings;
   [
+    storeDir,
+    `${storeDir}/sessions`,
     distDir,
     `${distDir}/css`,
     `${distDir}/js`,
@@ -73,10 +75,11 @@ var setup = (config) => {
 };
 
 var reset = (config) => {
-  let {distDir} = config.settings;
+  let {distDir, storeDir} = config.settings;
 
   [
     distDir,
+    storeDir,
     'node_modules',
     'coverage',
     '.nyc_output'

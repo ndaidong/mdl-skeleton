@@ -1,5 +1,5 @@
 {
-  "version": "2.1.0",
+  "version": "2.1.1",
   "name": "mdl-skeleton",
   "homepage": "https://techpush.xyz",
   "description": "Material Design skeleton for Koa & Rollup",
@@ -42,6 +42,7 @@
     "koa-helmet": "3.x.x",
     "koa-response-time": "2.x.x",
     "koa-router": "7.x.x",
+    "koa-session": "5.x.x",
     "koa-static": "3.x.x",
     "lru-cache": "4.x.x",
     "mkdirp": "0.x.x",

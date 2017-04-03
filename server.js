@@ -18,19 +18,40 @@ const favicon = require('koa-favicon');
 const kstatic = require('koa-static');
 const bodyParser = require('koa-bodyparser');
 const responseTime = require('koa-response-time');
+const session = require('koa-session');
 
 var config = require('./configs');
 config.revision = bella.id;
 
-var {builder, compiler} = require('./scripts');
+var {builder, compiler, sesStore} = require('./scripts');
 
 const app = new Koa();
 
 app.context.config = config;
 
+// session
+const APP_KEY = bella.md5(config.name);
+const SESSION_MAX_AGE = 6e4 * 60 * 24 * 7; // 7 days
+const SESSION_KEY = 'MDLID';
+
+app.keys = [APP_KEY];
+
+var sesConfig = {
+  key: SESSION_KEY,
+  maxAge: SESSION_MAX_AGE,
+  overwrite: true,
+  httpOnly: true,
+  signed: true,
+  store: sesStore
+};
+
+app.use(session(sesConfig, app));
+
+// headers
 app.use(helmet());
 app.use(responseTime());
 
+// static resources
 app.use(favicon(pjoin(__dirname, '/assets/seo/favicon.ico')));
 app.use(kstatic(pjoin(__dirname, '/assets/seo/robots.txt')));
 
