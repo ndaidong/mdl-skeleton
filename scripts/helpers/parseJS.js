@@ -37,9 +37,10 @@ var compileMultiJS = (js) => {
     let arr = [
       f,
       `${distDir}/${f}`,
+      `${distDir}/js/${f}`,
       `${distDir}/vendor/js/${f}`
     ].concat(assetsDirs.map((dir) => {
-      return `${dir}/${f}`;
+      return `${dir}/js/${f}`;
     }));
 
     let s = '';
