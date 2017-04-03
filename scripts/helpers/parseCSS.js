@@ -45,7 +45,7 @@ var distintCSS = (css) => {
       let ff = arr[i];
       s = readFile(ff);
       if (s) {
-        if (isVendorAsset(f)) {
+        if (isVendorAsset(ff)) {
           externals.push(s);
         } else {
           internals.push(s);

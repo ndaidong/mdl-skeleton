@@ -47,7 +47,7 @@ var compileMultiJS = (js) => {
       let ff = arr[i];
       s = readFile(ff);
       if (s) {
-        if (!isVendorAsset(f)) {
+        if (!isVendorAsset(ff)) {
           s = transpileJS(s);
         }
         break;
