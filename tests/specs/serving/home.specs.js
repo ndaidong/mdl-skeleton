@@ -25,7 +25,7 @@ test('Check app config', (assert) => {
   assert.end();
 });
 
-test('Check default page', (assert) => {
+test('Check login page', (assert) => {
   request(target)
     .get('/')
     .expect((res) => {
