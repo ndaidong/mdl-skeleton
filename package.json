@@ -1,5 +1,5 @@
 {
-  "version": "2.1.1",
+  "version": "2.1.14",
   "name": "mdl-skeleton",
   "homepage": "https://techpush.xyz",
   "description": "Material Design skeleton for Koa & Rollup",
@@ -32,6 +32,7 @@
     "babel-preset-es2015-rollup": "3.x.x",
     "bellajs": "6.x.x",
     "cheerio": "0.x.x",
+    "copy-dir": "0.x.x",
     "css-mqpacker": "5.x.x",
     "cssnano": "3.x.x",
     "debug": "2.x.x",
@@ -64,6 +65,7 @@
     "eslint": "3.x.x",
     "eslint-config-ggc": "1.x.x",
     "nsp": "2.x.x",
+    "sinon": "2.x.x",
     "supertest": "3.x.x",
     "tap-spec": "4.x.x",
     "tape": "4.x.x",

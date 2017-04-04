@@ -36,8 +36,11 @@ var distintCSS = (css) => {
       f,
       `${distDir}/${f}`,
       `${distDir}/css/${f}`,
+      `${distDir}/vendor/${f}`,
       `${distDir}/vendor/css/${f}`
     ].concat(assetsDirs.map((dir) => {
+      return `${dir}/${f}`;
+    })).concat(assetsDirs.map((dir) => {
       return `${dir}/css/${f}`;
     }));
 

@@ -7,6 +7,7 @@ var fs = require('fs');
 var exec = require('child_process').execSync;
 
 var mkdirp = require('mkdirp').sync;
+var cpdir = require('copy-dir').sync;
 
 var log = console.log;
 
@@ -23,6 +24,18 @@ var download = (src, saveas) => {
   log('Downloading %s ...', src);
   exec('wget -O ' + saveas + ' ' + src);
   log('Downloaded %s', saveas);
+};
+
+var publish = (from, to) => {
+  if (!fs.existsSync(from)) {
+    return false;
+  }
+  if (fs.existsSync(to)) {
+    exec('rm -rf ' + to);
+  }
+  mkdirp(to);
+  cpdir(from, to);
+  return null;
 };
 
 var prepareResources = (res, dir) => {
@@ -71,6 +84,9 @@ var setup = (config) => {
     }
   });
 
+  publish('./assets/fonts', `${distDir}/fonts`);
+  publish('./assets/images', `${distDir}/images`);
+
   prepareResources(pkg.setup, `${distDir}/vendor`);
 };
 
@@ -90,7 +106,7 @@ var reset = (config) => {
   });
 
   [
-    'npm-error.log',
+    'npm-debug.log',
     'yarn.lock'
   ].forEach((file) => {
     if (fs.existsSync(file)) {

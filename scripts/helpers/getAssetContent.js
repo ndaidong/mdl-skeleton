@@ -13,11 +13,17 @@ var getAssetContent = (f) => {
   let arr = [
     f,
     `${distDir}/${f}`,
+    `${distDir}/js/${f}`,
+    `${distDir}/css/${f}`,
     `${distDir}/vendor/${f}`,
-    `${distDir}/vendor/css/${f}`,
-    `${distDir}/vendor/js/${f}`
+    `${distDir}/vendor/js/${f}`,
+    `${distDir}/vendor/css/${f}`
   ].concat(assetsDirs.map((dir) => {
     return `${dir}/${f}`;
+  })).concat(assetsDirs.map((dir) => {
+    return `${dir}/js/${f}`;
+  })).concat(assetsDirs.map((dir) => {
+    return `${dir}/css/${f}`;
   }));
 
   let s = '';
