@@ -37,9 +37,10 @@ var compileMultiJS = (js) => {
     let arr = [
       f,
       `${distDir}/${f}`,
+      `${distDir}/js/${f}`,
       `${distDir}/vendor/js/${f}`
     ].concat(assetsDirs.map((dir) => {
-      return `${dir}/${f}`;
+      return `${dir}/js/${f}`;
     }));
 
     let s = '';
@@ -47,7 +48,7 @@ var compileMultiJS = (js) => {
       let ff = arr[i];
       s = readFile(ff);
       if (s) {
-        if (!isVendorAsset(f)) {
+        if (!isVendorAsset(ff)) {
           s = transpileJS(s);
         }
         break;

@@ -35,9 +35,10 @@ var distintCSS = (css) => {
     let arr = [
       f,
       `${distDir}/${f}`,
+      `${distDir}/css/${f}`,
       `${distDir}/vendor/css/${f}`
     ].concat(assetsDirs.map((dir) => {
-      return `${dir}/${f}`;
+      return `${dir}/css/${f}`;
     }));
 
     let s = '';
@@ -45,7 +46,7 @@ var distintCSS = (css) => {
       let ff = arr[i];
       s = readFile(ff);
       if (s) {
-        if (isVendorAsset(f)) {
+        if (isVendorAsset(ff)) {
           externals.push(s);
         } else {
           internals.push(s);
