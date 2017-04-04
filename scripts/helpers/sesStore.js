@@ -20,7 +20,8 @@ var sesStore = {
     await writeFile(f, JSON.stringify(val));
   },
   destroy: async (key) => {
-    await delFile(key);
+    let f = `${storeDir}/sessions/${key}`;
+    await delFile(f);
   }
 };
 
