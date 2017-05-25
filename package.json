@@ -1,5 +1,5 @@
 {
-  "version": "2.1.16",
+  "version": "2.1.17",
   "name": "mdl-skeleton",
   "homepage": "https://techpush.xyz",
   "description": "Material Design skeleton for Koa & Rollup",
@@ -58,7 +58,6 @@
     "rollup-plugin-babel": "2.x.x",
     "rollup-plugin-commonjs": "8.x.x",
     "rollup-plugin-node-resolve": "3.x.x",
-    "rollup-plugin-uglify": "2.x.x",
     "uglify-js": "3.x.x"
   },
   "devDependencies": {
