@@ -10,7 +10,8 @@ var rollup = require('rollup');
 var babel = require('rollup-plugin-babel');
 var nodeResolve = require('rollup-plugin-node-resolve');
 var commonjs = require('rollup-plugin-commonjs');
-var uglify = require('rollup-plugin-uglify');
+
+var minifyJS = require('./minifyJS');
 
 var writeFile = require('./writeFile');
 
@@ -64,17 +65,22 @@ var rollupify = (entry, otherCode = '', output) => {
         plugins: [
           'external-helpers'
         ]
-      }),
-      ENV === 'production' && uglify()
+      })
     ]
   }).then((bundle) => {
     info('Generating code with bundle...');
-    let result = bundle.generate({
+    let {code} = bundle.generate({
       format: 'iife',
       moduleName: 'app'
     });
     info('Rolling finished. Write to file...');
-    writeFile(output, otherCode + '\n' + result.code);
+
+    let js = [
+      otherCode,
+      ENV === 'production' ? minifyJS(code) : code
+    ].join('\n');
+
+    writeFile(output, js);
   }).catch((err) => {
     error(err);
   });
