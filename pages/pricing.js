@@ -5,9 +5,13 @@
 
 var start = (ctx) => {
 
+  let n = ctx.session.views || 0;
+  ctx.session.views = ++n;
+
   let data = {
     title: 'Pricing',
-    message: 'How we estimate our value?'
+    message: 'How we estimate our value?',
+    views: n
   };
 
   let context = {

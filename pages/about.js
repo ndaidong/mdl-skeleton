@@ -5,9 +5,13 @@
 
 var start = (ctx) => {
 
+  let n = ctx.session.views || 0;
+  ctx.session.views = ++n;
+
   let data = {
     title: 'About us',
-    message: 'Who we are and what we do?'
+    message: 'Who we are and what we do?',
+    views: n
   };
 
   let context = {

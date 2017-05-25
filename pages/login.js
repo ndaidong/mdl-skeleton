@@ -5,9 +5,13 @@
 
 var start = (ctx) => {
 
+  let n = ctx.session.views || 0;
+  ctx.session.views = ++n;
+
   let data = {
     title: 'Login',
-    message: 'Get into your dashboard'
+    message: 'Get into your dashboard',
+    views: n
   };
 
   let context = {
