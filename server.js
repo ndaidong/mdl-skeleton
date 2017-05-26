@@ -3,29 +3,29 @@
  * @ndaidong
  **/
 
-const fs = require('fs');
-const path = require('path');
-const pjoin = path.join;
+var fs = require('fs');
+var path = require('path');
+var pjoin = path.join;
 
-const bella = require('bellajs');
-const debug = require('debug');
-const error = debug('app:error');
+var bella = require('bellajs');
+var debug = require('debug');
+var error = debug('app:error');
 
-const Koa = require('koa');
-const helmet = require('koa-helmet');
-const router = require('koa-router')();
-const favicon = require('koa-favicon');
-const kstatic = require('koa-static');
-const bodyParser = require('koa-bodyparser');
-const responseTime = require('koa-response-time');
-const session = require('koa-session');
+var Koa = require('koa');
+var helmet = require('koa-helmet');
+var router = require('koa-router')();
+var favicon = require('koa-favicon');
+var kstatic = require('koa-static');
+var bodyParser = require('koa-bodyparser');
+var responseTime = require('koa-response-time');
+var session = require('koa-session');
 
 var config = require('./configs');
 config.revision = bella.id;
 
 var {builder, compiler, sesStore} = require('./scripts');
 
-const app = new Koa();
+var app = new Koa();
 
 app.context.config = config;
 
