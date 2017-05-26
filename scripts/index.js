@@ -5,7 +5,7 @@
 
 var builder = require('./builder');
 var compiler = require('./compiler');
-var sesStore = require('./helpers/sesStore');
+var sesStore = require('../app/utils/sesStore');
 
 module.exports = {
   builder,

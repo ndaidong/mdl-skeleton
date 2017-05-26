@@ -28,7 +28,7 @@ var isAsync = (fn) => {
 
 test('Check if helpers are already', (assert) => {
   helpers.forEach((h) => {
-    let f = require(path.join('../../../scripts/helpers', h));
+    let f = require(path.join('../../../app/utils', h));
     assert.ok(bella.isFunction(f) || isAsync(f), `${h} must be a function`);
   });
   assert.end();

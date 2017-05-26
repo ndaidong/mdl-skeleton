@@ -3,8 +3,8 @@
  * @ndaidong
  */
 
-var addExt = require('../../../scripts/helpers/addExt');
-var getAssetContent = require('../../../scripts/helpers/getAssetContent');
+var addExt = require('../../../app/utils/addExt');
+var getAssetContent = require('../../../app/utils/getAssetContent');
 
 var checkAssets = (context = {}, assert) => {
   let {

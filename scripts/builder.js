@@ -84,8 +84,8 @@ var setup = (config) => {
     }
   });
 
-  publish('./assets/fonts', `${distDir}/fonts`);
-  publish('./assets/images', `${distDir}/images`);
+  publish('./app/assets/fonts', `${distDir}/fonts`);
+  publish('./app/assets/images', `${distDir}/images`);
 
   prepareResources(pkg.setup, `${distDir}/vendor`);
 };

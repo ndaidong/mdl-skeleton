@@ -6,7 +6,7 @@
 var test = require('tape');
 var bella = require('bellajs');
 
-var home = require('../../../pages/home');
+var home = require('../../../app/pages/home');
 
 var checkCtxRender = require('./checkCtxRender');
 var checkAssets = require('./checkAssets');

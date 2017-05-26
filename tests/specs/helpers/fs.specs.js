@@ -8,9 +8,11 @@ var bella = require('bellajs');
 
 var {existsSync} = require('fs');
 
-var readFile = require('../../../scripts/helpers/readFile');
-var writeFile = require('../../../scripts/helpers/writeFile');
-var delFile = require('../../../scripts/helpers/delFile');
+var {
+  readFile,
+  writeFile,
+  delFile
+} = require('../../../app/utils');
 
 test('Check file management utils', (assert) => {
   assert.ok(bella.isFunction(readFile), 'readFile must be a function');

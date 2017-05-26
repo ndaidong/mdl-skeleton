@@ -21,7 +21,7 @@ var {
   readFile,
   getHTTPStatus,
   parseLayout
-} = require('./helpers');
+} = require('../app/utils');
 
 var compile = (input) => {
   return new Promise((resolve, reject) => {

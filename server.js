@@ -52,8 +52,8 @@ app.use(helmet());
 app.use(responseTime());
 
 // static resources
-app.use(favicon(pjoin(__dirname, '/assets/seo/favicon.ico')));
-app.use(kstatic(pjoin(__dirname, '/assets/seo/robots.txt')));
+app.use(favicon(pjoin(__dirname, '/app/assets/seo/favicon.ico')));
+app.use(kstatic(pjoin(__dirname, '/app/assets/seo/robots.txt')));
 
 var {
   ENV,
@@ -76,7 +76,7 @@ if (ENV === 'production') {
   };
 }
 
-app.use(kstatic(pjoin(__dirname, 'assets'), staticData));
+app.use(kstatic(pjoin(__dirname, 'app/assets'), staticData));
 app.use(kstatic(pjoin(__dirname, 'dist'), staticData));
 
 app.use(bodyParser({
@@ -91,9 +91,9 @@ app.use(bodyParser({
 
 app.context.render = compiler;
 
-fs.readdirSync('./routers').forEach((file) => {
+fs.readdirSync('./app/routers').forEach((file) => {
   if (path.extname(file) === '.js') {
-    require('./routers/' + file)(router);
+    require('./app/routers/' + file)(router);
   }
 });
 
