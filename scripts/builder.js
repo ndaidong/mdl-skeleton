@@ -9,7 +9,7 @@ var exec = require('child_process').execSync;
 var mkdirp = require('mkdirp').sync;
 var cpdir = require('copy-dir').sync;
 
-var log = console.log;
+var log = console.log; // eslint-disable-line no-console
 
 var pkg = require('../package');
 
