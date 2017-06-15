@@ -17,11 +17,11 @@
     "live": "NODE_ENV=production node server",
     "lint": "eslint .",
     "nsp": "nsp check --output checkstyle",
-    "tape": "tape tests/start.js | tap-spec",
+    "tape": "tape test/start.js | tap-spec",
     "pretest": "npm run lint",
     "test": "NODE_ENV=test npm run tape",
     "posttest": "npm run nsp",
-    "testcafe": "testcafe chrome tests/e2e",
+    "testcafe": "testcafe chrome test/e2e",
     "reset": "node ./scripts/reset"
   },
   "dependencies": {
@@ -30,8 +30,8 @@
     "babel-plugin-transform-remove-strict-mode": "0.x.x",
     "babel-preset-env": "1.x.x",
     "babel-preset-es2015-rollup": "3.x.x",
-    "bellajs": "6.x.x",
-    "cheerio": "0.x.x",
+    "bellajs": "7.x.x",
+    "cheerio": "1.0.0-rc.1",
     "copy-dir": "0.x.x",
     "css-mqpacker": "6.x.x",
     "cssnano": "3.x.x",
@@ -61,7 +61,7 @@
     "uglify-js": "3.x.x"
   },
   "devDependencies": {
-    "eslint": "3.x.x",
+    "eslint": "4.x.x",
     "eslint-config-ggc": "1.x.x",
     "nsp": "2.x.x",
     "sinon": "2.x.x",

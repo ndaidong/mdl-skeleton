@@ -3,6 +3,8 @@
  * @ndaidong
  */
 
+/* eslint-disable no-console */
+
 import {
   add
 } from './utils.js';

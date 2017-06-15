@@ -15,3 +15,7 @@ output
 
 storage
 dist
+
+yarn.lock
+coverage.lcov
+package-lock.json

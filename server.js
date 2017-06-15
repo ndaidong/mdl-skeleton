@@ -3,6 +3,8 @@
  * @ndaidong
  **/
 
+/* eslint-disable no-console */
+
 var fs = require('fs');
 var path = require('path');
 var pjoin = path.join;
