@@ -67,9 +67,9 @@ var rollupify = (entry, otherCode = '', output) => {
         ]
       })
     ]
-  }).then((bundle) => {
+  }).then(async (bundle) => {
     info('Generating code with bundle...');
-    let {code} = bundle.generate({
+    let {code} = await bundle.generate({
       format: 'iife',
       moduleName: 'app'
     });
