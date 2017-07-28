@@ -1,5 +1,5 @@
 {
-  "version": "2.2.0",
+  "version": "2.2.1",
   "name": "mdl-skeleton",
   "homepage": "https://techpush.xyz",
   "description": "Material Design skeleton for Koa & Rollup",
@@ -21,7 +21,7 @@
     "pretest": "npm run lint",
     "test": "NODE_ENV=test npm run tape",
     "posttest": "npm run nsp",
-    "testcafe": "testcafe chrome test/e2e",
+    "testcafe": "testcafe phantomjs test/e2e",
     "reset": "node ./scripts/reset"
   },
   "dependencies": {
@@ -31,7 +31,7 @@
     "babel-preset-env": "1.x.x",
     "babel-preset-es2015-rollup": "3.x.x",
     "bellajs": "7.x.x",
-    "cheerio": "1.0.0-rc.1",
+    "cheerio": "1.0.0-rc.2",
     "copy-dir": "0.x.x",
     "css-mqpacker": "6.x.x",
     "cssnano": "3.x.x",
@@ -44,15 +44,15 @@
     "koa-response-time": "2.x.x",
     "koa-router": "7.x.x",
     "koa-session": "5.x.x",
-    "koa-static": "3.x.x",
+    "koa-static": "4.x.x",
     "lru-cache": "4.x.x",
     "mkdirp": "0.x.x",
     "mustache": "2.x.x",
     "postcss": "6.x.x",
-    "postcss-cssnext": "2.x.x",
+    "postcss-cssnext": "3.x.x",
     "postcss-filter-plugins": "2.x.x",
     "postcss-nested": "2.x.x",
-    "promise.prototype.finally": "2.x.x",
+    "promise-wtf": "1.x.x",
     "response-time": "2.x.x",
     "rollup": "0.x.x",
     "rollup-plugin-babel": "2.x.x",
@@ -68,7 +68,8 @@
     "supertest": "3.x.x",
     "tap-spec": "4.x.x",
     "tape": "4.x.x",
-    "testcafe": "latest"
+    "testcafe": "0.x.x",
+    "testcafe-browser-provider-nightmare": "0.x.x"
   },
   "setup": {
     "css": {

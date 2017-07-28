@@ -10,7 +10,7 @@ var test = require('tape');
 var dirs = ['', 'helpers', 'pages', 'serving'];
 
 dirs.forEach((dir) => {
-  let where = './test/specs/' + dir;
+  let where = './test/units/' + dir;
   if (fs.existsSync(where)) {
     fs.readdirSync(where).forEach((file) => {
       if (file.endsWith('.specs.js')) {
