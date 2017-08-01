@@ -23,13 +23,15 @@ var responseTime = require('koa-response-time');
 var session = require('koa-session');
 
 var config = require('./configs');
-config.revision = bella.id;
+config.revision = bella.createId();
 
 var {builder, compiler, sesStore} = require('./scripts');
 
 var app = new Koa();
 
 app.context.config = config;
+
+console.log(config);
 
 // session
 const APP_KEY = bella.md5(config.name);
