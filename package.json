@@ -35,7 +35,7 @@
     "copy-dir": "0.x.x",
     "css-mqpacker": "6.x.x",
     "cssnano": "3.x.x",
-    "debug": "2.x.x",
+    "debug": "3.x.x",
     "html-minifier": "3.x.x",
     "koa": "2.x.x",
     "koa-bodyparser": "4.x.x",
@@ -55,7 +55,7 @@
     "promise-wtf": "1.x.x",
     "response-time": "2.x.x",
     "rollup": "0.x.x",
-    "rollup-plugin-babel": "2.x.x",
+    "rollup-plugin-babel": "3.x.x",
     "rollup-plugin-commonjs": "8.x.x",
     "rollup-plugin-node-resolve": "3.x.x",
     "uglify-js": "3.x.x"
