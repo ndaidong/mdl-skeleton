@@ -2,8 +2,12 @@
 
 var babel = require('babel-core');
 
-var debug = require('debug');
-var info = debug('app:info');
+const {
+  name
+} = require('../../package.json');
+
+const debug = require('debug');
+const info = debug(`${name}:info`);
 
 var transpile = (code) => {
   info('Transpiling with Babel...');

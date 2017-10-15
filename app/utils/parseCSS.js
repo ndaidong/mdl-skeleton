@@ -3,8 +3,12 @@
 var fs = require('fs');
 var path = require('path');
 
-var debug = require('debug');
-var info = debug('app:info');
+const {
+  name
+} = require('../../package.json');
+
+const debug = require('debug');
+const info = debug(`${name}:info`);
 
 var readFile = require('./readFile');
 var compileCSS = require('./compileCSS');

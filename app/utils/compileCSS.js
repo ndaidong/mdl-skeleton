@@ -1,8 +1,12 @@
 // compileCSS
 
-var debug = require('debug');
-var info = debug('app:info');
-var error = debug('app:error');
+const {
+  name
+} = require('../../package.json');
+
+const debug = require('debug');
+const info = debug(`${name}:info`);
+const error = debug(`${name}:error`);
 
 var postcss = require('postcss');
 var postcssFilter = require('postcss-filter-plugins');

@@ -1,9 +1,14 @@
 // parseJS
 
 var fs = require('fs');
-var debug = require('debug');
-var info = debug('app:info');
-var error = debug('app:error');
+
+const {
+  name
+} = require('../../package.json');
+
+const debug = require('debug');
+const info = debug(`${name}:info`);
+const error = debug(`${name}:error`);
 
 var rollup = require('rollup');
 
@@ -40,10 +45,10 @@ var getRealPath = (file) => {
   return false;
 };
 
-var rollupify = (entry, otherCode = '', output) => {
+var rollupify = (input, otherCode = '', output) => {
   info('Rollup start...');
   rollup.rollup({
-    entry,
+    input,
     plugins: [
       nodeResolve({
         jsnext: true,
@@ -71,7 +76,7 @@ var rollupify = (entry, otherCode = '', output) => {
     info('Generating code with bundle...');
     let {code} = await bundle.generate({
       format: 'iife',
-      moduleName: 'app'
+      name: 'app'
     });
     info('Rolling finished. Write to file...');
 

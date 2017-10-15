@@ -3,9 +3,13 @@
  * @ndaidong
  **/
 
-var debug = require('debug');
-var info = debug('app:info');
-var error = debug('app:error');
+const {
+  name
+} = require('../package.json');
+
+const debug = require('debug');
+const info = debug(`${name}:info`);
+const error = debug(`${name}:error`);
 
 var bella = require('bellajs');
 var lru = require('lru-cache');
