@@ -38,10 +38,10 @@ var publish = (from, to) => {
   return null;
 };
 
-var prepareResources = (res, dir) => {
+var prepareResources = (res = {}, dir) => {
   let {
-    css,
-    js
+    css = {},
+    js = {}
   } = res;
 
   for (let alias in css) {
@@ -66,19 +66,33 @@ var prepareResources = (res, dir) => {
 
 var setup = (config) => {
 
-  let {distDir, storeDir} = config.settings;
+  let {
+    ENV,
+    settings
+  } = config;
+
+  let {distDir, storeDir} = settings;
+
+  let jsDir = `${distDir}/js`;
+  let cssDir = `${distDir}/css`;
+
   [
     storeDir,
     `${storeDir}/sessions`,
     distDir,
-    `${distDir}/css`,
-    `${distDir}/js`,
+    cssDir,
+    jsDir,
     `${distDir}/images`,
     `${distDir}/fonts`,
     `${distDir}/vendor`,
     `${distDir}/vendor/css`,
     `${distDir}/vendor/js`
   ].forEach((dir) => {
+    if (ENV === 'production') {
+      if (dir === cssDir || dir === jsDir) {
+        exec('rm -rf ' + dir);
+      }
+    }
     if (!fs.existsSync(dir)) {
       mkdirp(dir);
     }
@@ -107,7 +121,9 @@ var reset = (config) => {
 
   [
     'npm-debug.log',
-    'yarn.lock'
+    'yarn.lock',
+    'package-lock.json',
+    'coverage.lcov'
   ].forEach((file) => {
     if (fs.existsSync(file)) {
       exec('rm ' + file);

@@ -1,5 +1,5 @@
 {
-  "version": "2.2.1",
+  "version": "2.3.0",
   "name": "mdl-skeleton",
   "homepage": "https://techpush.xyz",
   "description": "Material Design skeleton for Koa & Rollup",
@@ -13,8 +13,7 @@
   },
   "main": "./server.js",
   "scripts": {
-    "start": "NODE_ENV=development DEBUG=app:* node server",
-    "live": "NODE_ENV=production node server",
+    "start": "DEBUG=app:* node server",
     "lint": "eslint .",
     "nsp": "nsp check --output checkstyle",
     "tape": "tape test/start.js | tap-spec",
@@ -58,7 +57,7 @@
     "rollup-plugin-babel": "3.x.x",
     "rollup-plugin-commonjs": "8.x.x",
     "rollup-plugin-node-resolve": "3.x.x",
-    "uglify-js": "3.x.x"
+    "uglify-es": "3.x.x"
   },
   "devDependencies": {
     "eslint": "4.x.x",
