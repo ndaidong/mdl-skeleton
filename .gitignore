@@ -11,11 +11,12 @@ node_modules
 coverage
 .nyc_output
 
-output
-
 storage
 dist
+src/vendor
 
 yarn.lock
 coverage.lcov
 package-lock.json
+
+.nuxt

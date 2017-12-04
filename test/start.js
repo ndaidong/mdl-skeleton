@@ -1,23 +1,26 @@
-var fs = require('fs');
-var path = require('path');
-
-var test = require('tape');
-
 /**
  * Import specs
  */
 
-var dirs = ['', 'helpers', 'pages', 'serving'];
+const {
+  existsSync,
+  readdirSync,
+} = require('fs');
 
-dirs.forEach((dir) => {
-  let where = './test/units/' + dir;
-  if (fs.existsSync(where)) {
-    fs.readdirSync(where).forEach((file) => {
-      if (file.endsWith('.specs.js')) {
-        require(path.join('.' + where, file));
-      }
-    });
-  }
-});
+const {
+  join,
+  extname,
+} = require('path');
+
+const test = require('tape');
+
+const where = './test/specs';
+if (existsSync(where)) {
+  readdirSync(where).forEach((file) => {
+    if (extname(file) === '.js') {
+      require(join('.' + where, file));
+    }
+  });
+}
 
 test.onFinish(process.exit);

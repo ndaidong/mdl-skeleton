@@ -9,3 +9,6 @@ LICENSE
 package.json
 README.md
 
+vendor
+
+.nuxt
