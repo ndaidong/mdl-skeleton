@@ -21,3 +21,5 @@ let {
 
 info(`Server started at the port ${port} in ${ENV} mode`);
 info('Access website via', `${url}`);
+
+module.exports = app;

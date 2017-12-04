@@ -1,6 +1,6 @@
 # Material Design skeleton
 
-With the newest stacks: Koa, Rollup, Babel, PostCSS and MUICSS.
+* v3.x.x: start using [ssr-engine](https://github.com/ndaidong/ssr-engine)
 
 [![Build Status](https://travis-ci.org/ndaidong/mdl-skeleton.svg?branch=master)](https://travis-ci.org/ndaidong/mdl-skeleton)
 [![Dependency Status](https://gemnasium.com/badges/github.com/ndaidong/mdl-skeleton.svg)](https://gemnasium.com/github.com/ndaidong/mdl-skeleton)
