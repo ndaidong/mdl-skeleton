@@ -1,0 +1,40 @@
+:root {
+  --gradientEffectTime: 60s;
+  --boxHeight: 16rem;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  cursor: default;
+}
+
+header {
+  width: 100%;
+  height: 3rem;
+  position: fixed;
+  z-index: 1000;
+}
+
+
+main {
+  & .container {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+footer {
+  padding: 20px 16px 10px;
+  background-color: #727272;
+
+  & p {
+    color: #fff;
+  }
+}

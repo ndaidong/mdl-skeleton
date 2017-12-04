@@ -1,0 +1,14 @@
+doctype html
+html(lang='en')
+  head
+    include ../components/meta.pug
+    title= meta.title
+    link(rel='shortcut icon' href='/favicon.ico')
+    block stylesheet
+  body
+    block content
+    block javascript
+
+    - var isProduction = ENV === 'production'
+    if isProduction
+      include ../components/ga.pug

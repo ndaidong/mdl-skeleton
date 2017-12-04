@@ -1,0 +1,26 @@
+extends layouts/default.pug
+
+block stylesheet
+  link(rel='stylesheet' type='text/css' href='vendor/css/reboot.css')
+  link(rel='stylesheet' type='text/css' href='css/main.css')
+block content
+  #space
+  main
+    .container
+      .box
+        .inner
+          .section
+            .avatar(style=`background-image:url(${about.avatar})`)
+          .section
+            .name #{about.name}
+          .section
+            .role #{about.role}
+          .section
+            .tags #{about.tags}
+          .section
+            .connection
+              each link in about.links
+                a(href=`${link.href}`, title=`${link.title}`, rel="noopener", target="_blank")
+                  i.icon(class=`${link.icon}`)
+block javascript
+  script(type='text/javascript', src='js/main.js')

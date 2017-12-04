@@ -1,5 +1,5 @@
 {
-  "version": "2.3.0",
+  "version": "3.0.0",
   "name": "mdl-skeleton",
   "homepage": "https://techpush.xyz",
   "description": "Material Design skeleton for Koa & Rollup",
@@ -13,69 +13,37 @@
   },
   "main": "./server.js",
   "scripts": {
-    "start": "DEBUG=app:* node server",
+    "start": "DEBUG=mdl-skeleton:* node server",
     "lint": "eslint .",
     "nsp": "nsp check --output checkstyle",
     "tape": "tape test/start.js | tap-spec",
     "pretest": "npm run lint",
     "test": "NODE_ENV=test npm run tape",
     "posttest": "npm run nsp",
-    "testcafe": "testcafe phantomjs test/e2e",
-    "reset": "node ./scripts/reset"
+    "setup": "node scripts/setup",
+    "reset": "node scripts/reset"
   },
   "dependencies": {
-    "babel-core": "6.x.x",
-    "babel-plugin-external-helpers": "6.x.x",
-    "babel-plugin-transform-remove-strict-mode": "0.x.x",
-    "babel-preset-env": "1.x.x",
-    "babel-preset-es2015-rollup": "3.x.x",
-    "bellajs": "7.x.x",
-    "cheerio": "1.0.0-rc.2",
-    "copy-dir": "0.x.x",
-    "css-mqpacker": "6.x.x",
-    "cssnano": "3.x.x",
-    "debug": "3.x.x",
-    "html-minifier": "3.x.x",
-    "koa": "2.x.x",
-    "koa-bodyparser": "4.x.x",
-    "koa-favicon": "2.x.x",
-    "koa-helmet": "3.x.x",
-    "koa-response-time": "2.x.x",
-    "koa-router": "7.x.x",
-    "koa-session": "5.x.x",
-    "koa-static": "4.x.x",
-    "lru-cache": "4.x.x",
-    "mkdirp": "0.x.x",
-    "mustache": "2.x.x",
-    "postcss": "6.x.x",
-    "postcss-cssnext": "3.x.x",
-    "postcss-filter-plugins": "2.x.x",
-    "postcss-nested": "2.x.x",
-    "promise-wtf": "1.x.x",
-    "response-time": "2.x.x",
-    "rollup": "0.x.x",
-    "rollup-plugin-babel": "3.x.x",
-    "rollup-plugin-commonjs": "8.x.x",
-    "rollup-plugin-node-resolve": "3.x.x",
-    "uglify-es": "3.x.x"
+    "bellajs": "^7.2.0",
+    "debug": "^3.1.0",
+    "realdom": "^3.2.4",
+    "ssr-engine": "^0.0.1"
   },
   "devDependencies": {
-    "eslint": "4.x.x",
-    "eslint-config-ggc": "1.x.x",
-    "nsp": "2.x.x",
-    "sinon": "2.x.x",
-    "supertest": "3.x.x",
-    "tap-spec": "4.x.x",
-    "tape": "4.x.x",
-    "testcafe": "0.x.x",
-    "testcafe-browser-provider-nightmare": "0.x.x"
+    "eslint": "^4.10.0",
+    "eslint-config-goes": "^1.0.0",
+    "nsp": "^3.1.0",
+    "supertest": "^3.0.0",
+    "tap-spec": "^4.1.1",
+    "tape": "^4.8.0"
   },
-  "setup": {
+  "vendor": {
     "css": {
-      "mui": "http://cdn.muicss.com/mui-0.9.12/css/mui.min.css"
+      "reboot": "https://raw.githubusercontent.com/twbs/bootstrap/v4-dev/dist/css/bootstrap-reboot.css"
     },
     "js": {
-      "mui": "http://cdn.muicss.com/mui-0.9.12/js/mui.min.js"
+      "fetch": "https://unpkg.com/unfetch@3.0.0/dist/unfetch.umd.js",
+      "localforage": "https://raw.githubusercontent.com/localForage/localForage/master/dist/localforage.min.js"
     }
   },
   "license": "MIT"
