@@ -1,8 +1,8 @@
 {
   "meta": {
-    "name": "tom",
-    "title": "About Tom Jerry",
-    "description": "Something about Tom Jerry",
+    "name": "mdl",
+    "title": "Material Design Lite",
+    "description": "A front-end template that helps you build fast, modern mobile web apps.",
     "keywords": "",
     "image": "/images/about-bg.png",
     "author": "@tom",
@@ -10,62 +10,5 @@
     "canonical": "",
     "themeColor": "#2F3BA2"
   },
-  "about": {
-    "name": "Tom Jerry",
-    "avatar": "/images/avatar_128.png",
-    "role": "Web Developer",
-    "tags": "#html #css #javascript #node #python #go #linux",
-    "links": [
-      {
-        "icon": "icon-home",
-        "title": "Homepage",
-        "href": "https://google.com"
-      },
-      {
-        "icon": "icon-twitter",
-        "title": "Twitter",
-        "href": "https://twitter.com"
-      },
-      {
-        "icon": "icon-github",
-        "title": "GitHub",
-        "href": "https://github.com"
-      },
-      {
-        "icon": "icon-codeopen",
-        "title": "CodePen",
-        "href": "https://codepen.io"
-      },
-      {
-        "icon": "icon-gplus",
-        "title": "Google+",
-        "href": "https://plus.google.com"
-      },
-      {
-        "icon": "icon-linkedin",
-        "title": "LinkedIn",
-        "href": "https://www.linkedin.com"
-      },
-      {
-        "icon": "icon-angellist",
-        "title": "AngelList",
-        "href": "https://angel.co"
-      },
-      {
-        "icon": "icon-medium",
-        "title": "Medium",
-        "href": "https://medium.com"
-      },
-      {
-        "icon": "icon-quora",
-        "title": "Quora",
-        "href": "https://www.quora.com"
-      },
-      {
-        "icon": "icon-stackoverflow",
-        "title": "StackOverflow",
-        "href": "https://stackoverflow.com"
-      }
-    ]
-  }
+  "searchText": "Enter your query..."
 }

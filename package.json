@@ -27,7 +27,7 @@
     "bellajs": "^7.2.0",
     "debug": "^3.1.0",
     "realdom": "^3.2.4",
-    "ssr-engine": "^0.0.1"
+    "ssr-engine": "../ssr-engine"
   },
   "devDependencies": {
     "cheerio": "^1.0.0-rc.2",
@@ -40,11 +40,10 @@
   },
   "vendor": {
     "css": {
-      "reboot": "https://raw.githubusercontent.com/twbs/bootstrap/v4-dev/dist/css/bootstrap-reboot.css"
+      "material": "https://code.getmdl.io/1.3.0/material.teal-red.min.css"
     },
     "js": {
-      "fetch": "https://unpkg.com/unfetch@3.0.0/dist/unfetch.umd.js",
-      "localforage": "https://raw.githubusercontent.com/localForage/localForage/master/dist/localforage.min.js"
+      "material": "https://code.getmdl.io/1.3.0/material.min.js"
     }
   },
   "license": "MIT"
