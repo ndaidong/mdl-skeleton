@@ -31,7 +31,13 @@ If everything goes well, you can get the output at: http://localhost:8081
 
 // Coming soon
 
+Please refer [ssr-engine](https://github.com/ndaidong/ssr-engine) guide for better understanding about app structure.
+
 
 # License
 
 The MIT License (MIT)
+
+
+Sample template by Google's Material Design Lite team:
+https://getmdl.io/templates/article/index.html
