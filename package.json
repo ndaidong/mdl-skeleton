@@ -26,8 +26,8 @@
   "dependencies": {
     "bellajs": "^7.2.0",
     "debug": "^3.1.0",
-    "realdom": "^3.2.4",
-    "ssr-engine": "../ssr-engine"
+    "realdom": "^3.2.11",
+    "ssr-engine": "0.0.3"
   },
   "devDependencies": {
     "cheerio": "^1.0.0-rc.2",
