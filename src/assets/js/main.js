@@ -1,3 +1,3 @@
 import {log} from './utils/logger';
 
-log('Nothing here.');
+log(`Hi, I'm trying to log`);
