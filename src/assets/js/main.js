@@ -1,3 +1,3 @@
-import {init as generateLightPoint} from './modules/lightPoint';
+import {log} from './utils/logger';
 
-generateLightPoint();
+log(`Hi, I'm trying to log`);
