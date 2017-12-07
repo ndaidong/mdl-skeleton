@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "debug": "^3.1.0",
-    "ssr-engine": "0.0.3"
+    "ssr-engine": "^0.0.4"
   },
   "devDependencies": {
     "cheerio": "^1.0.0-rc.2",
