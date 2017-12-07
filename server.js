@@ -1,6 +1,9 @@
 // server.js
 
-const ssre = require('ssr-engine');
+const {
+  configure,
+  start,
+} = require('ssr-engine');
 
 const {
   info,
@@ -9,9 +12,9 @@ const {
 const config = require('./src/configs');
 config.baseDir = __dirname;
 
-ssre.configure(config);
+configure(config);
 
-let app = ssre.start();
+let app = start();
 let appConfig = app.get('config');
 let {
   ENV,
@@ -20,6 +23,6 @@ let {
 } = appConfig;
 
 info(`Server started at the port ${port} in ${ENV} mode`);
-info('Access website via', `${url}`);
+info(`Access website via ${url}`);
 
 module.exports = app;
