@@ -13,7 +13,7 @@
   },
   "main": "./server.js",
   "scripts": {
-    "start": "DEBUG=mdl-skeleton:* node server",
+    "start": "node server",
     "lint": "eslint .",
     "nsp": "nsp check --output checkstyle",
     "tape": "tape test/start.js | tap-spec",
@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "debug": "^3.1.0",
-    "ssr-engine": "^0.0.4"
+    "ssr-engine": "^0.0.5"
   },
   "devDependencies": {
     "cheerio": "^1.0.0-rc.2",
