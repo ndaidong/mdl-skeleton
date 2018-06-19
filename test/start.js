@@ -12,8 +12,6 @@ const {
   extname,
 } = require('path');
 
-const test = require('tape');
-
 const where = './test/specs';
 if (existsSync(where)) {
   readdirSync(where).forEach((file) => {
@@ -23,4 +21,3 @@ if (existsSync(where)) {
   });
 }
 
-test.onFinish(process.exit);
