@@ -40,19 +40,4 @@ config.srcDir = './src';
 config.distDir = './dist';
 config.baseDir = './';
 
-config.babel = {
-  presets: [
-    [
-      'env',
-      {
-        targets: {
-          browsers: [
-            '> 4%',
-          ],
-        },
-      },
-    ],
-  ],
-};
-
 module.exports = config;
