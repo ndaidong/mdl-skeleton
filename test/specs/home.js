@@ -53,5 +53,8 @@ test('Check home page', (assert) => {
       let title = $('title').text();
 
       assert.ok(title === meta.title, `Page title must be "${meta.title}"`);
-    }).end(assert.end);
+      assert.end();
+    }).end(() => {
+      setTimeout(process.exit, 2000);
+    });
 });
