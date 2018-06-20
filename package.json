@@ -15,8 +15,9 @@
   "scripts": {
     "start": "node server",
     "lint": "eslint .",
+    "tap": "tap test/start.js --coverage --reporter=spec",
     "pretest": "npm run lint",
-    "test": "NODE_ENV=test tap test/start.js --coverage --reporter=spec",
+    "test": "NODE_ENV=test npm run tap",
     "setup": "node scripts/setup",
     "reset": "node scripts/reset"
   },
